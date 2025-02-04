@@ -1,5 +1,5 @@
 import React, { JSX } from "react";
-import Auth from "../Auth/Auth";
+import UserThumbnail from "../UserThumbnail/UserThumbnail";
 
 export default function Navbar(): JSX.Element {
   return (
@@ -12,7 +12,7 @@ export default function Navbar(): JSX.Element {
         />
         <h1 className="text-sm font-semibold">HireTrkr</h1>
       </div>
-      <Auth />
+      <UserThumbnail />
     </nav>
   );
 }

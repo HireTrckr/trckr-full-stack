@@ -65,7 +65,7 @@ const JobListing = memo(
     return (
       <div
         ref={dropdownRef}
-        className="relative flex items-center justify-between g-10"
+        className="relative flex items-center justify-between"
       >
         {job.company} | {job.position} |{" "}
         <span
