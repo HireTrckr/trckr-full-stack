@@ -5,10 +5,12 @@ export default function EditJobModal({
   job,
   onSave,
   onClose,
+  onDelete,
 }: {
   job: Job;
   onSave: (updatedJob: Job) => void;
   onClose: () => void;
+  onDelete: (job: Job) => void;
 }): JSX.Element {
   const [formData, setFormData] = useState<Job>(job);
 
@@ -27,6 +29,11 @@ export default function EditJobModal({
       ...formData,
     };
     onSave(updatedJob);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    onDelete(job);
     onClose();
   };
 
@@ -93,6 +100,12 @@ export default function EditJobModal({
             className="bg-gray-500 text-white px-4 py-2 rounded"
           >
             Cancel
+          </button>
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded"
+          >
+            Delete
           </button>
         </div>
       </div>
