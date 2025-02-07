@@ -67,7 +67,7 @@ const JobListing = memo(
         ref={dropdownRef}
         className="relative flex items-center justify-between"
       >
-        {job.company} | {job.position} |{" "}
+        {job.company} | {job.position} | {job.location}
         <span
           onClick={() => setIsDropDownOpen(!isDropDownOpen)}
           className={getStatusColor(job.status)}
@@ -103,7 +103,8 @@ const JobListing = memo(
       prevProps.job.id === nextProps.job.id &&
       prevProps.job.status === nextProps.job.status &&
       prevProps.job.company === nextProps.job.company &&
-      prevProps.job.position === nextProps.job.position
+      prevProps.job.position === nextProps.job.position &&
+      prevProps.job.location === nextProps.job.location
     );
   }
 );
