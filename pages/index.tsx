@@ -11,7 +11,7 @@ NavBar
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center space-y-6">
+    <div className="min-h-screen  cmin-w-screen bg-gray-100 flex flex-col items-center space-y-6">
       <Navbar />
       <JobForm />
       <JobList />
