@@ -17,38 +17,7 @@ type JobStore = {
   addJob: (job: Job) => void;
   deleteJob: (job: Job) => void;
   updateJob: (job: Job) => void;
-  clearJobs: () => void; // doesn't delete from server, only deleted locally saved jobs
-};
-
-export const fetchJobs = async () => {
-  if (!auth.currentUser) return [];
-
-  // ignore deleted jobs
-  const q = query(
-    collection(db, `users/${auth.currentUser.uid}/jobs`),
-    where("status", "!=", "deleted")
-  );
-
-  try {
-    const querySnapshot = await getDocs(q);
-    const jobs = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Job[];
-    return jobs;
-  } catch (e) {
-    console.error("Error fetching jobs: ", e);
-    return [];
-  }
-};
-
-export const deleteJob = async (job: Job) => {
-  if (!auth.currentUser) return;
-  if (!job.id) return;
-  const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
-  await updateDoc(jobRef, { status: "deleted" });
-
-  fetchJobs();
+  clearJobs: () => void; // doesn't delete from server, only clears locally saved jobs
 };
 
 export const useJobStore = create<JobStore>((set) => ({
@@ -56,16 +25,23 @@ export const useJobStore = create<JobStore>((set) => ({
 
   fetchJobs: async () => {
     if (!auth.currentUser) return;
-    const q = query(collection(db, `users/${auth.currentUser.uid}/jobs`));
-    const querySnapshot = await getDocs(q);
-    const jobs = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Job[];
-    set({ jobs });
+    try {
+      const q = query(
+        collection(db, `users/${auth.currentUser.uid}/jobs`),
+        where("status", "!=", "deleted")
+      );
+      const querySnapshot = await getDocs(q);
+      const jobs = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Job[];
+      set({ jobs });
+    } catch (e) {
+      console.error("Error fetching jobs: ", e);
+    }
   },
 
-  addJob: async (job) => {
+  addJob: async (job: Job) => {
     if (!auth.currentUser) return;
     const docRef = await addDoc(
       collection(db, `users/${auth.currentUser.uid}/jobs`),
@@ -79,8 +55,9 @@ export const useJobStore = create<JobStore>((set) => ({
     if (!job.id) return;
     const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
     await updateDoc(jobRef, { status: "deleted" });
-
-    fetchJobs();
+    set((state) => ({
+      jobs: state.jobs.filter((j) => j.id !== job.id),
+    }));
   },
 
   updateJob: async (job: Job) => {
@@ -88,12 +65,10 @@ export const useJobStore = create<JobStore>((set) => ({
     if (!job.id) return;
     const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
     await updateDoc(jobRef, job);
-
-    fetchJobs();
     set((state) => ({
       jobs: state.jobs.map((j) => (j.id === job.id ? job : j)),
     }));
-    },
+  },
 
   clearJobs: () => set({ jobs: [] }),
 }));

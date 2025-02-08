@@ -9,15 +9,25 @@ import EditJobModal from "../EditJobModal/EditJobModal";
 import JobListing from "../JobListing/JobListing";
 
 export const JobList: React.FC = () => {
-  const [jobs, deleteJob, clearJobs] = useJobStore((state) => [
+  /*const [jobs, deleteJob, clearJobs, updateJob] = useJobStore((state) => [
     state.jobs,
     state.deleteJob,
     state.clearJobs,
-  ]);
+    state.updateJob,
+  ]);*/
+  const jobs = useJobStore((state) => state.jobs);
+  const clearJobs = useJobStore((state) => state.clearJobs);
+  const fetchJobs = useJobStore((state) => state.fetchJobs);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleJobUpdate = async (updatedJob: Job) => {
+    return;
+  };
+
+  /*const handleJobUpdate = async (updatedJob: Job) => {
     try {
       if (!auth.currentUser) {
         console.error("User not authenticated");
@@ -29,10 +39,6 @@ export const JobList: React.FC = () => {
         setSelectedJob(null);
         return;
       }
-
-      setJobs((prevJobs: Job[]) =>
-        prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job))
-      );
 
       const jobRef = doc(
         db,
@@ -48,7 +54,7 @@ export const JobList: React.FC = () => {
     } catch (error) {
       console.error("Error updating job:", error);
     }
-  };
+  };&*/
 
   const handleEdit = (jobId: Job["id"]) => {
     if (!jobId) return;
@@ -85,14 +91,25 @@ export const JobList: React.FC = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
-        await useJobStore.getState().fetchJobs();
+        setIsLoading(true);
+        try {
+          await fetchJobs();
+        } catch (error) {
+          console.error("Error fetching jobs:", error);
+        } finally {
+          setIsLoading(false);
+        }
       } else {
         clearJobs();
       }
     });
 
     return () => unsubscribe();
-  }, [clearJobs]);
+  }, [fetchJobs, clearJobs]);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
