@@ -79,9 +79,7 @@ export default function JobForm() {
             onChange={(e) => setJob({ ...job, location: e.target.value })}
           />
           <button
-            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative
-                        bg-background-primary text-text-primary border border-background-secondary 
-                        focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
+            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
             onClick={() => setDropDownOpen(!dropDownOpen)}
           >
             {job.status}
@@ -93,20 +91,18 @@ export default function JobForm() {
           </button>
           {dropDownOpen && (
             <div
-              className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border 
-                             border-accent-primary rounded-lg shadow-light text-text-primary z-50"
+              className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
               onMouseEnter={() => setDropDownOpen(true)}
               onMouseLeave={() => setDropDownOpen(false)}
             >
               {statusOptions.map((status: Job["status"]) => (
                 <button
                   key={status}
-                  className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
-                                  ${
-                                    job.status === status
-                                      ? "bg-background-primary text-text-primary"
-                                      : "text-text-secondary"
-                                  }`}
+                  className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
+                    job.status === status
+                      ? "bg-background-primary text-text-primary"
+                      : "text-text-secondary"
+                  }`}
                   role="menuitem"
                   onClick={() => {
                     setJob({ ...job, status });
@@ -124,80 +120,11 @@ export default function JobForm() {
               ))}
             </div>
           )}
-          {/*<select
-            className="w-full px-4 py-2 rounded-lg
-                     bg-background-primary focus:bg-background-secondary
-                     text-text-primary
-                     border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
-                     transition-all duration-text capitalize"
-            value={job.status}
-            onChange={(e) => setJob({ ...job, status: e.target.value })}
-          >
-            <option
-              value="applied"
-              className="bg-background-primary text-text-primary"
-            >
-              applied
-            </option>
-            <option
-              value="interview"
-              className="bg-background-primary text-text-primary"
-            >
-              interview
-            </option>
-            <option
-              value="offer"
-              className="bg-background-primary text-text-primary"
-            >
-              offer
-            </option>
-            <option
-              value="rejected"
-              className="bg-background-primary text-text-primary"
-            >
-              rejected
-            </option>
-          </select>*/}
-
-          {/*<div className="absolute left-0 top-full w-full bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50">
-            <span
-              className="w-full px-4 py-2 rounded-lg
-                     bg-background-primary focus:bg-background-secondary
-                     text-text-primary
-                     border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
-                     transition-all duration-text capitalize"
-            >
-              {job.status}
-            </span>
-
-            {statusOptions.map((status: Job["status"]) => (
-              <button
-                key={status}
-                className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
-                         ${
-                           job.status === status
-                             ? "bg-background-primary text-text-primary"
-                             : "text-text-secondary"
-                         }`}
-                onClick={() => setJob({ ...job, status })}
-                role="menuitem"
-              >
-                {status}
-              </button>
-            ))}
-          </div>*/}
         </div>
 
         <button
           type="submit"
-          className="w-full px-4 py-2 rounded-lg
-                   bg-accent-primary hover:bg-accent-hover
-                   text-white font-medium
-                   transition-all duration-bg
-                   disabled:opacity-50 disabled:cursor-not-allowed capitalize
-                   focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:bg-accent-hover text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
           disabled={!job.company || !job.position}
         >
           add job

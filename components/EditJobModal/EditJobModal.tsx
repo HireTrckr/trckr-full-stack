@@ -57,10 +57,7 @@ export default function EditJobModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
-        className="bg-background-secondary
-                    p-6 rounded-lg w-96
-                    shadow-light
-                    transition-all duration-bg ease-in-out"
+        className="bg-background-secondary p-6 rounded-lg w-96 shadow-light transition-all duration-bg ease-in-out"
         ref={modalRef}
       >
         <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
@@ -77,13 +74,7 @@ export default function EditJobModal({
             name="title"
             value={formData.position}
             onChange={handleChange}
-            className="
-                     p-2 rounded w-full
-                     bg-background-primary
-                     text-text-primary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
-                     border: border-background-secondary
-                     transition-all duration-200 ease-in-out"
+            className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
           />
         </div>
 
@@ -97,13 +88,7 @@ export default function EditJobModal({
             name="company"
             value={formData.company}
             onChange={handleChange}
-            className="
-                     p-2 rounded w-full
-                     bg-background-primary
-                     text-text-primary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
-                    border: border-background-secondary
-                     transition-all duration-200 ease-in-out"
+            className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
           />
         </div>
 
@@ -116,12 +101,7 @@ export default function EditJobModal({
             name="status"
             value={formData.status}
             onChange={handleChange}
-            className="
-                     p-2 rounded w-full
-                     bg-background-primary
-                     text-text-primary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
-                     transition-all duration-200 ease-in-out"
+            className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-200 ease-in-out"
           >
             <option value="applied">Applied</option>
             <option value="interview">Interview</option>
@@ -133,28 +113,19 @@ export default function EditJobModal({
         <div className="mt-6 flex justify-center space-x-3">
           <button
             onClick={handleSave}
-            className="bg-accent-primary hover:bg-accent-hover
-                     text-white
-                     px-4 py-2 rounded
-                     transition-colors duration-200 ease-in-out"
+            className="bg-accent-primary hover:bg-accent-hover text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
           >
             Save
           </button>
           <button
             onClick={onClose}
-            className="bg-gray-500 hover:bg-gray-600
-                     text-white
-                     px-4 py-2 rounded
-                     transition-colors duration-200 ease-in-out"
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
           >
             Cancel
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600
-                     text-white
-                     px-4 py-2 rounded
-                     transition-colors duration-200 ease-in-out"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
           >
             Delete
           </button>
