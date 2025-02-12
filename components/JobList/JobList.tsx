@@ -1,86 +1,57 @@
 import { useEffect, useState } from "react";
 import { Job, useJobStore } from "../../context/jobStore";
 import { auth } from "../../lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../lib/firebase";
 
 import EditJobModal from "../EditJobModal/EditJobModal";
 
 import JobListing from "../JobListing/JobListing";
 
 export const JobList: React.FC = () => {
-  /*const [jobs, deleteJob, clearJobs, updateJob] = useJobStore((state) => [
-    state.jobs,
-    state.deleteJob,
-    state.clearJobs,
-    state.updateJob,
-  ]);*/
   const jobs = useJobStore((state) => state.jobs);
   const clearJobs = useJobStore((state) => state.clearJobs);
   const fetchJobs = useJobStore((state) => state.fetchJobs);
+  const updateJob = useJobStore((state) => state.updateJob);
+  const deleteJob = useJobStore((state) => state.deleteJob);
 
+  // states for editing pannel
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+
   const [isLoading, setIsLoading] = useState(false);
 
+  const [jobWithOpenDropdown, setJobWithOpenDropdown] = useState<Job | null>(
+    null
+  );
+  const [hoveredJob, setHoveredJob] = useState<Job | null>(null);
+
   const handleJobUpdate = async (updatedJob: Job) => {
-    return;
+    // check updatedJob has actually changed from the selectedJob
+    if (
+      selectedJob &&
+      updatedJob &&
+      JSON.stringify(selectedJob) === JSON.stringify(updatedJob)
+    ) {
+      return;
+    }
+
+    updateJob(updatedJob);
+    handleClose();
   };
 
-  /*const handleJobUpdate = async (updatedJob: Job) => {
-    try {
-      if (!auth.currentUser) {
-        console.error("User not authenticated");
-        return;
-      }
-
-      if (!updatedJob.id) {
-        console.error("Job ID is missing");
-        setSelectedJob(null);
-        return;
-      }
-
-      const jobRef = doc(
-        db,
-        "users",
-        auth.currentUser.uid,
-        "jobs",
-        updatedJob.id
-      );
-      await updateDoc(jobRef, updatedJob);
-      const fetchedJobs = await fetchJobs();
-      setJobs(fetchedJobs);
-      setSelectedJob(null);
-    } catch (error) {
-      console.error("Error updating job:", error);
-    }
-  };&*/
-
   const handleEdit = (jobId: Job["id"]) => {
-    if (!jobId) return;
-    const jobToEdit = jobs.find((job) => job.id === jobId);
-    if (jobToEdit) {
-      setSelectedJob(jobToEdit);
+    const job = jobs.find((job) => job.id === jobId);
+    if (job) {
+      setSelectedJob(job);
       setIsModalOpen(true);
     }
   };
 
-  const handleJobDelete = async (job: Job) => {
-    try {
-      if (!auth.currentUser) {
-        console.error("User not authenticated");
-        return;
-      }
+  const handleJobDelete = async (deletedJob: Job) => {
+    // dont do anything if the job is null
+    if (!deletedJob) return;
 
-      if (!job.id) {
-        console.error("Job ID is missing");
-        return;
-      }
-
-      setSelectedJob(null);
-    } catch (error) {
-      console.error("Error deleting job:", error);
-    }
+    deleteJob(deletedJob);
+    setSelectedJob(null);
   };
 
   const handleClose = () => {
@@ -108,32 +79,54 @@ export const JobList: React.FC = () => {
   }, [fetchJobs, clearJobs]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-text-secondary">Loading...</p>;
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-        My Job Applications {jobs.length ? `(${jobs.length})` : ""}
-      </h2>
+    <div className="w-full transition-colors duration-bg">
+      <div className="flex justify-center items-center mb-6">
+        <h2 className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
+          My Job Applications {jobs.length ? `(${jobs.length})` : ""}
+        </h2>
+      </div>
+
       {jobs.length === 0 ? (
-        <p className="text-gray-500 text-center">No jobs found</p>
+        <div className="text-center py-8">
+          <p className="text-text-secondary">
+            No jobs found! Add a new job application to get started.
+          </p>
+        </div>
       ) : (
-        <ul className="space-y-3">
-          {jobs.map((job) => (
-            <li
-              key={job.id}
-              className="p-4 border rounded-lg shadow-sm hover:bg-gray-100 transition"
-            >
-              <JobListing
-                job={job}
-                onUpdate={handleJobUpdate}
-                onEdit={handleEdit}
-              />
-            </li>
-          ))}
+        <ul className="relative">
+          {jobs.map((job) => {
+            const isActive =
+              jobWithOpenDropdown === job ||
+              (!jobWithOpenDropdown && hoveredJob === job);
+            return (
+              <li
+                key={job.id}
+                className={`relative rounded-lg transition-all duration-bg ease-in-out ${
+                  isActive
+                    ? "scale-[1.01] shadow-light bg-background-secondary z-20"
+                    : "bg-background-primary z-10"
+                }`}
+                onMouseEnter={() => setHoveredJob(job)}
+                onMouseLeave={() => setHoveredJob(null)}
+              >
+                <JobListing
+                  job={job}
+                  onUpdate={handleJobUpdate}
+                  onEdit={handleEdit}
+                  showControls={isActive}
+                  onDropdownOpen={() => setJobWithOpenDropdown(job)}
+                  onDropdownClose={() => setJobWithOpenDropdown(null)}
+                />
+              </li>
+            );
+          })}
         </ul>
       )}
+
       {isModalOpen && selectedJob && (
         <EditJobModal
           job={selectedJob}

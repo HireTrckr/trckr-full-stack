@@ -11,6 +11,13 @@ export type Job = {
   status: "applied" | "interview" | "offer" | "rejected";
 };
 
+export const statusOptions: Job["status"][] = [
+  "applied",
+  "interview",
+  "offer",
+  "rejected",
+];
+
 type JobStore = {
   jobs: Job[];
   fetchJobs: () => Promise<void>;

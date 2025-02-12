@@ -1,0 +1,21 @@
+:root[data-theme="light"] {
+  --background-primary: #ffffff;
+  --background-secondary: #f5f5f5;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent-color: #4dabf7;
+  --accent-hover: #3994e4;
+}
+
+:root[data-theme="dark"] {
+  --background-primary: #1a1a1a;
+  --background-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent-color: #4dabf7;
+  --accent-hover: #3994e4;
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

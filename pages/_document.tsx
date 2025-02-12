@@ -6,7 +6,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="theme-color" content="#000000" />
           <meta charSet="UTF-8" />
 
           <link rel="icon" href="/HireTrckr.png" />

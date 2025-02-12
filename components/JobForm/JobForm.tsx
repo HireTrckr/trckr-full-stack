@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useJobStore, Job } from "../../context/jobStore";
+import { useJobStore, Job, statusOptions } from "../../context/jobStore";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 export default function JobForm() {
   const { addJob } = useJobStore();
@@ -10,6 +11,8 @@ export default function JobForm() {
     location: "",
   });
 
+  const [dropDownOpen, setDropDownOpen] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!job.company || !job.position) return;
@@ -19,52 +22,176 @@ export default function JobForm() {
       status: job.status as Job["status"],
     });
 
-    setJob({ company: "", position: "", status: "applied", location: "" });
+    setJob({
+      company: "",
+      position: "",
+      status: "applied" as Job["status"],
+      location: "",
+    });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="p-4 bg-white shadow-md rounded-lg w-full max-w-sm"
-    >
-      <h2 className="text-lg font-semibold mb-2">Add Job</h2>
-      <input
-        type="text"
-        placeholder="Company"
-        className="border p-2 w-full mb-2"
-        value={job.company}
-        onChange={(e) => setJob({ ...job, company: e.target.value })}
-      />
-      <input
-        type="text"
-        placeholder="Position"
-        className="border p-2 w-full mb-2"
-        value={job.position}
-        onChange={(e) => setJob({ ...job, position: e.target.value })}
-      />
-      <input
-        type="text"
-        placeholder="Location"
-        className="border p-2 w-full mb-2"
-        value={job.location}
-        onChange={(e) => setJob({ ...job, location: e.target.value })}
-      />
-      <select
-        className="border p-2 w-full mb-2"
-        value={job.status}
-        onChange={(e) => setJob({ ...job, status: e.target.value })}
-      >
-        <option value="applied">Applied</option>
-        <option value="interview">Interview</option>
-        <option value="offer">Offer</option>
-        <option value="rejected">Rejected</option>
-      </select>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white p-2 w-full rounded"
-      >
-        Add Job
-      </button>
-    </form>
+    <>
+      <div className="flex justify-center items-center mb-6">
+        <h2 className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text capitalize">
+          track a new application
+        </h2>
+      </div>
+      <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <div className="space-y-3 relative">
+          <input
+            type="text"
+            placeholder="Company"
+            className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary 
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     placeholder-text-secondary/50
+                     transition-all duration-text"
+            value={job.company}
+            onChange={(e) => setJob({ ...job, company: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Position"
+            className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary 
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     placeholder-text-secondary/50
+                     transition-all duration-text"
+            value={job.position}
+            onChange={(e) => setJob({ ...job, position: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Location"
+            className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary 
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     placeholder-text-secondary/50
+                     transition-all duration-text"
+            value={job.location}
+            onChange={(e) => setJob({ ...job, location: e.target.value })}
+          />
+          <button
+            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative
+                        bg-background-primary text-text-primary border border-background-secondary 
+                        focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
+            onClick={() => setDropDownOpen(!dropDownOpen)}
+          >
+            {job.status}
+            {!dropDownOpen && (
+              <RiArrowDropDownLine className="rotate-90 transition-all duration-text" />
+            )}
+            {dropDownOpen && (
+              <RiArrowDropDownLine className="rotate-270 transition-all duration-text" />
+            )}
+          </button>
+          {dropDownOpen && (
+            <div
+              className="absolute left-0 top-full w-3/4 mt-0 bg-background-secondary border 
+                             border-accent-primary rounded-lg shadow-light text-text-primary z-50"
+            >
+              {statusOptions.map((status: Job["status"]) => (
+                <button
+                  key={status}
+                  className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
+                                  ${
+                                    job.status === status
+                                      ? "bg-background-primary text-text-primary"
+                                      : "text-text-secondary"
+                                  }`}
+                  role="menuitem"
+                >
+                  {status}
+                </button>
+              ))}
+            </div>
+          )}
+          {/*<select
+            className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary focus:bg-background-secondary
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
+                     transition-all duration-text capitalize"
+            value={job.status}
+            onChange={(e) => setJob({ ...job, status: e.target.value })}
+          >
+            <option
+              value="applied"
+              className="bg-background-primary text-text-primary"
+            >
+              applied
+            </option>
+            <option
+              value="interview"
+              className="bg-background-primary text-text-primary"
+            >
+              interview
+            </option>
+            <option
+              value="offer"
+              className="bg-background-primary text-text-primary"
+            >
+              offer
+            </option>
+            <option
+              value="rejected"
+              className="bg-background-primary text-text-primary"
+            >
+              rejected
+            </option>
+          </select>*/}
+
+          {/*<div className="absolute left-0 top-full w-full bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50">
+            <span
+              className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary focus:bg-background-secondary
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50
+                     transition-all duration-text capitalize"
+            >
+              {job.status}
+            </span>
+
+            {statusOptions.map((status: Job["status"]) => (
+              <button
+                key={status}
+                className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
+                         ${
+                           job.status === status
+                             ? "bg-background-primary text-text-primary"
+                             : "text-text-secondary"
+                         }`}
+                onClick={() => setJob({ ...job, status })}
+                role="menuitem"
+              >
+                {status}
+              </button>
+            ))}
+          </div>*/}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full px-4 py-2 rounded-lg
+                   bg-accent-primary hover:bg-accent-hover
+                   text-white font-medium
+                   transition-all duration-bg
+                   disabled:opacity-50 disabled:cursor-not-allowed capitalize
+                   focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+          disabled={!job.company || !job.position}
+        >
+          add job
+        </button>
+      </form>
+    </>
   );
 }
