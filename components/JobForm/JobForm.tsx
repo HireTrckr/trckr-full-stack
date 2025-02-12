@@ -85,17 +85,18 @@ export default function JobForm() {
             onClick={() => setDropDownOpen(!dropDownOpen)}
           >
             {job.status}
-            {!dropDownOpen && (
-              <RiArrowDropDownLine className="rotate-90 transition-all duration-text" />
-            )}
-            {dropDownOpen && (
-              <RiArrowDropDownLine className="rotate-270 transition-all duration-text" />
-            )}
+            <RiArrowDropDownLine
+              className={`rotate-${
+                dropDownOpen ? "270" : "90"
+              } transition-all text-text-primary duration-text`}
+            />
           </button>
           {dropDownOpen && (
             <div
-              className="absolute left-0 top-full w-3/4 mt-0 bg-background-secondary border 
+              className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border 
                              border-accent-primary rounded-lg shadow-light text-text-primary z-50"
+              onMouseEnter={() => setDropDownOpen(true)}
+              onMouseLeave={() => setDropDownOpen(false)}
             >
               {statusOptions.map((status: Job["status"]) => (
                 <button
@@ -107,6 +108,16 @@ export default function JobForm() {
                                       : "text-text-secondary"
                                   }`}
                   role="menuitem"
+                  onClick={() => {
+                    setJob({ ...job, status });
+                    setDropDownOpen(false);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      setJob({ ...job, status });
+                      setDropDownOpen(false);
+                    }
+                  }}
                 >
                   {status}
                 </button>

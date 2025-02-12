@@ -2,7 +2,6 @@ import React, { JSX, useEffect, useRef } from "react";
 import { Job } from "../../context/jobStore";
 import { useState, memo } from "react";
 import { statusOptions } from "../../context/jobStore";
-import { getStatusColor } from "../../utils/statusColoring";
 
 const JobListing = memo(
   function JobListing({
@@ -33,6 +32,23 @@ const JobListing = memo(
       onUpdate?.(updatedJob);
       setIsDropDownOpen(false);
       onDropdownClose();
+    };
+
+    const getStatusColor = (status: Job["status"]): string => {
+      const baseClasses =
+        "text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px]";
+      switch (status.toLowerCase()) {
+        case "applied":
+          return `bg-blue-500 ${baseClasses}`;
+        case "interview":
+          return `bg-yellow-500 ${baseClasses}`;
+        case "offer":
+          return `bg-green-500 ${baseClasses}`;
+        case "rejected":
+          return `bg-red-500 ${baseClasses}`;
+        default:
+          return `bg-gray-500 ${baseClasses}`;
+      }
     };
 
     useEffect(() => {
@@ -81,7 +97,7 @@ const JobListing = memo(
           <span className="text-text-secondary text-xs">{job.location}</span>
         </div>
         {showControls && (
-          <div className="flex justify-between gap-2 transition-all duration-bg ease-in-out">
+          <div className="flex justify-between items-center gap-2 transition-all duration-bg ease-in-out">
             <div className="relative" ref={dropdownRef}>
               <span
                 onClick={() => toggleDropDown()}

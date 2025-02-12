@@ -34,7 +34,9 @@ export default function Navbar(): JSX.Element {
         >
           track
         </Link>
-        <span>|</span>
+        <span className="text-text-secondary transition-all duration-text">
+          |
+        </span>
         <Link
           href="/new"
           className="text-text-primary hover:text-text-secondary
@@ -42,7 +44,9 @@ export default function Navbar(): JSX.Element {
         >
           add new
         </Link>
-        <span>|</span>
+        <span className="text-text-secondary transition-all duration-text">
+          |
+        </span>
         <Link
           href="/settings"
           className="text-text-primary hover:text-text-secondary
