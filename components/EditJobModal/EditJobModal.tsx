@@ -1,4 +1,4 @@
-import React, { JSX, useState } from "react";
+import React, { JSX, useState, useEffect } from "react";
 import { Job } from "../../context/jobStore";
 
 export default function EditJobModal({
@@ -13,6 +13,23 @@ export default function EditJobModal({
   onDelete: (job: Job) => void;
 }): JSX.Element {
   const [formData, setFormData] = useState<Job>(job);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -38,12 +55,13 @@ export default function EditJobModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
         className="bg-background-secondary
                     p-6 rounded-lg w-96
                     shadow-light
                     transition-all duration-bg ease-in-out"
+        ref={modalRef}
       >
         <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
           Edit Job
