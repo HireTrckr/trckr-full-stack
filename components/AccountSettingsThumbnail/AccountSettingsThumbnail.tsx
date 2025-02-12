@@ -35,9 +35,7 @@ export default function AccountSettingsThumbnail(): JSX.Element {
         </Link>
         <button
           onClick={handleSignOut}
-          className="text-center px-2 py-1 h-7 text-sm rounded-lg
-                         text-white bg-accent-primary hover:bg-accent-hover
-                         transition-colors duration-text text-xs"
+          className="text-center px-2 py-1 h-7 text-sm rounded-lg text-white bg-accent-primary hover:bg-accent-hover transition-colors duration-text text-xs"
         >
           Sign Out
         </button>

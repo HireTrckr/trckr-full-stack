@@ -4,13 +4,7 @@ import Link from "next/link";
 
 export default function Navbar(): JSX.Element {
   return (
-    <nav
-      className="bg-background-primary border-b border-background-secondary
-                    text-text-primary 
-                    transition-colors duration-bg ease-in-out
-                    grid grid-cols-[1fr_auto_1fr] w-full items-center
-                    px-4 py-2 shadow-light"
-    >
+    <nav className="bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr] w-full items-center px-4 py-2 shadow-light">
       <Link href="/">
         <div className="flex items-center space-x-2 p-1">
           <img
@@ -18,10 +12,7 @@ export default function Navbar(): JSX.Element {
             alt="HireTrkr Logo"
             className="w-[15px] h-[15px] rounded-[50%]"
           />
-          <h1
-            className="text-lg font-semibold text-text-primary
-                       transition-colors duration-text"
-          >
+          <h1 className="text-lg font-semibold text-text-primary transition-colors duration-text">
             HireTrkr
           </h1>
         </div>
@@ -29,8 +20,7 @@ export default function Navbar(): JSX.Element {
       <div className="flex items-center gap-2 mx-auto">
         <Link
           href="/list"
-          className="text-text-primary hover:text-text-secondary
-                       transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
         >
           track
         </Link>
@@ -39,8 +29,7 @@ export default function Navbar(): JSX.Element {
         </span>
         <Link
           href="/new"
-          className="text-text-primary hover:text-text-secondary
-                       transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
         >
           add new
         </Link>
@@ -49,8 +38,7 @@ export default function Navbar(): JSX.Element {
         </span>
         <Link
           href="/settings"
-          className="text-text-primary hover:text-text-secondary
-                         transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
         >
           settings
         </Link>
