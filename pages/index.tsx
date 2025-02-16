@@ -6,12 +6,16 @@ import Head from "next/head";
 /*TODO:
 i18n
 system theme override
-modal placemend issues
 settings component
 settings backend
-job added popup
+job added popup / toast messages
 location stuff
 filter
+search bar
+due date (optional)
+notes
+confirmation popup for delete
+link
 */
 
 export default function Home() {
