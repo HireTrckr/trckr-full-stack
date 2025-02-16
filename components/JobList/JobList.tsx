@@ -6,6 +6,8 @@ import EditJobModal from "../EditJobModal/EditJobModal";
 
 import JobListing from "../JobListing/JobListing";
 
+import { createPortal } from "react-dom";
+
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
   const clearJobs = useJobStore((state) => state.clearJobs);
@@ -127,14 +129,35 @@ export const JobList: React.FC = () => {
         </ul>
       )}
 
-      {isModalOpen && selectedJob && (
-        <EditJobModal
-          job={selectedJob}
-          onClose={handleClose}
-          onSave={handleJobUpdate}
-          onDelete={handleJobDelete}
-        />
-      )}
+      {isModalOpen &&
+        selectedJob &&
+        createPortal(
+          <>
+            <div
+              id="modal-overlay"
+              className="fixed inset-0 bg-black/10 z-[999] backdrop-blur-sm"
+              onClick={handleClose}
+              aria-hidden="true"
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="modal-title"
+              className="fixed inset-0 z-[1000] flex items-center justify-center"
+            >
+              <div className="bg-background-primary rounded-lg">
+                <h2 id="modal-title">Edit Job</h2>
+                <EditJobModal
+                  job={selectedJob}
+                  onClose={handleClose}
+                  onSave={handleJobUpdate}
+                  onDelete={handleJobDelete}
+                />
+              </div>
+            </div>
+          </>,
+          document.body
+        )}
     </div>
   );
 };
