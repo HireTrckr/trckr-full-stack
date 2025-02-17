@@ -87,12 +87,12 @@ export const JobListing = memo(
         }`}
       >
         <div className="flex flex-col">
-          <div>
+          <>
             <span className="text-text-primary">{job.position}</span>
             <span className="text-text-secondary">
               {job.company ? `, ${job.company}` : ""}
             </span>
-          </div>
+          </>
           <span className="text-text-secondary text-xs">{job.location}</span>
         </div>
         {showControls && (
