@@ -4,7 +4,7 @@ import React, { JSX } from "react";
 import { auth } from "../../lib/firebase";
 import Link from "next/link";
 
-export default function AccountSettingsThumbnail(): JSX.Element {
+export function AccountSettingsThumbnail(): JSX.Element {
   const [user] = useAuthState(auth);
 
   const handleSignOut = () => {

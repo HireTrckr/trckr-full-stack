@@ -3,7 +3,7 @@ import { useJobStore } from "../../context/jobStore";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { Job, statusOptions } from "../../types/job";
 
-export default function JobForm() {
+export function JobForm() {
   const { addJob } = useJobStore();
   const [job, setJob] = useState({
     company: "",

@@ -2,12 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import { auth } from "../../lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
-import ThemeSettingsDropdown from "../ThemeSettingsDropdown/ThemeSettingsDropdown";
-import AccountSettingsThumbnail from "../AccountSettingsThumbnail/AccountSettingsThumbnail";
+import { ThemeSettingsDropdown } from "../ThemeSettingsDropdown/ThemeSettingsDropdown";
+import { AccountSettingsThumbnail } from "../AccountSettingsThumbnail/AccountSettingsThumbnail";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoIosClose } from "react-icons/io";
 
-export default function UserThumbnail() {
+export function UserThumbnail() {
   const [user] = useAuthState(auth);
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -60,10 +60,7 @@ export default function UserThumbnail() {
   };
 
   return (
-    <div
-      className="relative justify-self-end"
-      ref={dropdownRef}
-    >
+    <div className="relative justify-self-end" ref={dropdownRef}>
       {user ? (
         <>
           <button

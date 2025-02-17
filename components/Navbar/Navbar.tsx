@@ -1,8 +1,8 @@
 import React, { JSX } from "react";
-import UserThumbnail from "../UserThumbnail/UserThumbnail";
+import { UserThumbnail } from "../UserThumbnail/UserThumbnail";
 import Link from "next/link";
 
-export default function Navbar(): JSX.Element {
+export function Navbar(): JSX.Element {
   return (
     <nav className="bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr] w-full items-center px-4 py-2 shadow-light">
       <Link href="/">

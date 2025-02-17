@@ -1,5 +1,5 @@
 import { JobList } from "../components/JobList/JobList";
-import JobForm from "../components/JobForm/JobForm";
+import { JobForm } from "../components/JobForm/JobForm";
 import "../styles/globals.css";
 import Head from "next/head";
 
@@ -19,7 +19,7 @@ link (optional)
 search bar
 */
 
-export default function Home() {
+export function Home() {
   return (
     <>
       <Head>

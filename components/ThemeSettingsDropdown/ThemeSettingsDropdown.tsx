@@ -1,7 +1,7 @@
 import React, { JSX } from "react";
 import { ThemeToggle } from "../themeToggle/themeToggle";
 
-export default function ThemeSettingsDropdown(): JSX.Element {
+export function ThemeSettingsDropdown(): JSX.Element {
   return (
     <div className="hover:bg-background-secondary py-2">
       <div className="flex justify-center">

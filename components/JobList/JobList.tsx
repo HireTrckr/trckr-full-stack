@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import { useJobStore } from "../../context/jobStore";
 import { Job } from "../../types/job";
 import { auth } from "../../lib/firebase";
-
-import EditJobModal from "../EditJobModal/EditJobModal";
-
-import JobListing from "../JobListing/JobListing";
-
+import { EditJobModal } from "../EditJobModal/EditJobModal";
+import { JobListing } from "../JobListing/JobListing";
 import { createPortal } from "react-dom";
 
 export const JobList: React.FC = () => {

@@ -1,7 +1,7 @@
 import React, { JSX, useState, useEffect } from "react";
 import { Job } from "../../types/job";
 
-export default function EditJobModal({
+export function EditJobModal({
   job,
   onSave,
   onClose,

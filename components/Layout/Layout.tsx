@@ -1,6 +1,6 @@
-import Navbar from "../Navbar/Navbar";
+import { Navbar } from "../Navbar/Navbar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background-secondary flex flex-col items-center">
       <Navbar />

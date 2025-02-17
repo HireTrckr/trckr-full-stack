@@ -2,7 +2,7 @@ import React, { JSX, useEffect, useRef } from "react";
 import { Job, statusOptions } from "../../types/job";
 import { useState, memo } from "react";
 
-const JobListing = memo(
+export const JobListing = memo(
   function JobListing({
     job,
     onUpdate,
@@ -156,5 +156,3 @@ const JobListing = memo(
     );
   }
 );
-
-export default JobListing;
