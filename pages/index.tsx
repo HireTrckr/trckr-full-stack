@@ -15,7 +15,8 @@ search bar
 due date (optional)
 notes
 confirmation popup for delete
-link
+link (optional)
+search bar
 */
 
 export default function Home() {
