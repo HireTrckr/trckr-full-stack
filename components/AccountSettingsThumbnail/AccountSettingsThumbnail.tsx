@@ -30,7 +30,7 @@ export default function AccountSettingsThumbnail(): JSX.Element {
             src={user?.photoURL || ""}
             alt={user?.displayName || ""}
             referrerPolicy="no-referrer"
-            className="w-[15px] h-[15px] rounded-full ring-1 ring-background-secondary"
+            className="w-[15px] h-[15px] rounded-full"
           />
         </Link>
         <button
