@@ -19,7 +19,7 @@ link (optional)
 search bar
 */
 
-export function Home() {
+export default function Home() {
   return (
     <>
       <Head>
