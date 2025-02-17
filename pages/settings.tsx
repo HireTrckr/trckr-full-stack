@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Settings } from "../components/Settings/Settings";
 
-export function settings() {
+export default function settings() {
   return (
     <>
       <Head>
