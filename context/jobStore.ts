@@ -2,21 +2,7 @@ import { create } from "zustand";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-
-export type Job = {
-  id?: string;
-  company: string;
-  position: string;
-  location: string;
-  status: "applied" | "interview" | "offer" | "rejected";
-};
-
-export const statusOptions: Job["status"][] = [
-  "applied",
-  "interview",
-  "offer",
-  "rejected",
-];
+import { Job } from "../types/job";
 
 type JobStore = {
   jobs: Job[];

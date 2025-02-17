@@ -1,7 +1,6 @@
 import React, { JSX, useEffect, useRef } from "react";
-import { Job } from "../../context/jobStore";
+import { Job, statusOptions } from "../../types/job";
 import { useState, memo } from "react";
-import { statusOptions } from "../../context/jobStore";
 
 const JobListing = memo(
   function JobListing({

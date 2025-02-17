@@ -1,5 +1,5 @@
 import React, { JSX, useState, useEffect } from "react";
-import { Job } from "../../context/jobStore";
+import { Job } from "../../types/job";
 
 export default function EditJobModal({
   job,

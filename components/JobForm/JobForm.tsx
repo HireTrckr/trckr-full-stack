@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useJobStore, Job, statusOptions } from "../../context/jobStore";
+import { useJobStore } from "../../context/jobStore";
 import { RiArrowDropDownLine } from "react-icons/ri";
+import { Job, statusOptions } from "../../types/job";
 
 export default function JobForm() {
   const { addJob } = useJobStore();

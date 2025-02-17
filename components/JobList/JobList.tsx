@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Job, useJobStore } from "../../context/jobStore";
+import { useJobStore } from "../../context/jobStore";
+import { Job } from "../../types/job";
 import { auth } from "../../lib/firebase";
 
 import EditJobModal from "../EditJobModal/EditJobModal";
