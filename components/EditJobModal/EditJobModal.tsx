@@ -1,5 +1,7 @@
 import React, { JSX, useState, useEffect } from "react";
 import { Job } from "../../types/job";
+import { ToolTip } from "../ToolTip/ToolTip";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 export function EditJobModal({
   job,
@@ -13,7 +15,32 @@ export function EditJobModal({
   onDelete: (job: Job) => void;
 }): JSX.Element {
   const [formData, setFormData] = useState<Job>(job);
+
+  // time until user can send a request again (rate-limiting)
+  const [timeRemaining, setTimeRemaining] = useState(0);
+
   const modalRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!job.timestamps.updatedAt) return;
+
+    const updateTimeRemaining = () => {
+      const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
+      const remaingSeconds = Math.max(
+        0,
+        30 - Math.floor(timeSinceUpdate / 1000)
+      );
+      setTimeRemaining(remaingSeconds);
+    };
+
+    updateTimeRemaining();
+
+    // update every second
+    const interval = setInterval(updateTimeRemaining, 1000);
+
+    // unmount
+    return () => clearInterval(interval);
+  }, [job.timestamps?.updatedAt]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -37,6 +64,7 @@ export function EditJobModal({
     >
   ) => {
     const { name, value } = e.target;
+    console.log(`${name}: ${value}`);
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -54,6 +82,8 @@ export function EditJobModal({
     onClose();
   };
 
+  console.log(new Date().getTime() - job.timestamps.updatedAt.getTime());
+
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
@@ -65,13 +95,13 @@ export function EditJobModal({
         </h2>
 
         <div className="mb-4">
-          <label htmlFor="title" className="block text-text-primary text-xs">
+          <label htmlFor="position" className="block text-text-primary text-xs">
             Position
           </label>
           <input
             type="text"
-            id="title"
-            name="title"
+            id="position"
+            name="position"
             value={formData.position}
             onChange={handleChange}
             className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
@@ -87,6 +117,19 @@ export function EditJobModal({
             id="company"
             name="company"
             value={formData.company}
+            onChange={handleChange}
+            className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="location" className="block text-text-primary text-xs">
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            value={formData.location}
             onChange={handleChange}
             className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
           />
@@ -109,11 +152,21 @@ export function EditJobModal({
             <option value="rejected">Rejected</option>
           </select>
         </div>
+        {job.timestamps?.updatedAt && (
+          <div className=" mb-4 flex justify-center items-center">
+            <span className="text-xs text-text-secondary transition-all duration-text">
+              Last Updated at: {job.timestamps.updatedAt.toLocaleString()}
+            </span>
+          </div>
+        )}
 
-        <div className="mt-6 flex justify-center space-x-3">
+        <div className="mt-2 flex justify-center space-x-3">
           <button
             onClick={handleSave}
-            className="bg-accent-primary hover:bg-accent-hover text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
+            className="bg-accent-primary hover:bg-accent-hover text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={
+              !formData.position || !formData.company || timeRemaining > 0
+            }
           >
             Save
           </button>
@@ -125,11 +178,26 @@ export function EditJobModal({
           </button>
           <button
             onClick={handleDelete}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={timeRemaining > 0}
           >
             Delete
           </button>
         </div>
+
+        {timeRemaining > 0 && (
+          <div className="mt-1 flex flex justify-center items-center gap-1">
+            <span className="text-xs text-text-secondary transition-all duration-text">
+              Please wait {timeRemaining} second{timeRemaining != 1 ? "s" : ""} to edit again.
+            </span>
+            <ToolTip
+              text="Rate limiting is enabled to prevent spam!"
+              position="bottom"
+            >
+              <IoMdInformationCircleOutline className="text-xs text-text-secondary transition-all duration-text" />
+            </ToolTip>
+          </div>
+        )}
       </div>
     </div>
   );

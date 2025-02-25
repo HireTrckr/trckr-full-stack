@@ -15,8 +15,8 @@ search bar
 due date (optional)
 notes
 confirmation popup for delete
+dropdown styling for inside job modal
 link (optional)
-search bar
 */
 
 export default function Home() {

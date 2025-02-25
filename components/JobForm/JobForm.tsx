@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useJobStore } from "../../context/jobStore";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { Job, statusOptions } from "../../types/job";
+import { auth } from "../../lib/firebase";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export function JobForm() {
   const { addJob } = useJobStore();
@@ -21,6 +23,10 @@ export function JobForm() {
     await addJob({
       ...job,
       status: job.status as Job["status"],
+      timestamps: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     });
 
     setJob({
@@ -30,6 +36,39 @@ export function JobForm() {
       location: "",
     });
   };
+
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error: any) {
+      if (error.code === "auth/popup-closed-by-user") {
+        return;
+      }
+      console.error("Login failed", error);
+    }
+  };
+
+  if (!auth.currentUser) {
+    return (
+      <div className="flex flex-col justify-center items-center gap-2">
+        <span className="text-md text-text-primary transition-colors duration-text capitalize">please sign in to continue</span>
+        <button
+          onClick={signInWithGoogle}
+          className="px-3 py-1.5 rounded-lg text-sm font-medium
+               bg-accent-primary hover:bg-accent-hover
+               text-white
+               transition-all duration-text ease-in-out
+               flex items-center gap-2 shadow-light
+                 "
+        >
+          Sign In
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -68,7 +107,7 @@ export function JobForm() {
           />
           <input
             type="text"
-            placeholder="Location"
+            placeholder="Location (optional)"
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary

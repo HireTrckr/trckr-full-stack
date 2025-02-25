@@ -13,7 +13,14 @@ type JobStore = {
   clearJobs: () => void; // doesn't delete from server, only clears locally saved jobs
 };
 
-export const useJobStore = create<JobStore>((set) => ({
+const timestampToDate = (timestamp: any) => {
+  if (!timestamp) return null;
+  if (timestamp instanceof Date) return timestamp;
+  if (timestamp.toDate) return timestamp.toDate();
+  return new Date(timestamp.seconds * 1000);
+};
+
+export const useJobStore = create<JobStore>((set, get) => ({
   jobs: [],
 
   fetchJobs: async () => {
@@ -27,6 +34,13 @@ export const useJobStore = create<JobStore>((set) => ({
       const jobs = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        timestamps: {
+          createdAt: timestampToDate(doc.data().timestamps.createdAt),
+          updatedAt: timestampToDate(doc.data().timestamps.updatedAt),
+          deletedAt: doc.data().timestamps.deletedAt
+            ? timestampToDate(doc.data().timestamps.deletedAt)
+            : null,
+        },
       })) as Job[];
       set({ jobs });
     } catch (e) {
@@ -36,6 +50,10 @@ export const useJobStore = create<JobStore>((set) => ({
 
   addJob: async (job: Job) => {
     if (!auth.currentUser) return;
+    job.timestamps = {
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
     const docRef = await addDoc(
       collection(db, `users/${auth.currentUser.uid}/jobs`),
       job
@@ -47,7 +65,14 @@ export const useJobStore = create<JobStore>((set) => ({
     if (!auth.currentUser) return;
     if (!job.id) return;
     const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
-    await updateDoc(jobRef, { status: "deleted" });
+    await updateDoc(jobRef, {
+      status: "deleted",
+      timestamps: {
+        ...job.timestamps,
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
     set((state) => ({
       jobs: state.jobs.filter((j) => j.id !== job.id),
     }));
@@ -57,6 +82,10 @@ export const useJobStore = create<JobStore>((set) => ({
     if (!auth.currentUser) return;
     if (!job.id) return;
     const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
+    job.timestamps = {
+      ...job.timestamps,
+      updatedAt: new Date(),
+    };
     await updateDoc(jobRef, job);
     set((state) => ({
       jobs: state.jobs.map((j) => (j.id === job.id ? job : j)),

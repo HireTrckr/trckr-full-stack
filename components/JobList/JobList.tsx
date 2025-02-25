@@ -33,7 +33,7 @@ export const JobList: React.FC = () => {
     ) {
       return;
     }
-
+    updatedJob.timestamps.updatedAt = new Date();
     updateJob(updatedJob);
     handleClose();
   };
@@ -49,7 +49,7 @@ export const JobList: React.FC = () => {
   const handleJobDelete = async (deletedJob: Job) => {
     // dont do anything if the job is null
     if (!deletedJob) return;
-
+    
     deleteJob(deletedJob);
     setSelectedJob(null);
   };
