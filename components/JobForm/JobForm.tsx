@@ -53,8 +53,10 @@ export function JobForm() {
 
   if (!auth.currentUser) {
     return (
-      <div className="flex flex-col justify-center items-center gap-2">
-        <span className="text-md text-text-primary transition-colors duration-text capitalize">please sign in to continue</span>
+      <div className="flex flex-col justify-center items-center gap-2 py-8">
+        <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text capitalize mb-6">
+          please sign in to continue
+        </span>
         <button
           onClick={signInWithGoogle}
           className="px-3 py-1.5 rounded-lg text-sm font-medium
