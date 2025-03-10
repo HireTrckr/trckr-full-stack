@@ -17,6 +17,8 @@ notes
 confirmation popup for delete
 dropdown styling for inside job modal
 link (optional)
+tags
+rate limiting for requests, creations, deletions, edits
 */
 
 export default function Home() {

@@ -1,6 +1,7 @@
 import React, { JSX, useEffect, useRef } from "react";
 import { Job, statusOptions } from "../../types/job";
 import { useState, memo } from "react";
+import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
 
 export const JobListing = memo(
   function JobListing({
@@ -19,9 +20,34 @@ export const JobListing = memo(
     onDropdownClose: () => void;
   }): JSX.Element {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+    const [timeRemaining, setTimeRemaining] = useState(
+      Date.now() - job?.timestamps?.updatedAt.getTime() || 0
+    );
+
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const updateStatus = (newStatus: Job["status"]) => {
+    useEffect(() => {
+      if (!job.timestamps.updatedAt) return;
+
+      const updateTimeRemaining = () => {
+        const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
+        const remaingSeconds = Math.max(
+          0,
+          30 - Math.floor(timeSinceUpdate / 1000)
+        );
+        setTimeRemaining(remaingSeconds);
+      };
+
+      updateTimeRemaining();
+
+      // update every second
+      const interval = setInterval(updateTimeRemaining, 1000);
+
+      // unmount
+      return () => clearInterval(interval);
+    }, [job.timestamps?.updatedAt]);
+
+    const updateStatus = (newStatus: Job["status"]): void => {
       if (job.status === newStatus) {
         setIsDropDownOpen(false);
         onDropdownClose();
@@ -35,7 +61,7 @@ export const JobListing = memo(
 
     const getStatusColor = (status: Job["status"]): string => {
       const baseClasses =
-        "text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px]";
+        "text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed";
       switch (status.toLowerCase()) {
         case "applied":
           return `bg-blue-500 ${baseClasses}`;
@@ -86,24 +112,47 @@ export const JobListing = memo(
           showControls ? "z-10" : "z-0"
         }`}
       >
-        <div className="flex flex-col">
-          <div>
-            <span className="text-text-primary">{job.position}</span>
-            <span className="text-text-secondary">
-              {job.company ? `, ${job.company}` : ""}
-            </span>
+        {/* left side */}
+        <div className="flex gap-2">
+          <div className="rounded-lg">
+            {job.URL ? (
+              <UrlPreviewCard job={job} size="small" />
+            ) : (
+              <button
+                className="h-10 w-10 rounded-lg bg-background-secondary flex items-center justify-center"
+                onClick={() => onEdit(job.id)}
+              >
+                <span className="text-text-primary text-2xl">
+                  {job.company?.charAt(0).toUpperCase()}
+                </span>
+              </button>
+            )}
           </div>
-          <span className="text-text-secondary text-xs">{job.location}</span>
+
+          <div className="flex flex-col">
+            <div className="flex items-center gap-5">
+              <div>
+                <span className="text-text-primary">{job.position}</span>
+                <span className="text-text-secondary">
+                  {job.company ? `, ${job.company}` : ""}
+                </span>
+              </div>
+            </div>
+            <span className="text-text-secondary text-xs">{job.location}</span>
+          </div>
         </div>
+
+        {/* right side */}
         {showControls && (
           <div className="flex justify-between items-center gap-2 transition-all duration-bg ease-in-out">
             <div className="relative" ref={dropdownRef}>
-              <span
+              <button
                 onClick={() => toggleDropDown()}
                 className={getStatusColor(job.status)}
+                disabled={timeRemaining > 0}
               >
                 {job.status}
-              </span>
+              </button>
               {isDropDownOpen && (
                 <div
                   className="absolute left-0 top-full w-48 bg-background-secondary border 

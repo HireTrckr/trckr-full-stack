@@ -4,7 +4,7 @@ import { ThemeColors, themeConfig } from "../styles/theme";
 export const useThemeColors = (): ThemeColors => {
   const { theme } = useTheme();
 
-  if (typeof window !== "undefined") {
+  if (window && typeof window !== "undefined") {
     return {
       backgroundPrimary: getComputedStyle(
         document.documentElement

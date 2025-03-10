@@ -4,17 +4,38 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { Job, statusOptions } from "../../types/job";
 import { auth } from "../../lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import React, { useEffect } from "react";
 
 export function JobForm() {
   const { addJob } = useJobStore();
   const [job, setJob] = useState({
     company: "",
     position: "",
-    status: "applied",
+    status: "applied" as Job["status"],
     location: "",
+    URL: "",
   });
 
-  const [dropDownOpen, setDropDownOpen] = useState(false);
+  const [statusDropDownOpen, setStatusDropDownOpen] = useState(false);
+  const [attributeDropDownOpen, setAttributeDropDownOpen] = useState(false);
+
+  const statusDropDownRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        statusDropDownRef.current &&
+        !statusDropDownRef.current.contains(event.target as Node)
+      ) {
+        setStatusDropDownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +55,7 @@ export function JobForm() {
       position: "",
       status: "applied" as Job["status"],
       location: "",
+      URL: "",
     });
   };
 
@@ -107,35 +129,24 @@ export function JobForm() {
             value={job.position}
             onChange={(e) => setJob({ ...job, position: e.target.value })}
           />
-          <input
-            type="text"
-            placeholder="Location (optional)"
-            className="w-full px-4 py-2 rounded-lg
-                     bg-background-primary 
-                     text-text-primary
-                     border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
-                     placeholder-text-secondary/50
-                     transition-all duration-text"
-            value={job.location}
-            onChange={(e) => setJob({ ...job, location: e.target.value })}
-          />
+
           <button
             className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
-            onClick={() => setDropDownOpen(!dropDownOpen)}
+            onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
           >
             {job.status}
             <RiArrowDropDownLine
               className={`rotate-${
-                dropDownOpen ? "270" : "90"
+                statusDropDownOpen ? "270" : "90"
               } transition-all text-text-primary duration-text`}
             />
           </button>
-          {dropDownOpen && (
+          {statusDropDownOpen && (
             <div
               className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
-              onMouseEnter={() => setDropDownOpen(true)}
-              onMouseLeave={() => setDropDownOpen(false)}
+              onMouseEnter={() => setStatusDropDownOpen(true)}
+              onMouseLeave={() => setStatusDropDownOpen(false)}
+              ref={statusDropDownRef}
             >
               {statusOptions.map((status: Job["status"]) => (
                 <button
@@ -148,12 +159,12 @@ export function JobForm() {
                   role="menuitem"
                   onClick={() => {
                     setJob({ ...job, status });
-                    setDropDownOpen(false);
+                    setStatusDropDownOpen(false);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       setJob({ ...job, status });
-                      setDropDownOpen(false);
+                      setStatusDropDownOpen(false);
                     }
                   }}
                 >
@@ -163,6 +174,42 @@ export function JobForm() {
             </div>
           )}
         </div>
+
+        <div className="w-full flex items-center justify-center">
+          <button
+            onClick={() => setAttributeDropDownOpen(!attributeDropDownOpen)}
+          >
+            <span className="text-center text-text-secondary transition-all duration-text capitalize text-sm">
+              view {attributeDropDownOpen ? "less" : "more"}
+            </span>
+          </button>
+        </div>
+
+        {attributeDropDownOpen && (
+          <>
+            <input
+              type="text"
+              placeholder="Location (optional)"
+              className="w-full px-4 py-2 rounded-lg
+                     bg-background-primary 
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     placeholder-text-secondary/50
+                     transition-all duration-text"
+              value={job.location}
+              onChange={(e) => setJob({ ...job, location: e.target.value })}
+            />
+
+            <input
+              type="url"
+              placeholder="URL (optional)"
+              className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
+              value={job?.URL}
+              onChange={(e) => setJob({ ...job, URL: e.target.value })}
+            ></input>
+          </>
+        )}
 
         <button
           type="submit"

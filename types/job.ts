@@ -6,6 +6,7 @@ export type Job = {
   position: string;
   location?: string;
   status: "applied" | "interview" | "offer" | "rejected";
+  URL?: string;
   timestamps: timestamps;
 };
 
