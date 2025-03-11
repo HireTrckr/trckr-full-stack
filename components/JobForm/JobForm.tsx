@@ -3,7 +3,7 @@ import { useJobStore } from "../../context/jobStore";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { Job, statusOptions } from "../../types/job";
 import { auth } from "../../lib/firebase";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithGoogle } from "../../utils/authUtils";
 import React, { useEffect } from "react";
 
 export function JobForm() {
@@ -58,41 +58,6 @@ export function JobForm() {
       URL: "",
     });
   };
-
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error: any) {
-      if (error.code === "auth/popup-closed-by-user") {
-        return;
-      }
-      console.error("Login failed", error);
-    }
-  };
-
-  if (!auth.currentUser) {
-    return (
-      <div className="flex flex-col justify-center items-center gap-2 py-8">
-        <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text capitalize mb-6">
-          please sign in to continue
-        </span>
-        <button
-          onClick={signInWithGoogle}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium
-               bg-accent-primary hover:bg-accent-hover
-               text-white
-               transition-all duration-text ease-in-out
-               flex items-center gap-2 shadow-light
-                 "
-        >
-          Sign In
-        </button>
-      </div>
-    );
-  }
 
   return (
     <>

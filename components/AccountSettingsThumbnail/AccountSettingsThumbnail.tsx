@@ -1,15 +1,10 @@
-import { signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
-import React, { JSX } from "react";
 import { auth } from "../../lib/firebase";
 import Link from "next/link";
+import { handleSignOut } from "../../utils/authUtils";
 
-export function AccountSettingsThumbnail(): JSX.Element {
+export function AccountSettingsThumbnail() {
   const [user] = useAuthState(auth);
-
-  const handleSignOut = () => {
-    signOut(auth);
-  };
 
   return (
     <div className="hover:bg-background-secondary py-2">

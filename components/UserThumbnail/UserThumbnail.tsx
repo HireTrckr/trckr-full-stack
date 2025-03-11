@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { auth } from "../../lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { signInWithGoogle } from "../../utils/authUtils";
 import { ThemeSettingsDropdown } from "../ThemeSettingsDropdown/ThemeSettingsDropdown";
 import { AccountSettingsThumbnail } from "../AccountSettingsThumbnail/AccountSettingsThumbnail";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -44,20 +44,6 @@ export function UserThumbnail() {
   if (!isClient) {
     return null;
   }
-
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
-
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error: any) {
-      if (error.code === "auth/popup-closed-by-user") {
-        return;
-      }
-      console.error("Login failed", error);
-    }
-  };
 
   return (
     <div className="relative justify-self-end" ref={dropdownRef}>
