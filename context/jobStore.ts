@@ -56,8 +56,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
     if (tagIds.length === 0) return get().jobs;
 
     return get().jobs.filter((job: Job) => {
-      if (!job.tags) return false;
-      return job.tags.some((tagId: string) => tagIds.includes(tagId));
+      if (!job.tagIds) return false;
+      return job.tagIds.some((tagId: string) => tagIds.includes(tagId));
     });
   },
 
