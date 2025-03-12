@@ -106,8 +106,8 @@ export const useTagStore = create<TagStore>((set, get) => ({
         // remove tag from jobs
         const jobStore = useJobStore.getState();
         jobsWithTag.forEach((job: Job) => {
-          const updatedTags = job.tags?.filter((tag) => tag !== tagId) || [];
-          jobStore.updateJob({ ...job, tags: updatedTags });
+          const updatedTags = job.tagIds?.filter((tag) => tag !== tagId) || [];
+          jobStore.updateJob({ ...job, tagIds: updatedTags });
         });
       }
 

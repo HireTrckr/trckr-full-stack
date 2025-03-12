@@ -7,6 +7,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { Job } from "../types/job";
 import { Tag } from "../types/tag";
 
+import { timestampToDate } from "../utils/timestampUtils";
+
 type JobStore = {
   jobs: Job[];
   fetchJobs: () => Promise<void>;
@@ -15,13 +17,6 @@ type JobStore = {
   updateJob: (job: Job) => void;
   getJobsWithTags: (tagId: Tag["id"][]) => Job[];
   clearJobs: () => void; // doesn't delete from server, only clears locally saved jobs
-};
-
-const timestampToDate = (timestamp: any) => {
-  if (!timestamp) return null;
-  if (timestamp instanceof Date) return timestamp;
-  if (timestamp.toDate) return timestamp.toDate();
-  return new Date(timestamp.seconds * 1000);
 };
 
 export const useJobStore = create<JobStore>((set, get) => ({
