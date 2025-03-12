@@ -1,8 +1,11 @@
+//context/jobStore.ts
+
 import { create } from "zustand";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { Job } from "../types/job";
+import { Tag } from "../types/tag";
 
 type JobStore = {
   jobs: Job[];
@@ -10,6 +13,7 @@ type JobStore = {
   addJob: (job: Job) => void;
   deleteJob: (job: Job) => void;
   updateJob: (job: Job) => void;
+  getJobsWithTags: (tagId: Tag["id"][]) => Job[];
   clearJobs: () => void; // doesn't delete from server, only clears locally saved jobs
 };
 
@@ -46,6 +50,15 @@ export const useJobStore = create<JobStore>((set, get) => ({
     } catch (e) {
       console.error("Error fetching jobs: ", e);
     }
+  },
+
+  getJobsWithTags(tagIds: string[]) {
+    if (tagIds.length === 0) return get().jobs;
+
+    return get().jobs.filter((job: Job) => {
+      if (!job.tags) return false;
+      return job.tags.some((tagId: string) => tagIds.includes(tagId));
+    });
   },
 
   addJob: async (job: Job) => {

@@ -1,4 +1,5 @@
 import { timestamps } from "./timestamps";
+import { Tag } from "./tag";
 
 export type Job = {
   id?: string;
@@ -8,6 +9,7 @@ export type Job = {
   status: "applied" | "interview" | "offer" | "rejected";
   URL?: string;
   timestamps: timestamps;
+  tagIds?: Tag["id"][]; // tag_ids
 };
 
 export const statusOptions: Job["status"][] = [

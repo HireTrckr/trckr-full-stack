@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useJobStore } from "../../context/jobStore";
+import { useTagStore } from "../../context/tagStore";
 import { Job } from "../../types/job";
 import { auth } from "../../lib/firebase";
 import { EditJobModal } from "../EditJobModal/EditJobModal";
@@ -8,6 +9,9 @@ import { createPortal } from "react-dom";
 
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
+  const tags = useTagStore((state) => state.tagMap);
+  const clearTags = useTagStore((state) => state.clearTags);
+  const fetchTags = useTagStore((state) => state.fetchTags);
   const clearJobs = useJobStore((state) => state.clearJobs);
   const fetchJobs = useJobStore((state) => state.fetchJobs);
   const updateJob = useJobStore((state) => state.updateJob);
@@ -49,7 +53,7 @@ export const JobList: React.FC = () => {
   const handleJobDelete = async (deletedJob: Job) => {
     // dont do anything if the job is null
     if (!deletedJob) return;
-    
+
     deleteJob(deletedJob);
     setSelectedJob(null);
   };
@@ -61,6 +65,9 @@ export const JobList: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      clearJobs();
+      clearTags();
+
       if (user) {
         setIsLoading(true);
         try {
@@ -70,13 +77,18 @@ export const JobList: React.FC = () => {
         } finally {
           setIsLoading(false);
         }
-      } else {
-        clearJobs();
+        try {
+          await fetchTags();
+        } catch (error) {
+          console.error("Error fetching tags:", error);
+        } finally {
+          setIsLoading(false);
+        }
       }
     });
 
     return () => unsubscribe();
-  }, [fetchJobs, clearJobs]);
+  }, [fetchJobs, clearJobs, fetchTags, clearTags]);
 
   if (isLoading) {
     return <p className="text-text-secondary">Loading...</p>;

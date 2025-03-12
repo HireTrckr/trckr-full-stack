@@ -26,6 +26,8 @@ export const JobListing = memo(
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
+    job.tags = ["React", "TypeScript", "Firebase"];
+
     useEffect(() => {
       if (!job.timestamps.updatedAt) return;
 
@@ -140,6 +142,19 @@ export const JobListing = memo(
             </div>
             <span className="text-text-secondary text-xs">{job.location}</span>
           </div>
+
+          {job.tags && (
+            <div className="flex flex items-start gap-2">
+              {job.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="bg-accent-primary text-white px-2 py-1 rounded-lg text-xs"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* right side */}

@@ -16,7 +16,9 @@ due date (optional)
 notes
 confirmation popup for delete
 dropdown styling for inside job modal
-link (optional)
+make edit job modal responsive for when use adds a link
+tag editor
+tag category
 tags
 rate limiting for requests, creations, deletions, edits
 */
