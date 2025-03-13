@@ -2,6 +2,8 @@ import React, { JSX, useEffect, useRef } from "react";
 import { Job, statusOptions } from "../../types/job";
 import { useState, memo } from "react";
 import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
+import { useTagStore } from "../../context/tagStore";
+import { TagCard } from "../TagCard/TagCard";
 
 export const JobListing = memo(
   function JobListing({
@@ -24,9 +26,12 @@ export const JobListing = memo(
       Date.now() - job?.timestamps?.updatedAt.getTime() || 0
     );
 
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
+    const removeTagFromJob = useTagStore((state) => state.removeTagFromJob);
 
-    job.tags = ["React", "TypeScript", "Firebase"];
+    const tags = getTagsFromJob(job);
+
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (!job.timestamps.updatedAt) return;
@@ -131,7 +136,7 @@ export const JobListing = memo(
             )}
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-evenly">
             <div className="flex items-center gap-5">
               <div>
                 <span className="text-text-primary">{job.position}</span>
@@ -140,18 +145,20 @@ export const JobListing = memo(
                 </span>
               </div>
             </div>
-            <span className="text-text-secondary text-xs">{job.location}</span>
+            {job.location && (
+              <span className="text-text-secondary text-xs">
+                {job.location}
+              </span>
+            )}
           </div>
 
-          {job.tags && (
+          {tags && (
             <div className="flex flex items-start gap-2">
-              {job.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="bg-accent-primary text-white px-2 py-1 rounded-lg text-xs"
-                >
-                  {tag}
-                </span>
+              {tags.map((_tag) => (
+                <TagCard
+                  tag={_tag}
+                  onRemoveButtonClick={() => removeTagFromJob(job.id, _tag.id)}
+                />
               ))}
             </div>
           )}

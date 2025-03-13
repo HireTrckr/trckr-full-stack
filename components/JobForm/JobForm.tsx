@@ -1,29 +1,47 @@
 import { useState } from "react";
 import { useJobStore } from "../../context/jobStore";
-import { RiArrowDropDownLine } from "react-icons/ri";
+import { TiArrowSortedDown } from "react-icons/ti";
 import { Job, statusOptions } from "../../types/job";
-import { auth } from "../../lib/firebase";
-import { signInWithGoogle } from "../../utils/authUtils";
+import { Tag } from "../../types/tag";
 import React, { useEffect } from "react";
+import { useTagStore } from "../../context/tagStore";
+import { TagEditor } from "../TagEditor/TagEditor";
+
+// Define the NewTag interface to match what's in the TagEditor
+interface NewTag extends Tag {
+  isNew: boolean;
+}
 
 export function JobForm() {
   const { addJob } = useJobStore();
+  const { createTag } = useTagStore(); // Get the createTag function from the store
+
   const [job, setJob] = useState({
     company: "",
     position: "",
     status: "applied" as Job["status"],
     location: "",
     URL: "",
+    tagIds: [] as Job["tagIds"],
   });
+
+  // Track new tags created during form session
+  const [newTags, setNewTags] = useState<NewTag[]>([]);
 
   const [statusDropDownOpen, setStatusDropDownOpen] = useState(false);
   const [attributeDropDownOpen, setAttributeDropDownOpen] = useState(false);
 
   const statusDropDownRef = React.useRef<HTMLDivElement>(null);
+  const statusDropDownButtonRef = React.useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
+        statusDropDownButtonRef.current &&
+        statusDropDownButtonRef.current.contains(event.target as Node)
+      ) {
+        // do nothing as button logic will handle it
+      } else if (
         statusDropDownRef.current &&
         !statusDropDownRef.current.contains(event.target as Node)
       ) {
@@ -37,26 +55,44 @@ export function JobForm() {
     };
   }, []);
 
+  // Handler for tag changes
+  const handleTagsChange = (tagIds: Tag["id"][], localNewTags?: NewTag[]) => {
+    setJob({ ...job, tagIds });
+    if (localNewTags) {
+      setNewTags(localNewTags);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!job.company || !job.position) return;
 
+    // First, save any new tags to Firestore
+    for (const newTag of newTags) {
+      await createTag(newTag.name);
+    }
+
+    // Then save the job with the tag IDs
     await addJob({
       ...job,
       status: job.status as Job["status"],
+      tagIds: job.tagIds as Job["tagIds"],
       timestamps: {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
 
+    // Reset form state
     setJob({
       company: "",
       position: "",
       status: "applied" as Job["status"],
       location: "",
       URL: "",
+      tagIds: [] as Job["tagIds"],
     });
+    setNewTags([]); // Reset new tags
   };
 
   return (
@@ -70,7 +106,7 @@ export function JobForm() {
         <div className="space-y-3 relative">
           <input
             type="text"
-            placeholder="Company"
+            placeholder="Company*"
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -83,7 +119,7 @@ export function JobForm() {
           />
           <input
             type="text"
-            placeholder="Position"
+            placeholder="Position*"
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -98,19 +134,18 @@ export function JobForm() {
           <button
             className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
             onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
+            ref={statusDropDownButtonRef}
           >
             {job.status}
-            <RiArrowDropDownLine
-              className={`rotate-${
-                statusDropDownOpen ? "270" : "90"
+            <TiArrowSortedDown
+              className={`${
+                statusDropDownOpen ? "rotate-0" : "rotate-90"
               } transition-all text-text-primary duration-text`}
             />
           </button>
           {statusDropDownOpen && (
             <div
               className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
-              onMouseEnter={() => setStatusDropDownOpen(true)}
-              onMouseLeave={() => setStatusDropDownOpen(false)}
               ref={statusDropDownRef}
             >
               {statusOptions.map((status: Job["status"]) => (
@@ -154,7 +189,7 @@ export function JobForm() {
           <>
             <input
               type="text"
-              placeholder="Location (optional)"
+              placeholder="Location"
               className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -168,11 +203,16 @@ export function JobForm() {
 
             <input
               type="url"
-              placeholder="URL (optional)"
+              placeholder="URL"
               className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
               value={job?.URL}
               onChange={(e) => setJob({ ...job, URL: e.target.value })}
             ></input>
+
+            <TagEditor
+              tagIds={job.tagIds || []}
+              onTagsChange={handleTagsChange}
+            />
           </>
         )}
 

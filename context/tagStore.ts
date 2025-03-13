@@ -2,17 +2,7 @@
 
 import { create } from "zustand";
 import { TagMap, TagStatus } from "../types/tag";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  getDoc,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { getDoc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { doc } from "firebase/firestore";
 import { timestampToDate } from "../utils/timestampUtils";
@@ -26,13 +16,17 @@ type TagStore = {
   error: string | null;
 
   // actions
-  fetchTags: () => Promise<void>;
-  deleteTag: (tagId: string) => void;
-
-  clearTags: () => void; // doesn't delete from server, only clears locally saved tags
+  fetchTags: () => Promise<boolean>;
+  createTag: (tagName: Tag["name"]) => Promise<boolean>;
+  deleteTag: (tagId: Tag["id"]) => Promise<boolean>;
+  getRecentTags: (limit: number) => Tag[];
+  addTagToJob: (jobId: Job["id"], tagId: Tag["id"]) => Promise<boolean>;
+  removeTagFromJob: (jobId: Job["id"], tagId: Tag["id"]) => Promise<boolean>;
+  clearTags: () => boolean; // doesn't delete from server, only clears locally saved tags
+  getTagsFromJob: (job: Job) => Tag[];
 };
 
-const TAGS_PER_RECORD = 5;
+export const TAGS_PER_RECORD = 5;
 
 export const useTagStore = create<TagStore>((set, get) => ({
   tagMap: {},
@@ -42,7 +36,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
   error: null,
 
   fetchTags: async () => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
     try {
@@ -54,7 +48,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
         console.warn("[tagStore.ts] No tags file found");
         await setDoc(tagsRef, { tagMap: {} });
         set({ tagMap: {}, isLoading: false });
-        return;
+        return true;
       }
 
       const tagData = tagsDoc.data();
@@ -71,7 +65,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
               id: tagId,
               name: tagData.name,
               color: tagData.color,
-              count: tagData.count,
+              count: Math.min(tagData.count, 0),
               timestamps: {
                 createdAt: tagData.timestamps?.createdAt.toDate(),
                 updatedAt: timestampToDate(tagData.timestamps?.updatedAt),
@@ -89,11 +83,13 @@ export const useTagStore = create<TagStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+
+    return !get().error;
   },
 
   deleteTag: async (tagId: string) => {
-    if (!auth.currentUser) return;
-    if (!tagId) return;
+    if (!auth.currentUser) return false;
+    if (!tagId) return false;
 
     set({ isLoading: true, error: null });
     try {
@@ -114,10 +110,12 @@ export const useTagStore = create<TagStore>((set, get) => ({
       const tagsRef = doc(db, `users/${auth.currentUser.uid}/metadata/tags`);
       const tagToDelete = get().tagMap[tagId];
 
+      if (!tagsRef) {
+        throw new Error("Tags document not found");
+      }
+
       if (!tagToDelete) {
-        set({ error: "Tag not found" });
-        set({ isLoading: false });
-        return;
+        throw new Error("Tag not found");
       }
 
       await updateDoc(tagsRef, {
@@ -146,8 +144,40 @@ export const useTagStore = create<TagStore>((set, get) => ({
     return !get().error;
   },
 
+  createTag: async (tagName: Tag["name"]) => {
+    if (!auth.currentUser) return false;
+    if (!tagName) return false;
+
+    set({ isLoading: true, error: null });
+    try {
+      // create tag object
+      const newTag: Tag = {
+        id: tagName.toLowerCase().replace(/\s/g, "-"),
+        name: tagName,
+        color: "gray",
+        count: 1,
+        timestamps: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      };
+
+      await updateDoc(doc(db, `users/${auth.currentUser.uid}/metadata/tags`), {
+        [`tagMap.${newTag.id}`]: newTag,
+      });
+    } catch (error) {
+      console.error(`[tagStore.ts] Error creating tag: ${tagName}`, error);
+      set({ error: `Failed to create tag: ${error}` });
+    } finally {
+      set({ isLoading: false });
+    }
+
+    return !get().error;
+  },
+
   addTagToJob: async (jobId: Job["id"], tagId: Tag["id"]) => {
-    if (!auth.currentUser) return;
+    if (!auth.currentUser) return false;
+    if (!jobId || !tagId) return false;
 
     try {
       set({ isLoading: true, error: null });
@@ -155,34 +185,39 @@ export const useTagStore = create<TagStore>((set, get) => ({
       // update job with tag
       const jobStore = useJobStore.getState();
       const job = jobStore.jobs.find((job: Job) => job.id === jobId);
+
+      let tag = get().tagMap[tagId];
+
       if (!job) {
-        console.error(`[tagStore.ts] Job not found: ${jobId}`);
         throw new Error("Job not found");
       }
 
+      if (!job.tagIds) {
+        job.tagIds = [];
+      }
+
       // check if job has reached tag limit already
-      if (job.tags && job.tags.length > TAGS_PER_RECORD) {
-        set({
-          error: `Job [${jobId}] has reached the maximum number of tags (${TAGS_PER_RECORD})`,
-        });
+      if (job.tagIds.length > TAGS_PER_RECORD) {
         throw new Error("Job has reached the maximum number of tags");
+      }
+
+      // check if job already has this tag
+      if (job.tagIds.includes(tagId)) {
+        throw new Error("Job already has this tag");
+      }
+
+      if (!tag) {
+        // need to create new tag
+        get().createTag(tagId);
+        tag = get().tagMap[tagId];
       }
 
       const updatedJob: Job = {
         ...job,
-        tags: job.tags ? [...job.tags, tagId] : [tagId],
-        timestamps: {
-          ...job.timestamps,
-          updatedAt: new Date(),
-        },
+        tagIds: job.tagIds ? [...job.tagIds, tagId] : [tagId],
       };
       await jobStore.updateJob(updatedJob);
 
-      const tag = get().tagMap[tagId];
-      if (!tag) {
-        console.error(`[tagStore.ts] Tag not found: ${tagId}`);
-        throw new Error("Tag not found");
-      }
       await updateDoc(doc(db, `users/${auth.currentUser.uid}/metadata/tags`), {
         [`tagMap.${tagId}`]: {
           ...tag,
@@ -201,9 +236,103 @@ export const useTagStore = create<TagStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+
+    return !get().error;
+  },
+
+  removeTagFromJob: async (jobId: Job["id"], tagId: Tag["id"]) => {
+    if (!auth.currentUser) return false;
+    if (!jobId || !tagId) return false;
+
+    try {
+      set({ isLoading: true, error: null });
+
+      // update job with tag
+      const jobStore = useJobStore.getState();
+      const job = jobStore.jobs.find((job: Job) => job.id === jobId);
+
+      const tag = get().tagMap[tagId];
+
+      if (!tag) {
+        console.error(`[tagStore.ts] Tag not found: ${tagId}`);
+        throw new Error("Tag not found");
+      }
+      if (!job) {
+        console.error(`[tagStore.ts] Job not found: ${jobId}`);
+        throw new Error("Job not found");
+      }
+
+      if (!job.tagIds) {
+        job.tagIds = [];
+      }
+
+      // check if job already has this tag
+      if (!job.tagIds.includes(tagId)) {
+        throw new Error("Job does not have this tag");
+      }
+
+      const updatedJob: Job = {
+        ...job,
+        tagIds: job.tagIds.filter((tag) => tag !== tagId),
+      };
+      await jobStore.updateJob(updatedJob);
+
+      await updateDoc(doc(db, `users/${auth.currentUser.uid}/metadata/tags`), {
+        [`tagMap.${tagId}`]: {
+          ...tag,
+          count: Math.min(tag.count - 1, 0),
+          timestamps: {
+            ...tag.timestamps,
+            updatedAt: new Date(),
+          },
+        },
+      });
+
+      // if tag is not used anymmore - delete it
+      if (tag.count - 1 <= 0) {
+        await get().deleteTag(tagId);
+      }
+    } catch (error) {
+      console.error(
+        `[tagStore.ts] Error removing tag from job: ${jobId}`,
+        error
+      );
+      set({
+        error: `Failed to remove tag [${tagId}] from job [${jobId}]: ${error}`,
+      });
+    } finally {
+      set({ isLoading: false });
+    }
+
+    return !get().error;
+  },
+
+  getRecentTags(limit: number = 5): Tag[] {
+    if (limit <= 0) return [];
+    const tags = Object.values(get().tagMap);
+    tags.sort((a, b) => {
+      return (
+        b.timestamps.updatedAt.getTime() - a.timestamps.updatedAt.getTime()
+      );
+    });
+    return tags.slice(0, limit);
   },
 
   clearTags: () => {
-    set({ tagMap: {} });
+    set({ isLoading: true, error: null });
+    try {
+      set({ tagMap: {} });
+    } catch (error) {
+      console.error(`[tagStore.ts] Error clearing tags`, error);
+      set({ error: `Failed to clear tags: ${error}` });
+    } finally {
+      set({ isLoading: false });
+    }
+    return !get().error;
+  },
+
+  getTagsFromJob(job: Job) {
+    if (!job.tagIds) return [];
+    return job.tagIds.map((tagId) => get().tagMap[tagId]).filter(Boolean);
   },
 }));

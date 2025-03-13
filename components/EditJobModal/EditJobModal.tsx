@@ -1,8 +1,10 @@
 import React, { JSX, useState, useEffect } from "react";
-import { Job } from "../../types/job";
+import { Job, statusOptions } from "../../types/job";
 import { ToolTip } from "../ToolTip/ToolTip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { TagEditor } from "../TagEditor/TagEditor";
 
 export function EditJobModal({
   job,
@@ -20,7 +22,10 @@ export function EditJobModal({
   // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
 
+  const [statusDropDownOpen, setStatusDropDownOpen] = useState<boolean>(false);
+
   const modalRef = React.useRef<HTMLDivElement>(null);
+  const statusDropDownRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!job.timestamps.updatedAt) return;
@@ -65,7 +70,6 @@ export function EditJobModal({
     >
   ) => {
     const { name, value } = e.target;
-    console.log(`${name}: ${value}`);
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
@@ -109,7 +113,7 @@ export function EditJobModal({
               name="position"
               value={formData.position}
               onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
+              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
             />
           </div>
 
@@ -126,7 +130,7 @@ export function EditJobModal({
               name="company"
               value={formData.company}
               onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
+              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
             />
           </div>
 
@@ -142,26 +146,55 @@ export function EditJobModal({
               id="location"
               value={formData.location}
               onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
+              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label htmlFor="status" className="block text-text-primary text-xs">
               Status
             </label>
-            <select
-              id="status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-200 ease-in-out"
+            <button
+              className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
+              onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             >
-              <option value="applied">Applied</option>
-              <option value="interview">Interview</option>
-              <option value="offer">Offer</option>
-              <option value="rejected">Rejected</option>
-            </select>
+              {formData.status}
+              <TiArrowSortedDown
+                className={`${
+                  statusDropDownOpen ? "rotate-0" : "rotate-90"
+                } transition-all text-text-primary duration-text`}
+              />
+            </button>
+            {statusDropDownOpen && (
+              <div
+                className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
+                ref={statusDropDownRef}
+              >
+                {statusOptions.map((status: Job["status"]) => (
+                  <button
+                    key={status}
+                    className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
+                      formData.status === status
+                        ? "bg-background-primary text-text-primary"
+                        : "text-text-secondary"
+                    }`}
+                    role="menuitem"
+                    onClick={() => {
+                      setFormData({ ...formData, status });
+                      setStatusDropDownOpen(false);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        setFormData({ ...formData, status });
+                        setStatusDropDownOpen(false);
+                      }
+                    }}
+                  >
+                    {status}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mb-4">
@@ -175,7 +208,16 @@ export function EditJobModal({
               placeholder="e.g. https://www.hiretrkr.com"
               value={formData.URL}
               onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out"
+              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
+            />
+          </div>
+
+          <div className="mb-4">
+            <TagEditor
+              tagIds={formData.tagIds || []}
+              onTagsChange={(tagIds) => {
+                setFormData((prevData) => ({ ...prevData, tagIds: tagIds }));
+              }}
             />
           </div>
 

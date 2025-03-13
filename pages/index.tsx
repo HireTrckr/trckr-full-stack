@@ -8,19 +8,21 @@ i18n
 system theme override
 settings component
 settings backend
+maximum stack errors
 job added popup / toast messages
 location stuff
 filter
 search bar
+add tag editor to editJobModal
 due date (optional)
-notes
+notes (optional)
 confirmation popup for delete
-dropdown styling for inside job modal
 make edit job modal responsive for when use adds a link
 tag editor
 tag category
 tags
 rate limiting for requests, creations, deletions, edits
+changing tag color
 */
 
 export default function Home() {
