@@ -153,7 +153,11 @@ export const JobListing = memo(
           </div>
 
           {tags && (
-            <div className="flex flex items-start gap-2">
+            <div
+              className={`flex flex ${
+                job.location ? "items-center" : "items-start"
+              } gap-2`}
+            >
               {tags.map((_tag) => (
                 <TagCard
                   tag={_tag}
