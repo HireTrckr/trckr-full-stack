@@ -184,7 +184,6 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         timestamps: {
           createdAt: new Date(),
           updatedAt: new Date(),
-          deletedAt: null,
         },
         isNew: true,
       };
