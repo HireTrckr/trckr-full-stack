@@ -1,6 +1,13 @@
 import React, { JSX } from "react";
 import { UserThumbnail } from "../UserThumbnail/UserThumbnail";
 import Link from "next/link";
+import { NavBarOption } from "../../types/navBarOption";
+
+const navBarOptions: NavBarOption[] = [
+  { link: "/list", text: "track" },
+  { link: "/new", text: "add new" },
+  { link: "/settings", text: "settings" },
+];
 
 export function Navbar(): JSX.Element {
   return (
@@ -18,30 +25,15 @@ export function Navbar(): JSX.Element {
         </div>
       </Link>
       <div className="flex items-center gap-2 mx-auto">
-        <Link
-          href="/list"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
-        >
-          track
-        </Link>
-        <span className="text-text-secondary transition-all duration-text">
-          |
-        </span>
-        <Link
-          href="/new"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
-        >
-          add new
-        </Link>
-        <span className="text-text-secondary transition-all duration-text">
-          |
-        </span>
-        <Link
-          href="/settings"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
-        >
-          settings
-        </Link>
+        {navBarOptions.map((option: NavBarOption) => (
+          <Link
+            key={option.link}
+            href={option.link}
+            className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
+          >
+            {option.text}
+          </Link>
+        ))}
       </div>
       <UserThumbnail />
     </nav>
