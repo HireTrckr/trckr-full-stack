@@ -1,28 +1,28 @@
-import { useTheme } from "../context/themeContext";
-import { ThemeColors, themeConfig } from "../styles/theme";
+import { useTheme } from '../context/themeContext';
+import { ThemeColors, themeConfig } from '../styles/theme';
 
 export const useThemeColors = (): ThemeColors => {
   const { theme } = useTheme();
 
-  if (window && typeof window !== "undefined") {
+  if (window && typeof window !== 'undefined') {
     return {
       backgroundPrimary: getComputedStyle(
-        document.documentElement,
-      ).getPropertyValue("--background-primary"),
+        document.documentElement
+      ).getPropertyValue('--background-primary'),
       backgroundSecondary: getComputedStyle(
-        document.documentElement,
-      ).getPropertyValue("--background-secondary"),
+        document.documentElement
+      ).getPropertyValue('--background-secondary'),
       textPrimary: getComputedStyle(document.documentElement).getPropertyValue(
-        "--text-primary",
+        '--text-primary'
       ),
       textSecondary: getComputedStyle(
-        document.documentElement,
-      ).getPropertyValue("--text-secondary"),
+        document.documentElement
+      ).getPropertyValue('--text-secondary'),
       accentColor: getComputedStyle(document.documentElement).getPropertyValue(
-        "--accent-color",
+        '--accent-color'
       ),
       accentHover: getComputedStyle(document.documentElement).getPropertyValue(
-        "--accent-hover",
+        '--accent-hover'
       ),
     };
   }

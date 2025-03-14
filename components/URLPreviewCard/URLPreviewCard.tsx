@@ -1,21 +1,21 @@
-import React, { JSX, useEffect } from "react";
-import { Job } from "../../types/job";
-import { SiteMetadata } from "../../types/siteMetadata";
+import React, { JSX, useEffect } from 'react';
+import { Job } from '../../types/job';
+import { SiteMetadata } from '../../types/siteMetadata';
 
 interface URLPreviewCardProps {
   job: Job;
-  size: "small" | "large";
+  size: 'small' | 'large';
 }
 
 export function UrlPreviewCard({
   job,
-  size = "small",
+  size = 'small',
 }: URLPreviewCardProps): JSX.Element {
   const [isLoaded, setIsLoaded] = React.useState<boolean>(true);
   const [error, setError] = React.useState<boolean>(false);
   const [metadata, setMetadata] = React.useState<SiteMetadata | null>(null);
 
-  const link: Job["URL"] = job?.URL;
+  const link: Job['URL'] = job?.URL;
 
   if (!link) {
     return <></>;
@@ -28,7 +28,7 @@ export function UrlPreviewCard({
 
     try {
       const url = new URL(link);
-      if (!url.protocol.startsWith("http")) {
+      if (!url.protocol.startsWith('http')) {
         setError(true);
         setIsLoaded(true);
         return;
@@ -43,7 +43,7 @@ export function UrlPreviewCard({
     } catch (e) {
       setError(true);
 
-      console.error("[URL-Preview-Card]:", e);
+      console.error('[URL-Preview-Card]:', e);
     }
     setIsLoaded(true);
   }, [link]);
@@ -56,9 +56,9 @@ export function UrlPreviewCard({
           target="_blank"
           rel="noopener noreferrer"
           className={`rounded-full h-full aspect-square text-text-primary ${
-            size == "large"
-              ? "border-4 border-accent-primary p-1 hover:border-accent-hover hover:underline hover:border-2 hover:scale-105"
-              : ""
+            size == 'large'
+              ? 'border-4 border-accent-primary p-1 hover:border-accent-hover hover:underline hover:border-2 hover:scale-105'
+              : ''
           }`}
         >
           <div className="h-full w-full flex flex-col items-center justify-center gap-2">
@@ -67,7 +67,7 @@ export function UrlPreviewCard({
               alt={metadata.siteName}
               className="rounded-md"
             />
-            {size == "large" && (
+            {size == 'large' && (
               <span className="text-xs text-text-primary ">
                 {metadata.siteName}
               </span>

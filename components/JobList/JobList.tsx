@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useJobStore } from "../../context/jobStore";
-import { useTagStore } from "../../context/tagStore";
-import { Job } from "../../types/job";
-import { auth } from "../../lib/firebase";
-import { EditJobModal } from "../EditJobModal/EditJobModal";
-import { JobListing } from "../JobListing/JobListing";
-import { createPortal } from "react-dom";
+import { useEffect, useState } from 'react';
+import { useJobStore } from '../../context/jobStore';
+import { useTagStore } from '../../context/tagStore';
+import { Job } from '../../types/job';
+import { auth } from '../../lib/firebase';
+import { EditJobModal } from '../EditJobModal/EditJobModal';
+import { JobListing } from '../JobListing/JobListing';
+import { createPortal } from 'react-dom';
 
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
@@ -24,7 +24,7 @@ export const JobList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [jobWithOpenDropdown, setJobWithOpenDropdown] = useState<Job | null>(
-    null,
+    null
   );
   const [hoveredJob, setHoveredJob] = useState<Job | null>(null);
 
@@ -42,7 +42,7 @@ export const JobList: React.FC = () => {
     handleClose();
   };
 
-  const handleEdit = (jobId: Job["id"]) => {
+  const handleEdit = (jobId: Job['id']) => {
     const job = jobs.find((job) => job.id === jobId);
     if (job) {
       setSelectedJob(job);
@@ -73,14 +73,14 @@ export const JobList: React.FC = () => {
         try {
           await fetchJobs();
         } catch (error) {
-          console.error("Error fetching jobs:", error);
+          console.error('Error fetching jobs:', error);
         } finally {
           setIsLoading(false);
         }
         try {
           await fetchTags();
         } catch (error) {
-          console.error("Error fetching tags:", error);
+          console.error('Error fetching tags:', error);
         } finally {
           setIsLoading(false);
         }
@@ -98,7 +98,7 @@ export const JobList: React.FC = () => {
     <div className="w-full transition-colors duration-bg">
       <div className="flex justify-center items-center mb-6">
         <h2 className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
-          My Job Applications {jobs.length ? `(${jobs.length})` : ""}
+          My Job Applications {jobs.length ? `(${jobs.length})` : ''}
         </h2>
       </div>
 
@@ -119,8 +119,8 @@ export const JobList: React.FC = () => {
                 key={job.id}
                 className={`relative rounded-lg transition-all duration-bg ease-in-out ${
                   isActive
-                    ? "scale-[1.01] shadow-light bg-background-secondary z-20"
-                    : "bg-background-primary z-10"
+                    ? 'scale-[1.01] shadow-light bg-background-secondary z-20'
+                    : 'bg-background-primary z-10'
                 }`}
                 onMouseEnter={() => setHoveredJob(job)}
                 onMouseLeave={() => setHoveredJob(null)}
@@ -166,7 +166,7 @@ export const JobList: React.FC = () => {
               </div>
             </div>
           </>,
-          document.body,
+          document.body
         )}
     </div>
   );

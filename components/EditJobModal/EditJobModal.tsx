@@ -1,10 +1,10 @@
-import React, { JSX, useState, useEffect } from "react";
-import { Job, statusOptions } from "../../types/job";
-import { ToolTip } from "../ToolTip/ToolTip";
-import { IoMdInformationCircleOutline } from "react-icons/io";
-import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
-import { TiArrowSortedDown } from "react-icons/ti";
-import { TagEditor } from "../TagEditor/TagEditor";
+import React, { JSX, useState, useEffect } from 'react';
+import { Job, statusOptions } from '../../types/job';
+import { ToolTip } from '../ToolTip/ToolTip';
+import { IoMdInformationCircleOutline } from 'react-icons/io';
+import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
+import { TiArrowSortedDown } from 'react-icons/ti';
+import { TagEditor } from '../TagEditor/TagEditor';
 
 export function EditJobModal({
   job,
@@ -34,7 +34,7 @@ export function EditJobModal({
       const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
       const remaingSeconds = Math.max(
         0,
-        30 - Math.floor(timeSinceUpdate / 1000),
+        30 - Math.floor(timeSinceUpdate / 1000)
       );
       setTimeRemaining(remaingSeconds);
     };
@@ -58,16 +58,16 @@ export function EditJobModal({
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -91,7 +91,7 @@ export function EditJobModal({
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
         className={`bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light ${
-          job.URL ? "w-[50dvw]" : "w-[25dvw]"
+          job.URL ? 'w-[50dvw]' : 'w-[25dvw]'
         }`}
         ref={modalRef}
       >
@@ -161,7 +161,7 @@ export function EditJobModal({
               {formData.status}
               <TiArrowSortedDown
                 className={`${
-                  statusDropDownOpen ? "rotate-0" : "rotate-90"
+                  statusDropDownOpen ? 'rotate-0' : 'rotate-90'
                 } transition-all text-text-primary duration-text`}
               />
             </button>
@@ -170,13 +170,13 @@ export function EditJobModal({
                 className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
                 ref={statusDropDownRef}
               >
-                {statusOptions.map((status: Job["status"]) => (
+                {statusOptions.map((status: Job['status']) => (
                   <button
                     key={status}
                     className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
                       formData.status === status
-                        ? "bg-background-primary text-text-primary"
-                        : "text-text-secondary"
+                        ? 'bg-background-primary text-text-primary'
+                        : 'text-text-secondary'
                     }`}
                     role="menuitem"
                     onClick={() => {
@@ -184,7 +184,7 @@ export function EditJobModal({
                       setStatusDropDownOpen(false);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
+                      if (e.key === 'Enter' || e.key === ' ') {
                         setFormData({ ...formData, status });
                         setStatusDropDownOpen(false);
                       }
@@ -258,7 +258,7 @@ export function EditJobModal({
             <div className="mt-1 flex flex justify-center items-center gap-1">
               <span className="text-xs text-text-secondary transition-all duration-text">
                 Please wait {timeRemaining} second
-                {timeRemaining != 1 ? "s" : ""} to edit again.
+                {timeRemaining != 1 ? 's' : ''} to edit again.
               </span>
               <ToolTip
                 text="Rate limiting is enabled to prevent spam!"

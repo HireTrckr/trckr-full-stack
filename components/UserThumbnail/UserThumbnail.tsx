@@ -1,19 +1,19 @@
-import { useEffect, useState, useRef } from "react";
-import { auth } from "../../lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { signInWithGoogle } from "../../utils/authUtils";
-import { ThemeSettingsDropdown } from "../ThemeSettingsDropdown/ThemeSettingsDropdown";
-import { AccountSettingsThumbnail } from "../AccountSettingsThumbnail/AccountSettingsThumbnail";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { IoIosClose } from "react-icons/io";
+import { useEffect, useState, useRef } from 'react';
+import { auth } from '../../lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { signInWithGoogle } from '../../utils/authUtils';
+import { ThemeSettingsDropdown } from '../ThemeSettingsDropdown/ThemeSettingsDropdown';
+import { AccountSettingsThumbnail } from '../AccountSettingsThumbnail/AccountSettingsThumbnail';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { IoIosClose } from 'react-icons/io';
 
 export function UserThumbnail() {
   const [user] = useAuthState(auth);
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [useSystemTheme, setUseSystemTheme] = useState(() => {
-    if (window && typeof window !== "undefined") {
-      const systemOverride = localStorage.getItem("useSystemTheme"); // true or false
+    if (window && typeof window !== 'undefined') {
+      const systemOverride = localStorage.getItem('useSystemTheme'); // true or false
       return systemOverride ? JSON.parse(systemOverride) : true;
     }
     return true;
@@ -35,9 +35,9 @@ export function UserThumbnail() {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 

@@ -1,7 +1,7 @@
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../lib/firebase";
-import Link from "next/link";
-import { handleSignOut } from "../../utils/authUtils";
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../lib/firebase';
+import Link from 'next/link';
+import { handleSignOut } from '../../utils/authUtils';
 
 export function AccountSettingsThumbnail() {
   const [user] = useAuthState(auth);
@@ -22,8 +22,8 @@ export function AccountSettingsThumbnail() {
             Settings
           </span>
           <img
-            src={user?.photoURL || ""}
-            alt={user?.displayName || ""}
+            src={user?.photoURL || ''}
+            alt={user?.displayName || ''}
             referrerPolicy="no-referrer"
             className="w-[15px] h-[15px] rounded-full"
           />

@@ -1,5 +1,5 @@
-import Head from "next/head";
-import { JobList } from "../components/JobList/JobList";
+import Head from 'next/head';
+import { JobList } from '../components/JobList/JobList';
 
 export default function List() {
   return (

@@ -1,12 +1,12 @@
-import React, { JSX } from "react";
-import { UserThumbnail } from "../UserThumbnail/UserThumbnail";
-import Link from "next/link";
-import { NavBarOption } from "../../types/navBarOption";
+import React, { JSX } from 'react';
+import { UserThumbnail } from '../UserThumbnail/UserThumbnail';
+import Link from 'next/link';
+import { NavBarOption } from '../../types/navBarOption';
 
 const navBarOptions: NavBarOption[] = [
-  { link: "/list", text: "track" },
-  { link: "/new", text: "add new" },
-  { link: "/settings", text: "settings" },
+  { link: '/list', text: 'track' },
+  { link: '/new', text: 'add new' },
+  { link: '/settings', text: 'settings' },
 ];
 
 export function Navbar(): JSX.Element {

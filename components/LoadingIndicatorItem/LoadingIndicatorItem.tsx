@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { TiInfoOutline } from "react-icons/ti";
+import { useState } from 'react';
+import { TiInfoOutline } from 'react-icons/ti';
 
 export interface LoadingIndicatorItemProps {
   isError: boolean;

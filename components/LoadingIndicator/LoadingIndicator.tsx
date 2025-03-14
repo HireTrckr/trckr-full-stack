@@ -1,11 +1,11 @@
-import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
-import { useJobStore } from "../../context/jobStore";
-import { useTagStore } from "../../context/tagStore";
+import { createPortal } from 'react-dom';
+import { useState, useEffect } from 'react';
+import { useJobStore } from '../../context/jobStore';
+import { useTagStore } from '../../context/tagStore';
 import {
   LoadingIndicatorItemProps,
   LoadingIndicatorItem,
-} from "../LoadingIndicatorItem/LoadingIndicatorItem";
+} from '../LoadingIndicatorItem/LoadingIndicatorItem';
 
 export function LoadingIndicator() {
   const [mounted, setMounted] = useState(false);
@@ -34,7 +34,7 @@ export function LoadingIndicator() {
             ? isJobsError
             : isTagsError
               ? isTagsError
-              : "Unknown error",
+              : 'Unknown error',
         },
       ]);
     }
@@ -58,6 +58,6 @@ export function LoadingIndicator() {
         ))}
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }

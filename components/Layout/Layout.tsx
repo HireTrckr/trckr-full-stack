@@ -1,6 +1,6 @@
-import { AuthCheck } from "../AuthCheck/AuthCheck";
-import { LoadingIndicator } from "../LoadingIndicator/LoadingIndicator";
-import { Navbar } from "../Navbar/Navbar";
+import { AuthCheck } from '../AuthCheck/AuthCheck';
+import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator';
+import { Navbar } from '../Navbar/Navbar';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

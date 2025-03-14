@@ -1,10 +1,10 @@
-import { TiDeleteOutline } from "react-icons/ti";
-import { Tag } from "../../types/tag";
-import { useState } from "react";
+import { TiDeleteOutline } from 'react-icons/ti';
+import { Tag } from '../../types/tag';
+import { useState } from 'react';
 
 interface TagCardProps {
   tag: Tag;
-  onRemoveButtonClick: (tagId: Tag["id"]) => void;
+  onRemoveButtonClick: (tagId: Tag['id']) => void;
 }
 
 export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
@@ -19,7 +19,7 @@ export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
     >
       <div
         className={`transition-all duration-200 flex ${
-          showDeleteButton ? "justify-start" : "justify-center"
+          showDeleteButton ? 'justify-start' : 'justify-center'
         } w-full`}
       >
         <span key={tag.id} className="text-white text-xs">

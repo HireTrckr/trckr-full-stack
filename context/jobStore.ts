@@ -1,13 +1,13 @@
 //context/jobStore.ts
 
-import { create } from "zustand";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import { auth, db } from "../lib/firebase";
-import { doc, updateDoc } from "firebase/firestore";
-import { Job, JobNotSavedInDB } from "../types/job";
-import { Tag } from "../types/tag";
+import { create } from 'zustand';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { auth, db } from '../lib/firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { Job, JobNotSavedInDB } from '../types/job';
+import { Tag } from '../types/tag';
 
-import { timestampToDate } from "../utils/timestampUtils";
+import { timestampToDate } from '../utils/timestampUtils';
 
 type JobStore = {
   jobs: Job[];
@@ -18,7 +18,7 @@ type JobStore = {
   addJob: (job: JobNotSavedInDB) => Promise<boolean>;
   deleteJob: (job: Job) => Promise<boolean>;
   updateJob: (job: Job) => Promise<boolean>;
-  getJobsWithTags: (tagId: Tag["id"][]) => Job[];
+  getJobsWithTags: (tagId: Tag['id'][]) => Job[];
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 };
 
@@ -36,12 +36,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       const q = query(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        where("status", "!=", "deleted"),
+        where('status', '!=', 'deleted')
       );
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        console.warn("[jobStore.ts] No job files found");
+        console.warn('[jobStore.ts] No job files found');
         set({ jobs: [], isLoading: false });
         return true;
       }
@@ -60,7 +60,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
       set({ jobs });
     } catch (error) {
-      console.error("[jobStore.ts] Error fetching jobs:", error);
+      console.error('[jobStore.ts] Error fetching jobs:', error);
       set({ error: `Failed to fetch jobs: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -95,18 +95,18 @@ export const useJobStore = create<JobStore>((set, get) => ({
       } as Job;
       const docRef = await addDoc(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        completeJob,
+        completeJob
       );
 
       if (!docRef) {
-        throw Error("Failed to add job");
+        throw Error('Failed to add job');
       }
 
       set((state) => ({
         jobs: [...state.jobs, { ...completeJob, id: docRef.id }],
       }));
     } catch (error) {
-      console.error("[jobStore.ts] Error adding job:", error);
+      console.error('[jobStore.ts] Error adding job:', error);
       set({ error: `Failed to add job: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -122,14 +122,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
+      const jobRef = doc(db, 'users', auth.currentUser.uid, 'jobs', job.id);
 
       if (!jobRef) {
-        throw new Error("Job not found");
+        throw new Error('Job not found');
       }
 
       await updateDoc(jobRef, {
-        status: "deleted",
+        status: 'deleted',
         timestamps: {
           ...job.timestamps,
           updatedAt: new Date(),
@@ -155,10 +155,10 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const jobRef = doc(db, "users", auth.currentUser.uid, "jobs", job.id);
+      const jobRef = doc(db, 'users', auth.currentUser.uid, 'jobs', job.id);
 
       if (!jobRef) {
-        throw new Error("Job not found");
+        throw new Error('Job not found');
       }
       job.timestamps = {
         ...job.timestamps,

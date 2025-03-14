@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useTheme } from "../../context/themeContext";
+import React, { useEffect, useState } from 'react';
+import { useTheme } from '../../context/themeContext';
 
 interface ThemeToggleProps {
   className?: string;
@@ -21,9 +21,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
         relative w-14 h-7 rounded-full
         bg-gray-200 dark:bg-gray-700
         transition-colors duration-bg ease-in-out
-        ${className || ""}
+        ${className || ''}
       `}
-        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
       >
         {/* Background Icons */}
         <div className="absolute inset-0 w-full h-full flex justify-between items-center px-1.5">
@@ -52,12 +52,12 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
           transform transition-transform duration-bg ease-in-out
           flex items-center justify-center
           shadow-light
-          ${theme === "dark" ? "translate-x-7" : "translate-x-0"}
+          ${theme === 'dark' ? 'translate-x-7' : 'translate-x-0'}
         `}
         >
           {/* Active Icon */}
           <span className="text-yellow-400 dark:text-gray-100">
-            {theme === "light" ? (
+            {theme === 'light' ? (
               <svg
                 className="w-3.5 h-3.5"
                 fill="currentColor"

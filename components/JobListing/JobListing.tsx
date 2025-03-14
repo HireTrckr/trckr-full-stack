@@ -1,10 +1,10 @@
-import React, { JSX, useEffect, useRef } from "react";
-import { Job, statusOptions } from "../../types/job";
-import { useState, memo } from "react";
-import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
-import { useTagStore } from "../../context/tagStore";
-import { TagCard } from "../TagCard/TagCard";
-import { Tag } from "../../types/tag";
+import React, { JSX, useEffect, useRef } from 'react';
+import { Job, statusOptions } from '../../types/job';
+import { useState, memo } from 'react';
+import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
+import { useTagStore } from '../../context/tagStore';
+import { TagCard } from '../TagCard/TagCard';
+import { Tag } from '../../types/tag';
 
 export const JobListing = memo(
   function JobListing({
@@ -17,14 +17,14 @@ export const JobListing = memo(
   }: {
     job: Job;
     onUpdate?: (updatedJob: Job) => void;
-    onEdit: (jobId: Job["id"]) => void;
+    onEdit: (jobId: Job['id']) => void;
     showControls: boolean;
     onDropdownOpen: () => void;
     onDropdownClose: () => void;
   }): JSX.Element {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(
-      Date.now() - job?.timestamps?.updatedAt.getTime() || 0,
+      Date.now() - job?.timestamps?.updatedAt.getTime() || 0
     );
 
     const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
@@ -41,7 +41,7 @@ export const JobListing = memo(
         const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
         const remaingSeconds = Math.max(
           0,
-          30 - Math.floor(timeSinceUpdate / 1000),
+          30 - Math.floor(timeSinceUpdate / 1000)
         );
         setTimeRemaining(remaingSeconds);
       };
@@ -61,7 +61,7 @@ export const JobListing = memo(
       }
     }, [job.tagIds]);
 
-    const updateStatus = (newStatus: Job["status"]): void => {
+    const updateStatus = (newStatus: Job['status']): void => {
       if (job.status === newStatus) {
         setIsDropDownOpen(false);
         onDropdownClose();
@@ -73,17 +73,17 @@ export const JobListing = memo(
       onDropdownClose();
     };
 
-    const getStatusColor = (status: Job["status"]): string => {
+    const getStatusColor = (status: Job['status']): string => {
       const baseClasses =
-        "text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed";
+        'text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed';
       switch (status.toLowerCase()) {
-        case "applied":
+        case 'applied':
           return `bg-blue-500 ${baseClasses}`;
-        case "interview":
+        case 'interview':
           return `bg-yellow-500 ${baseClasses}`;
-        case "offer":
+        case 'offer':
           return `bg-green-500 ${baseClasses}`;
-        case "rejected":
+        case 'rejected':
           return `bg-red-500 ${baseClasses}`;
         default:
           return `bg-gray-500 ${baseClasses}`;
@@ -100,9 +100,9 @@ export const JobListing = memo(
         }
       }
 
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener('mousedown', handleClickOutside);
       };
     }, []);
 
@@ -123,7 +123,7 @@ export const JobListing = memo(
     return (
       <div
         className={`relative flex items-center justify-between p-4 ${
-          showControls ? "z-10" : "z-0"
+          showControls ? 'z-10' : 'z-0'
         }`}
       >
         {/* left side */}
@@ -148,7 +148,7 @@ export const JobListing = memo(
               <div>
                 <span className="text-text-primary">{job.position}</span>
                 <span className="text-text-secondary">
-                  {job.company ? `, ${job.company}` : ""}
+                  {job.company ? `, ${job.company}` : ''}
                 </span>
               </div>
             </div>
@@ -162,7 +162,7 @@ export const JobListing = memo(
           {tags && (
             <div
               className={`flex flex ${
-                job.location ? "items-start" : "items-center"
+                job.location ? 'items-start' : 'items-center'
               } gap-2`}
             >
               {tags.map((_tag) => (
@@ -194,14 +194,14 @@ export const JobListing = memo(
                     handleDropDownOpen();
                   }}
                 >
-                  {statusOptions.map((status: Job["status"]) => (
+                  {statusOptions.map((status: Job['status']) => (
                     <button
                       key={status}
                       className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
                         ${
                           job.status === status
-                            ? "bg-background-primary text-text-primary"
-                            : "text-text-secondary"
+                            ? 'bg-background-primary text-text-primary'
+                            : 'text-text-secondary'
                         }`}
                       onClick={() => updateStatus(status)}
                       role="menuitem"
@@ -236,5 +236,5 @@ export const JobListing = memo(
       prevProps.onDropdownOpen === nextProps.onDropdownOpen &&
       prevProps.onDropdownClose === nextProps.onDropdownClose
     );
-  },
+  }
 );

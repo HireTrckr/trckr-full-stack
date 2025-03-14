@@ -1,7 +1,7 @@
-import { useEffect, ReactNode } from "react";
-import { auth } from "../../lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { signInWithGoogle } from "../../utils/authUtils";
+import { useEffect, ReactNode } from 'react';
+import { auth } from '../../lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { signInWithGoogle } from '../../utils/authUtils';
 
 interface AuthCheckProps {
   children: ReactNode;

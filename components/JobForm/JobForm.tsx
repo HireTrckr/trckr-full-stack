@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { useJobStore } from "../../context/jobStore";
-import { TiArrowSortedDown } from "react-icons/ti";
-import { Job, JobNotSavedInDB, statusOptions } from "../../types/job";
-import { Tag } from "../../types/tag";
-import React, { useEffect } from "react";
-import { useTagStore } from "../../context/tagStore";
-import { TagEditor } from "../TagEditor/TagEditor";
+import { useState } from 'react';
+import { useJobStore } from '../../context/jobStore';
+import { TiArrowSortedDown } from 'react-icons/ti';
+import { Job, JobNotSavedInDB, statusOptions } from '../../types/job';
+import { Tag } from '../../types/tag';
+import React, { useEffect } from 'react';
+import { useTagStore } from '../../context/tagStore';
+import { TagEditor } from '../TagEditor/TagEditor';
 
 // Define the NewTag interface to match what's in the TagEditor
 interface NewTag extends Tag {
@@ -17,11 +17,11 @@ export function JobForm() {
   const { createTag } = useTagStore(); // Get the createTag function from the store
 
   const [job, setJob] = useState<JobNotSavedInDB>({
-    company: "",
-    position: "",
-    status: "applied",
-    location: "",
-    URL: "",
+    company: '',
+    position: '',
+    status: 'applied',
+    location: '',
+    URL: '',
     tagIds: [],
   });
 
@@ -49,14 +49,14 @@ export function JobForm() {
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   // Handler for tag changes
-  const handleTagsChange = (tagIds: Tag["id"][], localNewTags?: NewTag[]) => {
+  const handleTagsChange = (tagIds: Tag['id'][], localNewTags?: NewTag[]) => {
     setJob({ ...job, tagIds });
     if (localNewTags) {
       setNewTags(localNewTags);
@@ -83,12 +83,12 @@ export function JobForm() {
     }
 
     setJob({
-      company: "",
-      position: "",
-      status: "applied" as Job["status"],
-      location: "",
-      URL: "",
-      tagIds: [] as Job["tagIds"],
+      company: '',
+      position: '',
+      status: 'applied' as Job['status'],
+      location: '',
+      URL: '',
+      tagIds: [] as Job['tagIds'],
     });
     setNewTags([]);
   };
@@ -137,7 +137,7 @@ export function JobForm() {
             {job.status}
             <TiArrowSortedDown
               className={`${
-                statusDropDownOpen ? "rotate-0" : "rotate-90"
+                statusDropDownOpen ? 'rotate-0' : 'rotate-90'
               } transition-all text-text-primary duration-text`}
             />
           </button>
@@ -146,13 +146,13 @@ export function JobForm() {
               className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
               ref={statusDropDownRef}
             >
-              {statusOptions.map((status: Job["status"]) => (
+              {statusOptions.map((status: Job['status']) => (
                 <button
                   key={status}
                   className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
                     job.status === status
-                      ? "bg-background-primary text-text-primary"
-                      : "text-text-secondary"
+                      ? 'bg-background-primary text-text-primary'
+                      : 'text-text-secondary'
                   }`}
                   role="menuitem"
                   onClick={() => {
@@ -160,7 +160,7 @@ export function JobForm() {
                     setStatusDropDownOpen(false);
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
+                    if (e.key === 'Enter' || e.key === ' ') {
                       setJob({ ...job, status });
                       setStatusDropDownOpen(false);
                     }
@@ -178,7 +178,7 @@ export function JobForm() {
             onClick={() => setAttributeDropDownOpen(!attributeDropDownOpen)}
           >
             <span className="text-center text-text-secondary transition-all duration-text capitalize text-sm">
-              view {attributeDropDownOpen ? "less" : "more"}
+              view {attributeDropDownOpen ? 'less' : 'more'}
             </span>
           </button>
         </div>

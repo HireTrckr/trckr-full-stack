@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Tag } from "../../types/tag";
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { Tag } from '../../types/tag';
 
-import { TAGS_PER_RECORD, useTagStore } from "../../context/tagStore";
-import { TagCard } from "../TagCard/TagCard";
+import { TAGS_PER_RECORD, useTagStore } from '../../context/tagStore';
+import { TagCard } from '../TagCard/TagCard';
 
 // Define interface for new tags that haven't been saved to Firestore yet
 interface NewTag extends Tag {
@@ -10,33 +10,33 @@ interface NewTag extends Tag {
 }
 
 interface TagEditorProps {
-  tagIds: Tag["id"][];
-  onTagsChange?: (tagIds: Tag["id"][], newTags?: NewTag[]) => void;
+  tagIds: Tag['id'][];
+  onTagsChange?: (tagIds: Tag['id'][], newTags?: NewTag[]) => void;
 }
 
 // Helper function to generate a random color (You might want to move this elsewhere)
 const getRandomColor = (): string => {
   const colors = [
-    "#ef4444", // red
-    "#f97316", // orange
-    "#f59e0b", // amber
-    "#84cc16", // lime
-    "#10b981", // emerald
-    "#06b6d4", // cyan
-    "#3b82f6", // blue
-    "#8b5cf6", // violet
-    "#d946ef", // fuchsia
-    "#ec4899", // pink
+    '#ef4444', // red
+    '#f97316', // orange
+    '#f59e0b', // amber
+    '#84cc16', // lime
+    '#10b981', // emerald
+    '#06b6d4', // cyan
+    '#3b82f6', // blue
+    '#8b5cf6', // violet
+    '#d946ef', // fuchsia
+    '#ec4899', // pink
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
 export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<Tag[]>([]);
   // Initialize tags from props, but only on mount
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
-    () => tagIds || [],
+    () => tagIds || []
   );
   // Keep track of new tags created in this session
   const [newTags, setNewTags] = useState<NewTag[]>([]);
@@ -73,9 +73,9 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -92,7 +92,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     if (!inputValue.trim()) {
       // Show recent tags when input is empty
       const recentTags = getRecentTags(5).filter(
-        (tag) => !selectedTagIds.includes(tag.id),
+        (tag) => !selectedTagIds.includes(tag.id)
       );
       if (isMounted) {
         setSuggestions(recentTags);
@@ -105,7 +105,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         (tag) =>
           !selectedTagIds.includes(tag.id) &&
           (tag.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-            tag.id.includes(inputValue.toLowerCase())),
+            tag.id.includes(inputValue.toLowerCase()))
       )
       .slice(0, 5);
 
@@ -127,16 +127,16 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         onTagsChangeRef.current(tagIds, newTags);
       }
     },
-    [newTags],
+    [newTags]
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     // Check if the input contains a comma
-    if (value.includes(",")) {
+    if (value.includes(',')) {
       // Split by comma and handle each part
-      const parts = value.split(",");
+      const parts = value.split(',');
 
       // Process all parts except the last one as new tags
       const validParts = parts.slice(0, -1).filter((part) => part.trim());
@@ -153,7 +153,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Handle backspace to remove last tag when input is empty
-    if (e.key === "Backspace" && !inputValue && selectedTagIds.length > 0) {
+    if (e.key === 'Backspace' && !inputValue && selectedTagIds.length > 0) {
       const newTags = [...selectedTagIds];
       const lastTagId = newTags.pop() as string;
       updateTags(newTags);
@@ -166,7 +166,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     }
 
     // Check if this is a new tag or existing one
-    const normalizedTagId = tagName.toLowerCase().replace(/\s+/g, "-");
+    const normalizedTagId = tagName.toLowerCase().replace(/\s+/g, '-');
 
     // Check if this tag already exists
     const existingTag = tagMap[normalizedTagId];
@@ -198,7 +198,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       updateTags(updatedTagIds);
     }
 
-    setInputValue("");
+    setInputValue('');
   };
 
   const addTagToSelection = (tagId: string) => {
@@ -211,7 +211,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
 
     const updatedTagIds = [...selectedTagIds, tagId];
     updateTags(updatedTagIds);
-    setInputValue("");
+    setInputValue('');
   };
 
   const removeTag = (tagId: string) => {
@@ -269,8 +269,8 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
             selectedTagIds.length >= TAGS_PER_RECORD
               ? `Maximum ${TAGS_PER_RECORD} tags reached`
               : selectedTagIds.length === 0
-                ? "Add tags (comma or enter to separate)"
-                : ""
+                ? 'Add tags (comma or enter to separate)'
+                : ''
           }
           disabled={selectedTagIds.length >= TAGS_PER_RECORD || isLoading}
         />
@@ -287,7 +287,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
               <button
                 key={tag.id}
                 className={
-                  "block px-4 py-2 text-sm rounded-lg w-full text-left capitalize transition-all duration-text hover:bg-background-primary bg-background-secondary"
+                  'block px-4 py-2 text-sm rounded-lg w-full text-left capitalize transition-all duration-text hover:bg-background-primary bg-background-secondary'
                 }
                 onClick={() => handleSuggestionClick(tag.id)}
               >
@@ -303,7 +303,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
                 .filter(
                   (tag) =>
                     !selectedTagIds.includes(tag.id) &&
-                    tag.name.toLowerCase().includes(inputValue.toLowerCase()),
+                    tag.name.toLowerCase().includes(inputValue.toLowerCase())
                 )
                 .map((tag) => (
                   <div

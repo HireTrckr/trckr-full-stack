@@ -1,5 +1,5 @@
-import React, { JSX } from "react";
-import { ThemeToggle } from "../themeToggle/themeToggle";
+import React, { JSX } from 'react';
+import { ThemeToggle } from '../themeToggle/themeToggle';
 
 export function ThemeSettingsDropdown(): JSX.Element {
   return (

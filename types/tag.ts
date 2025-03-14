@@ -1,4 +1,4 @@
-import { timestamps } from "./timestamps";
+import { timestamps } from './timestamps';
 
 export type Tag = {
   id: string;
@@ -13,6 +13,6 @@ export interface TagMap {
 }
 
 export enum TagStatus {
-  ACTIVE = "active",
-  DELETED = "deleted",
+  ACTIVE = 'active',
+  DELETED = 'deleted',
 }

@@ -1,5 +1,5 @@
-import Head from "next/head";
-import { JobForm } from "../components/JobForm/JobForm";
+import Head from 'next/head';
+import { JobForm } from '../components/JobForm/JobForm';
 
 export default function List() {
   return (

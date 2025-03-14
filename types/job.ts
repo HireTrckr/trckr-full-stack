@@ -1,5 +1,5 @@
-import { timestamps } from "./timestamps";
-import { Tag } from "./tag";
+import { timestamps } from './timestamps';
+import { Tag } from './tag';
 
 export type Job = JobNotSavedInDB & {
   // server-side attribtued
@@ -13,14 +13,14 @@ export type JobNotSavedInDB = {
   location?: string;
   status: JobStatus;
   URL?: string;
-  tagIds?: Tag["id"][]; // tag_ids
+  tagIds?: Tag['id'][]; // tag_ids
 };
 
 export const statusOptions = [
-  "applied",
-  "interview",
-  "offer",
-  "rejected",
+  'applied',
+  'interview',
+  'offer',
+  'rejected',
 ] as const;
 
 export type JobStatus = (typeof statusOptions)[number];

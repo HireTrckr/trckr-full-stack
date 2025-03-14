@@ -1,7 +1,7 @@
-import { JobList } from "../components/JobList/JobList";
-import { JobForm } from "../components/JobForm/JobForm";
-import "../styles/globals.css";
-import Head from "next/head";
+import { JobList } from '../components/JobList/JobList';
+import { JobForm } from '../components/JobForm/JobForm';
+import '../styles/globals.css';
+import Head from 'next/head';
 
 /*TODO:
 

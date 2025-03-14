@@ -1,5 +1,5 @@
-import Head from "next/head";
-import { Settings } from "../components/Settings/Settings";
+import Head from 'next/head';
+import { Settings } from '../components/Settings/Settings';
 
 export default function settings() {
   return (

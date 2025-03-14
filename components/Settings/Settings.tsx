@@ -1,4 +1,4 @@
-import React, { JSX } from "react";
+import React, { JSX } from 'react';
 
 export function Settings(): JSX.Element {
   return (
