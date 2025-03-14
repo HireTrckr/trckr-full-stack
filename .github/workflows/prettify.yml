@@ -14,7 +14,8 @@ jobs:
           ref: ${{ github.event.ref }}
       - name: prettier
         run: |
-          npx prettier --write "**/*.{ts, tsx, js, jsx, html, css, json}"
+          npm install prettier
+          npm run format
       - name: Check for modified files
         id: git-check
         run: |
