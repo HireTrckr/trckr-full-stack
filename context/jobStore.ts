@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { Job } from "../types/job";
+import { Job, JobNotSavedInDB } from "../types/job";
 import { Tag } from "../types/tag";
 
 import { timestampToDate } from "../utils/timestampUtils";
@@ -15,7 +15,7 @@ type JobStore = {
   error: string | null;
 
   fetchJobs: () => Promise<boolean>;
-  addJob: (job: Job) => Promise<boolean>;
+  addJob: (job: JobNotSavedInDB) => Promise<boolean>;
   deleteJob: (job: Job) => Promise<boolean>;
   updateJob: (job: Job) => Promise<boolean>;
   getJobsWithTags: (tagId: Tag["id"][]) => Job[];
@@ -78,25 +78,33 @@ export const useJobStore = create<JobStore>((set, get) => ({
     });
   },
 
-  addJob: async (job: Job) => {
+  addJob: async (job: JobNotSavedInDB) => {
     if (!auth.currentUser) return false;
+    if (!job.status || !job.company || !job.position) return false; // will add timestamps - then type is satisfied
+
     set({ isLoading: true, error: null });
 
     try {
-      job.timestamps = {
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+      const completeJob: Job = {
+        ...job,
+        timestamps: {
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          deletedAt: null,
+        },
+      } as Job;
       const docRef = await addDoc(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        job
+        completeJob
       );
 
       if (!docRef) {
         throw Error("Failed to add job");
       }
 
-      set((state) => ({ jobs: [...state.jobs, { ...job, id: docRef.id }] }));
+      set((state) => ({
+        jobs: [...state.jobs, { ...completeJob, id: docRef.id }],
+      }));
     } catch (error) {
       console.error("[jobStore.ts] Error adding job:", error);
       set({ error: `Failed to add job: ${error}` });

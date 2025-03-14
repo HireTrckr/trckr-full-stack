@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useJobStore } from "../../context/jobStore";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { Job, statusOptions } from "../../types/job";
+import { Job, JobNotSavedInDB, statusOptions } from "../../types/job";
 import { Tag } from "../../types/tag";
 import React, { useEffect } from "react";
 import { useTagStore } from "../../context/tagStore";
@@ -16,13 +16,13 @@ export function JobForm() {
   const { addJob } = useJobStore();
   const { createTag } = useTagStore(); // Get the createTag function from the store
 
-  const [job, setJob] = useState({
+  const [job, setJob] = useState<JobNotSavedInDB>({
     company: "",
     position: "",
-    status: "applied" as Job["status"],
+    status: "applied",
     location: "",
     URL: "",
-    tagIds: [] as Job["tagIds"],
+    tagIds: [],
   });
 
   // Track new tags created during form session
@@ -67,23 +67,21 @@ export function JobForm() {
     e.preventDefault();
     if (!job.company || !job.position) return;
 
-    // First, save any new tags to Firestore
+    // save any new tags to Firestore
     for (const newTag of newTags) {
-      await createTag(newTag.name);
+      if (await createTag(newTag.name)) {
+        setJob((prevJob) => ({
+          ...prevJob,
+          tagIds: [...(prevJob.tagIds || []), newTag.id],
+        }));
+      }
+      // tag creation failute - do nothing?
     }
 
-    // Then save the job with the tag IDs
-    await addJob({
-      ...job,
-      status: job.status as Job["status"],
-      tagIds: job.tagIds as Job["tagIds"],
-      timestamps: {
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
+    if (!(await addJob(job))) {
+      // job failure
+    }
 
-    // Reset form state
     setJob({
       company: "",
       position: "",
@@ -92,7 +90,7 @@ export function JobForm() {
       URL: "",
       tagIds: [] as Job["tagIds"],
     });
-    setNewTags([]); // Reset new tags
+    setNewTags([]);
   };
 
   return (

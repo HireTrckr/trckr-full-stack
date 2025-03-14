@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import Head from "next/head";
 
 /*TODO:
+
 i18n
 system theme override
 settings component

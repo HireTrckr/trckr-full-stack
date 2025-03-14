@@ -159,6 +159,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
         timestamps: {
           createdAt: new Date(),
           updatedAt: new Date(),
+          deletedAt: null,
         },
       };
 

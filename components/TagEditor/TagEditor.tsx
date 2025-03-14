@@ -100,12 +100,14 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       return;
     }
 
-    const matchingTags = Object.values(tagMap).filter(
-      (tag) =>
-        !selectedTagIds.includes(tag.id) &&
-        (tag.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-          tag.id.includes(inputValue.toLowerCase()))
-    );
+    const matchingTags = Object.values(tagMap)
+      .filter(
+        (tag) =>
+          !selectedTagIds.includes(tag.id) &&
+          (tag.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+            tag.id.includes(inputValue.toLowerCase()))
+      )
+      .slice(0, 5);
 
     if (isMounted) {
       setSuggestions(matchingTags);
@@ -150,20 +152,8 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // Handle Enter key
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (inputValue.trim()) {
-        // Add the current input as a new tag
-        addTagIfNotExists(inputValue.trim());
-      }
-    }
     // Handle backspace to remove last tag when input is empty
-    else if (
-      e.key === "Backspace" &&
-      !inputValue &&
-      selectedTagIds.length > 0
-    ) {
+    if (e.key === "Backspace" && !inputValue && selectedTagIds.length > 0) {
       const newTags = [...selectedTagIds];
       const lastTagId = newTags.pop() as string;
       updateTags(newTags);
@@ -194,6 +184,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         timestamps: {
           createdAt: new Date(),
           updatedAt: new Date(),
+          deletedAt: null,
         },
         isNew: true,
       };
@@ -252,7 +243,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     <div className="w-full">
       <div
         ref={inputContainerRef}
-        className="flex flex-wrap items-center w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus-within:outline-none focus-within:ring-2 focus-within:ring-accent focus-within:ring-opacity-50 focus-within:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text cursor-text"
+        className="flex flex-wrap gap-2 items-center w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus-within:outline-none focus-within:ring-2 focus-within:ring-accent focus-within:ring-opacity-50 focus-within:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text cursor-text"
         onClick={focusInput}
       >
         {selectedTagIds.map((tagId) => {

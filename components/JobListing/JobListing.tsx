@@ -4,6 +4,7 @@ import { useState, memo } from "react";
 import { UrlPreviewCard } from "../URLPreviewCard/URLPreviewCard";
 import { useTagStore } from "../../context/tagStore";
 import { TagCard } from "../TagCard/TagCard";
+import { Tag } from "../../types/tag";
 
 export const JobListing = memo(
   function JobListing({
@@ -29,7 +30,7 @@ export const JobListing = memo(
     const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
     const removeTagFromJob = useTagStore((state) => state.removeTagFromJob);
 
-    const tags = getTagsFromJob(job);
+    let tags: Tag[] = getTagsFromJob(job);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -53,6 +54,12 @@ export const JobListing = memo(
       // unmount
       return () => clearInterval(interval);
     }, [job.timestamps?.updatedAt]);
+
+    useEffect(() => {
+      if (job.tagIds) {
+        tags = getTagsFromJob(job);
+      }
+    }, [job.tagIds]);
 
     const updateStatus = (newStatus: Job["status"]): void => {
       if (job.status === newStatus) {
@@ -155,7 +162,7 @@ export const JobListing = memo(
           {tags && (
             <div
               className={`flex flex ${
-                job.location ? "items-center" : "items-start"
+                job.location ? "items-start" : "items-center"
               } gap-2`}
             >
               {tags.map((_tag) => (
