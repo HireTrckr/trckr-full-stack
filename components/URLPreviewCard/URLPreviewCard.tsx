@@ -67,9 +67,11 @@ export function UrlPreviewCard({
               alt={metadata.siteName}
               className="rounded-md"
             />
-            {size=="large" && (<span className="text-xs text-text-primary ">
-              {metadata.siteName}
-            </span>)}
+            {size == "large" && (
+              <span className="text-xs text-text-primary ">
+                {metadata.siteName}
+              </span>
+            )}
           </div>
         </a>
       )}

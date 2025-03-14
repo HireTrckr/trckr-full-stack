@@ -34,7 +34,7 @@ export function EditJobModal({
       const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
       const remaingSeconds = Math.max(
         0,
-        30 - Math.floor(timeSinceUpdate / 1000)
+        30 - Math.floor(timeSinceUpdate / 1000),
       );
       setTimeRemaining(remaingSeconds);
     };
@@ -67,7 +67,7 @@ export function EditJobModal({
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));

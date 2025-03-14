@@ -24,7 +24,7 @@ export const JobList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [jobWithOpenDropdown, setJobWithOpenDropdown] = useState<Job | null>(
-    null
+    null,
   );
   const [hoveredJob, setHoveredJob] = useState<Job | null>(null);
 
@@ -166,7 +166,7 @@ export const JobList: React.FC = () => {
               </div>
             </div>
           </>,
-          document.body
+          document.body,
         )}
     </div>
   );

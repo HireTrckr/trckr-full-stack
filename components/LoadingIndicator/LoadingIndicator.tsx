@@ -33,8 +33,8 @@ export function LoadingIndicator() {
           errorMessage: isJobsError
             ? isJobsError
             : isTagsError
-            ? isTagsError
-            : "Unknown error",
+              ? isTagsError
+              : "Unknown error",
         },
       ]);
     }
@@ -58,6 +58,6 @@ export function LoadingIndicator() {
         ))}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

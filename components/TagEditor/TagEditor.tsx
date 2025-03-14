@@ -36,7 +36,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
   const [suggestions, setSuggestions] = useState<Tag[]>([]);
   // Initialize tags from props, but only on mount
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
-    () => tagIds || []
+    () => tagIds || [],
   );
   // Keep track of new tags created in this session
   const [newTags, setNewTags] = useState<NewTag[]>([]);
@@ -92,7 +92,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     if (!inputValue.trim()) {
       // Show recent tags when input is empty
       const recentTags = getRecentTags(5).filter(
-        (tag) => !selectedTagIds.includes(tag.id)
+        (tag) => !selectedTagIds.includes(tag.id),
       );
       if (isMounted) {
         setSuggestions(recentTags);
@@ -105,7 +105,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         (tag) =>
           !selectedTagIds.includes(tag.id) &&
           (tag.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-            tag.id.includes(inputValue.toLowerCase()))
+            tag.id.includes(inputValue.toLowerCase())),
       )
       .slice(0, 5);
 
@@ -127,7 +127,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         onTagsChangeRef.current(tagIds, newTags);
       }
     },
-    [newTags]
+    [newTags],
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -269,8 +269,8 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
             selectedTagIds.length >= TAGS_PER_RECORD
               ? `Maximum ${TAGS_PER_RECORD} tags reached`
               : selectedTagIds.length === 0
-              ? "Add tags (comma or enter to separate)"
-              : ""
+                ? "Add tags (comma or enter to separate)"
+                : ""
           }
           disabled={selectedTagIds.length >= TAGS_PER_RECORD || isLoading}
         />
@@ -303,7 +303,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
                 .filter(
                   (tag) =>
                     !selectedTagIds.includes(tag.id) &&
-                    tag.name.toLowerCase().includes(inputValue.toLowerCase())
+                    tag.name.toLowerCase().includes(inputValue.toLowerCase()),
                 )
                 .map((tag) => (
                   <div

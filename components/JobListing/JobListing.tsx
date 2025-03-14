@@ -24,7 +24,7 @@ export const JobListing = memo(
   }): JSX.Element {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(
-      Date.now() - job?.timestamps?.updatedAt.getTime() || 0
+      Date.now() - job?.timestamps?.updatedAt.getTime() || 0,
     );
 
     const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
@@ -41,7 +41,7 @@ export const JobListing = memo(
         const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
         const remaingSeconds = Math.max(
           0,
-          30 - Math.floor(timeSinceUpdate / 1000)
+          30 - Math.floor(timeSinceUpdate / 1000),
         );
         setTimeRemaining(remaingSeconds);
       };
@@ -236,5 +236,5 @@ export const JobListing = memo(
       prevProps.onDropdownOpen === nextProps.onDropdownOpen &&
       prevProps.onDropdownClose === nextProps.onDropdownClose
     );
-  }
+  },
 );
