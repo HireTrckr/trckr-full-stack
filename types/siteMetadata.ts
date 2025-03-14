@@ -1,4 +1,4 @@
 export interface SiteMetadata {
-    favicon?: string;
-    siteName?: string;
+  favicon?: string;
+  siteName?: string;
 }

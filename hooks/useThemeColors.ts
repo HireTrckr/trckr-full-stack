@@ -7,22 +7,22 @@ export const useThemeColors = (): ThemeColors => {
   if (window && typeof window !== "undefined") {
     return {
       backgroundPrimary: getComputedStyle(
-        document.documentElement
+        document.documentElement,
       ).getPropertyValue("--background-primary"),
       backgroundSecondary: getComputedStyle(
-        document.documentElement
+        document.documentElement,
       ).getPropertyValue("--background-secondary"),
       textPrimary: getComputedStyle(document.documentElement).getPropertyValue(
-        "--text-primary"
+        "--text-primary",
       ),
       textSecondary: getComputedStyle(
-        document.documentElement
+        document.documentElement,
       ).getPropertyValue("--text-secondary"),
       accentColor: getComputedStyle(document.documentElement).getPropertyValue(
-        "--accent-color"
+        "--accent-color",
       ),
       accentHover: getComputedStyle(document.documentElement).getPropertyValue(
-        "--accent-hover"
+        "--accent-hover",
       ),
     };
   }

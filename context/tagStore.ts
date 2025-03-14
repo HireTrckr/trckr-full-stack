@@ -72,7 +72,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
                 deletedAt: timestampToDate(tagData.timestamps?.deletedAt),
               },
             };
-          }
+          },
         );
       }
 
@@ -296,7 +296,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
     } catch (error) {
       console.error(
         `[tagStore.ts] Error removing tag from job: ${jobId}`,
-        error
+        error,
       );
       set({
         error: `Failed to remove tag [${tagId}] from job [${jobId}]: ${error}`,

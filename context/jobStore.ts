@@ -36,7 +36,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       const q = query(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        where("status", "!=", "deleted")
+        where("status", "!=", "deleted"),
       );
       const querySnapshot = await getDocs(q);
 
@@ -95,7 +95,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
       } as Job;
       const docRef = await addDoc(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        completeJob
+        completeJob,
       );
 
       if (!docRef) {
