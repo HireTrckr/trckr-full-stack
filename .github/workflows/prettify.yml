@@ -14,7 +14,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
       - name: prettier
         run: |
-          npx prettier --write game/
+          npx prettier --write components/**
       - name: Check for modified files
         id: git-check
         run: |
