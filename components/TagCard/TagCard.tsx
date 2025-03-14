@@ -13,7 +13,7 @@ export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
 
   return (
     <div
-      className="bg-accent-primary rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px] "
+      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary'} rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px]`}
       onMouseEnter={() => setShowDeleteButton(true)}
       onMouseLeave={() => setShowDeleteButton(false)}
     >
@@ -22,7 +22,7 @@ export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
           showDeleteButton ? 'justify-start' : 'justify-center'
         } w-full`}
       >
-        <span key={tag.id} className="text-white text-xs">
+        <span key={tag.id} className="text-text-primary text-xs">
           {tag?.name || tag.id}
         </span>
       </div>

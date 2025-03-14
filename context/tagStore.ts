@@ -9,6 +9,8 @@ import { timestampToDate } from '../utils/timestampUtils';
 import { Job } from '../types/job';
 import { useJobStore } from './jobStore';
 import { Tag } from '../types/tag';
+import { getRandomTailwindColor } from '../utils/generateRandomColor';
+import { count } from 'console';
 
 type TagStore = {
   tagMap: TagMap;
@@ -17,6 +19,12 @@ type TagStore = {
 
   // actions
   fetchTags: () => Promise<boolean>;
+
+  /**
+   * Takes in a tag name to create and assigns necesary server atributes
+   * @param tagName - name of tag to create
+   * @returns true if successful tag creation, false otherwise
+   * */
   createTag: (tagName: Tag['name']) => Promise<boolean>;
   deleteTag: (tagId: Tag['id']) => Promise<boolean>;
   getRecentTags: (limit: number) => Tag[];
@@ -121,6 +129,7 @@ export const useTagStore = create<TagStore>((set, get) => ({
       await updateDoc(tagsRef, {
         [`tagMap.${tagId}`]: {
           ...tagToDelete,
+          count: 0,
           status: TagStatus.DELETED,
           timestamps: {
             ...tagToDelete.timestamps,
@@ -151,21 +160,36 @@ export const useTagStore = create<TagStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // create tag object
-      const newTag: Tag = {
-        id: tagName.toLowerCase().replace(/\s/g, '-'),
-        name: tagName,
-        color: 'gray',
-        count: 1,
-        timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-      };
+      const newID = tagName.toLowerCase().replace(/\s/g, '-');
+      if (get().tagMap[newID]) {
+        get().tagMap[newID].count++;
 
-      await updateDoc(doc(db, `users/${auth.currentUser.uid}/metadata/tags`), {
-        [`tagMap.${newTag.id}`]: newTag,
-      });
+        await updateDoc(
+          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
+          {
+            [`tagMap.${newID}`]: get().tagMap[newID],
+          }
+        );
+      } else {
+        const newTag: Tag = {
+          id: tagName.toLowerCase().replace(/\s/g, '-'),
+          name: tagName,
+          color: getRandomTailwindColor(),
+          count: (get().tagMap[tagName].count || 0) + 1,
+          timestamps: {
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deletedAt: null,
+          },
+        };
+
+        await updateDoc(
+          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
+          {
+            [`tagMap.${newTag.id}`]: newTag,
+          }
+        );
+      }
     } catch (error) {
       console.error(`[tagStore.ts] Error creating tag: ${tagName}`, error);
       set({ error: `Failed to create tag: ${error}` });
@@ -252,12 +276,6 @@ export const useTagStore = create<TagStore>((set, get) => ({
       const jobStore = useJobStore.getState();
       const job = jobStore.jobs.find((job: Job) => job.id === jobId);
 
-      const tag = get().tagMap[tagId];
-
-      if (!tag) {
-        console.error(`[tagStore.ts] Tag not found: ${tagId}`);
-        throw new Error('Tag not found');
-      }
       if (!job) {
         console.error(`[tagStore.ts] Job not found: ${jobId}`);
         throw new Error('Job not found');
@@ -265,6 +283,13 @@ export const useTagStore = create<TagStore>((set, get) => ({
 
       if (!job.tagIds) {
         job.tagIds = [];
+      }
+
+      const tag = get().tagMap[tagId];
+
+      if (!tag) {
+        console.error(`[tagStore.ts] Tag not found: ${tagId}`);
+        throw new Error('Tag not found');
       }
 
       // check if job already has this tag
@@ -278,20 +303,25 @@ export const useTagStore = create<TagStore>((set, get) => ({
       };
       await jobStore.updateJob(updatedJob);
 
-      await updateDoc(doc(db, `users/${auth.currentUser.uid}/metadata/tags`), {
-        [`tagMap.${tagId}`]: {
-          ...tag,
-          count: Math.min(tag.count - 1, 0),
-          timestamps: {
-            ...tag.timestamps,
-            updatedAt: new Date(),
-          },
-        },
-      });
+      const updatedTag: Tag = {
+        ...tag,
+        count: tag.count - 1,
+      };
 
-      // if tag is not used anymmore - delete it
-      if (tag.count - 1 <= 0) {
-        await get().deleteTag(tagId);
+      if (updatedTag.count <= 0) await get().deleteTag(tagId);
+      else {
+        await updateDoc(
+          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
+          {
+            [`tagMap.${tagId}`]: {
+              ...updatedTag,
+              timestamps: {
+                ...updatedTag.timestamps,
+                updatedAt: new Date(),
+              },
+            },
+          }
+        );
       }
     } catch (error) {
       console.error(
