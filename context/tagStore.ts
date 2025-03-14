@@ -1,7 +1,7 @@
 // context/tagStore.ts
 
 import { create } from 'zustand';
-import { TagMap, TagStatus } from '../types/tag';
+import { TagMap } from '../types/tag';
 import {
   getDoc,
   setDoc,
@@ -82,8 +82,6 @@ export const useTagStore = create<TagStore>((set, get) => {
           Object.entries(tagData.tagMap).forEach(
             ([tagId, tagData]: [string, any]) => {
               if (!tagData || typeof tagData !== 'object') return;
-
-              if (tagData.status === TagStatus.DELETED) return;
 
               tagMap[tagId] = {
                 id: tagId,

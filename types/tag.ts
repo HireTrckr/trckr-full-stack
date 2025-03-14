@@ -11,8 +11,3 @@ export type Tag = {
 export interface TagMap {
   [key: string]: Tag;
 }
-
-export enum TagStatus {
-  ACTIVE = 'active',
-  DELETED = 'deleted',
-}
