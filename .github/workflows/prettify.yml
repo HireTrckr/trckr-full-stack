@@ -14,7 +14,7 @@ jobs:
           ref: ${{ github.event.ref }}
       - name: prettier
         run: |
-          npx prettier --write ./**
+          npx prettier --write "**/*.{ts, tsx, js, jsx, html, css, json}""
       - name: Check for modified files
         id: git-check
         run: |
