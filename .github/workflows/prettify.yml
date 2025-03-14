@@ -1,6 +1,6 @@
 name: auto-format
 run-name: Ensuring code style maintained
-on: 
+on:
   push:
     branches:
       - master
@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.ref }}
       - name: prettier
         run: |
-          npx prettier --write components/**
+          npx prettier --write ./**
       - name: Check for modified files
         id: git-check
         run: |
