@@ -37,7 +37,6 @@ export const JobList: React.FC = () => {
     ) {
       return;
     }
-    updatedJob.timestamps.updatedAt = new Date();
     updateJob(updatedJob);
     handleClose();
   };

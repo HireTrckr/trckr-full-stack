@@ -1,9 +1,8 @@
 import React, { JSX, useState, useEffect } from 'react';
 import { Job, statusOptions } from '../../types/job';
 import { ToolTip } from '../ToolTip/ToolTip';
-import { IoMdInformationCircleOutline } from 'react-icons/io';
 import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
-import { TiArrowSortedDown } from 'react-icons/ti';
+import { TiArrowSortedDown, TiWarningOutline } from 'react-icons/ti';
 import { TagEditor } from '../TagEditor/TagEditor';
 
 export function EditJobModal({
@@ -144,6 +143,7 @@ export function EditJobModal({
             <input
               type="text"
               id="location"
+              name='location'
               value={formData.location}
               onChange={handleChange}
               className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
@@ -264,7 +264,7 @@ export function EditJobModal({
                 text="Rate limiting is enabled to prevent spam!"
                 position="bottom"
               >
-                <IoMdInformationCircleOutline className="text-xs text-text-secondary transition-all duration-text" />
+                <TiWarningOutline className="text-xs text-text-secondary transition-all duration-text" />
               </ToolTip>
             </div>
           )}
