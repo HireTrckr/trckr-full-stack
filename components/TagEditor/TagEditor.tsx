@@ -285,8 +285,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
             ref={dropdownRef}
             className="absolute right-0 top-full w-3/4 !mt-0 z-10 overflow-auto border border-accent-primary rounded-lg shadow-light text-text-primary bg-background-secondary"
           >
-            {/* Show existing tags from database */}
-            {suggestions.map((tag, index) => (
+            {suggestions.map((tag) => (
               <button
                 key={tag.id}
                 className={
@@ -300,7 +299,6 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
                 </div>
               </button>
             ))}
-            {/* Show new tags created in this session that match search */}
             {inputValue &&
               newTags
                 .filter(
