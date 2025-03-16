@@ -16,7 +16,6 @@ import { Job } from '../types/job';
 import { useJobStore } from './jobStore';
 import { Tag } from '../types/tag';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
-import { count } from 'console';
 
 type TagStore = {
   tagMap: TagMap;
@@ -87,7 +86,7 @@ export const useTagStore = create<TagStore>((set, get) => {
                 id: tagId,
                 name: tagData.name,
                 color: tagData.color,
-                count: Math.max(tagData.count, 0),
+                count: Math.max(tagData.count, 0), // sometimes there is negative glitches
                 timestamps: {
                   createdAt: tagData.timestamps?.createdAt.toDate(),
                   updatedAt: timestampToDate(tagData.timestamps?.updatedAt),
@@ -303,7 +302,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Tag not found');
         }
 
-        const newCount = self()._calculateTagCount(tagId);
+        const newCount = self()._calculateTagCount(tagId) - 1;
 
         if (newCount <= 0) {
           await get().deleteTag(tagId);

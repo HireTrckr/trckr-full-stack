@@ -253,7 +253,11 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
           }
 
           return (
-            <TagCard tag={tag} onRemoveButtonClick={() => removeTag(tagId)} />
+            <TagCard
+              key={tagId}
+              tag={tag}
+              onRemoveButtonClick={() => removeTag(tagId)}
+            />
           );
         })}
         <input

@@ -168,6 +168,7 @@ export const JobListing = memo(
               {tags.map((_tag) => (
                 <TagCard
                   tag={_tag}
+                  key={_tag.id}
                   onRemoveButtonClick={() => removeTagFromJob(job.id, _tag.id)}
                 />
               ))}
