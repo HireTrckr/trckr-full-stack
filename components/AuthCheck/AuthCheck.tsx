@@ -1,7 +1,7 @@
 import { useEffect, ReactNode } from 'react';
 import { auth } from '../../lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { signInWithGoogle } from '../../utils/authUtils';
+import { NotSignedIn } from '../NotSignedIn/NotSignedIn';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -27,21 +27,8 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   return fallback ? (
     <>{fallback}</>
   ) : (
-    <div className="gap-2 bg-background-primary rounded-lg p-6 transition-all duration-bg ease-in-out flex flex-col items-center hover:scale-[1.02] mt-4">
-      <h2 className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text capitalize mb-6">
-        please sign in to continue
-      </h2>
-      <button
-        onClick={signInWithGoogle}
-        className="px-3 py-1.5 rounded-lg text-sm font-medium
-             bg-accent-primary hover:bg-accent-hover
-             text-white
-             transition-all duration-text ease-in-out
-             flex items-center gap-2 shadow-light
-               "
-      >
-        Sign In
-      </button>
-    </div>
+    <main className="mx-auto px-4 py-16 flex-1 z-0">
+      <NotSignedIn />
+    </main>
   );
 }
