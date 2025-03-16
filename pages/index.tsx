@@ -4,25 +4,30 @@ import '../styles/globals.css';
 import Head from 'next/head';
 
 /*TODO:
-
-i18n
+*settings*
 system theme override
 settings component
 settings backend
-maximum stack errors
+
+*features*
 job added popup / toast messages
 location stuff
 filter
 search bar
-add tag editor to editJobModal
 due date (optional)
 notes (optional)
+i18n
+
+*modal*
 confirmation popup for delete
 make better link preview in modal
 make edit job modal responsive for when use adds a link
+add tag editor to editJobModal
+
+*tags
+complete tag system
 tag editor - settings
 tags
-use react typicons for all icons
 rate limiting for requests, creations, deletions, edits
 changing tag color
 */
