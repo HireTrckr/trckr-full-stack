@@ -3,6 +3,7 @@ import { Tag } from '../../types/tag';
 
 import { TAGS_PER_RECORD, useTagStore } from '../../context/tagStore';
 import { TagCard } from '../TagCard/TagCard';
+import { getRandomTailwindColor } from '../../utils/generateRandomColor';
 
 // Define interface for new tags that haven't been saved to Firestore yet
 interface NewTag extends Tag {
@@ -13,23 +14,6 @@ interface TagEditorProps {
   tagIds: Tag['id'][];
   onTagsChange?: (tagIds: Tag['id'][], newTags?: NewTag[]) => void;
 }
-
-// Helper function to generate a random color (You might want to move this elsewhere)
-const getRandomColor = (): string => {
-  const colors = [
-    '#ef4444', // red
-    '#f97316', // orange
-    '#f59e0b', // amber
-    '#84cc16', // lime
-    '#10b981', // emerald
-    '#06b6d4', // cyan
-    '#3b82f6', // blue
-    '#8b5cf6', // violet
-    '#d946ef', // fuchsia
-    '#ec4899', // pink
-  ];
-  return colors[Math.floor(Math.random() * colors.length)];
-};
 
 export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
   const [inputValue, setInputValue] = useState('');
@@ -179,7 +163,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       const newTag: NewTag = {
         id: normalizedTagId,
         name: tagName,
-        color: getRandomColor(),
+        color: getRandomTailwindColor(),
         count: 1,
         timestamps: {
           createdAt: new Date(),
