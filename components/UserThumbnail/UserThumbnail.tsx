@@ -4,8 +4,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithGoogle } from '../../utils/authUtils';
 import { ThemeSettingsDropdown } from '../ThemeSettingsDropdown/ThemeSettingsDropdown';
 import { AccountSettingsThumbnail } from '../AccountSettingsThumbnail/AccountSettingsThumbnail';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { IoIosClose } from 'react-icons/io';
+import { TiThMenu, TiDeleteOutline } from 'react-icons/ti';
 
 export function UserThumbnail() {
   const [user] = useAuthState(auth);
@@ -55,13 +54,13 @@ export function UserThumbnail() {
                      transition-all duration-bg ease-in-out"
           >
             {!isOpen && (
-              <GiHamburgerMenu
+              <TiThMenu
                 onClick={() => setIsOpen(true)}
                 className="text-text-primary transition-colors duration-text"
               />
             )}
             {isOpen && (
-              <IoIosClose
+              <TiDeleteOutline
                 onClick={() => setIsOpen(false)}
                 className="text-text-primary transition-colors duration-text"
               />
