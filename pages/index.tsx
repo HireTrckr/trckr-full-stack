@@ -18,10 +18,11 @@ add tag editor to editJobModal
 due date (optional)
 notes (optional)
 confirmation popup for delete
+make better link preview in modal
 make edit job modal responsive for when use adds a link
-tag editor
-tag category
+tag editor - settings
 tags
+use react typicons for all icons
 rate limiting for requests, creations, deletions, edits
 changing tag color
 */
