@@ -157,6 +157,10 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ error: `Failed to delete tag: ${error}` });
       } finally {
         set({ isLoading: false });
+
+        // fetch new tags and jobs
+        await get().fetchTags();
+        await useJobStore.getState().fetchJobs();
       }
 
       // return whether there is not an error t/f
@@ -215,6 +219,9 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ error: `Failed to create tag: ${error}` });
       } finally {
         set({ isLoading: false });
+
+        // fetch new tags
+        await get().fetchTags();
       }
 
       return !get().error;
@@ -283,6 +290,10 @@ export const useTagStore = create<TagStore>((set, get) => {
         });
       } finally {
         set({ isLoading: false });
+
+        // fetch new tags and jobs
+        await get().fetchTags();
+        await useJobStore.getState().fetchJobs();
       }
 
       return !get().error;
@@ -344,6 +355,10 @@ export const useTagStore = create<TagStore>((set, get) => {
         });
       } finally {
         set({ isLoading: false });
+
+        // fetch new tags and jobs
+        await get().fetchTags();
+        await useJobStore.getState().fetchJobs();
       }
 
       return !get().error;
