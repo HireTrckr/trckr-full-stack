@@ -9,15 +9,6 @@ system theme override
 settings component
 settings backend
 
-*features*
-job added popup / toast messages
-location stuff
-filter
-search bar
-due date (optional)
-notes (optional)
-i18n
-
 *modal*
 confirmation popup for delete
 make better link preview in modal
