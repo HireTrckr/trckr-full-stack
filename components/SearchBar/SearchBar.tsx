@@ -25,6 +25,11 @@ export function SearchBar() {
 
   const getSearchMatches = useCallback(
     (term: string) => {
+      if (!term || term === '') {
+        setSearchResults([]);
+        return;
+      }
+
       const lCaseTerm: string = term.toLowerCase();
       const results: SearchableItem[] = [];
       const seenIds = new Set<string>();
@@ -96,19 +101,25 @@ export function SearchBar() {
   }
 
   useEffect(() => {
-    if (searchTerm && searchTerm !== '') getSearchMatches(searchTerm);
+    getSearchMatches(searchTerm);
   }, [searchTerm]);
 
   return (
-    <div className="p-2 transition-colors duration-text text-text-primary">
+    <div className="transition-colors duration-text text-text-primary w-md px-4 mx-4 flex-1">
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Search your applications and tags..."
         value={searchTerm}
-        className="bg-background-secondary text-text-primary placeholder:text-text-secondary rounded-lg"
+        className="w-full px-2 rounded-lg
+                     bg-background-primary 
+                     text-text-primary
+                     border border-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     placeholder-text-secondary/50
+                     transition-all duration-text"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <div className="absolute bg-background-primary rounded-lg shadow-lg mt-2">
+      <div className="absolute bg-background-primary rounded-lg shadow-lg mt-2 w-full">
         {searchResults.map((sbItem: SearchResult) => (
           <div
             key={sbItem.item.id}
