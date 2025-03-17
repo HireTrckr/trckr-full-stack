@@ -53,7 +53,7 @@ export const JobList: React.FC = () => {
     if (!deletedJob) return;
 
     deleteJob(deletedJob);
-    setSelectedJob(null);
+    handleClose();
   };
 
   const handleClose = () => {

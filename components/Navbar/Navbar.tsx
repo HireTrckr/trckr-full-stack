@@ -2,6 +2,7 @@ import React, { JSX } from 'react';
 import { UserThumbnail } from '../UserThumbnail/UserThumbnail';
 import Link from 'next/link';
 import { NavBarOption } from '../../types/navBarOption';
+import { SearchBar } from '../SearchBar/SearchBar';
 
 const navBarOptions: NavBarOption[] = [
   { link: '/list', text: 'track' },
@@ -50,6 +51,9 @@ export function Navbar(): JSX.Element {
           settings
         </Link>
       </div>
+
+      <SearchBar />
+
       <UserThumbnail />
     </nav>
   );
