@@ -9,7 +9,6 @@ import { createPortal } from 'react-dom';
 
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
-  const tags = useTagStore((state) => state.tagMap);
   const clearTags = useTagStore((state) => state.clearTags);
   const fetchTags = useTagStore((state) => state.fetchTags);
   const clearJobs = useJobStore((state) => state.clearJobs);
