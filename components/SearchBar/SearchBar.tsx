@@ -105,7 +105,7 @@ export function SearchBar() {
   }, [searchTerm]);
 
   return (
-    <div className="transition-colors duration-text text-text-primary w-md px-4 mx-4 flex-1">
+    <div className="transition-colors duration-text text-text-primary w-md px-8 flex-1">
       <input
         type="text"
         placeholder="Search your applications and tags..."
@@ -119,11 +119,11 @@ export function SearchBar() {
                      transition-all duration-text"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <div className="absolute bg-background-primary rounded-lg shadow-lg mt-2 w-full">
+      <div className="absolute bg-background-primary rounded-lg shadow-lg mt-2 max-w-full">
         {searchResults.map((sbItem: SearchResult) => (
           <div
             key={sbItem.item.id}
-            className="p-2 hover:bg-background-secondary cursor-pointer"
+            className="p-2 hover:bg-background-secondary cursor-pointer min-w-full max-w-full"
             onClick={() => handleSuggestionSelection(sbItem)}
           >
             <SearchBarItem item={sbItem} />
