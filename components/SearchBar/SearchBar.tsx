@@ -18,6 +18,8 @@ export function SearchBar() {
   const updateJob = useJobStore((state) => state.updateJob);
   const deleteJob = useJobStore((state) => state.deleteJob);
   const tags: TagMap = useTagStore((state) => state.tagMap);
+  const updateTag = useTagStore((state) => state.updateTag);
+  const deleteTag = useTagStore((state) => state.deleteTag);
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,9 +41,12 @@ export function SearchBar() {
 
       jobs.forEach((job: Job) => {
         if (
-          (job.company.toLowerCase().includes(lCaseTerm) ||
-            job.position.toLowerCase().includes(lCaseTerm)) &&
-          !seenIds.has(job.id)
+          job.company.toLowerCase().includes(lCaseTerm) ||
+          job.position.toLowerCase().includes(lCaseTerm) ||
+          (job.tagIds?.some((tagId) =>
+            tags[tagId]?.name.toLowerCase().includes(lCaseTerm)
+          ) &&
+            !seenIds.has(job.id))
         ) {
           results.push({ type: 'job', item: job });
           seenIds.add(job.id);
@@ -84,6 +89,7 @@ export function SearchBar() {
       return;
     }
 
+    console.log(await updateTag(updatedTag));
     handleModalClose();
   }
 
@@ -106,6 +112,7 @@ export function SearchBar() {
   async function handleTagDelete(deletedTag: Tag) {
     if (!deletedTag) return;
 
+    await deleteTag(deletedTag.id);
     handleModalClose();
   }
 
