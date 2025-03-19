@@ -130,7 +130,7 @@ export function EditTagModal({
               className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
               onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             >
-              <div className='flex gap-2 items-center'>
+              <div className="flex gap-2 items-center">
                 <div
                   className={`rounded-full aspect-square h-[1rem] bg-${formData.color}-300`}
                 />

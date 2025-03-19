@@ -98,7 +98,7 @@ export function EditJobModal({
           <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
             Edit Job
           </h2>
-          <span className='text-xs text-text-secondary'>
+          <span className="text-xs text-text-secondary">
             JobID: <i>{formData.id}</i>
           </span>
 
@@ -227,7 +227,8 @@ export function EditJobModal({
           {formData.timestamps?.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Last Updated at: {formData.timestamps.updatedAt.toLocaleString()}
+                Last Updated at:{' '}
+                {formData.timestamps.updatedAt.toLocaleString()}
               </span>
             </div>
           )}
