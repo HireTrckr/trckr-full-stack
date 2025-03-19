@@ -90,16 +90,19 @@ export function EditJobModal({
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
         className={`bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light ${
-          job.URL ? 'w-[50dvw]' : 'w-[25dvw]'
+          formData.URL ? 'w-[50dvw]' : 'w-[25dvw]'
         }`}
         ref={modalRef}
       >
-        <div className="flex-1 flex-grow p-6">
+        <div className="flex-1 flex-grow p-6 flex flex-col w-full items-center">
           <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
             Edit Job
           </h2>
+          <span className='text-xs text-text-secondary'>
+            JobID: <i>{formData.id}</i>
+          </span>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label
               htmlFor="position"
               className="block text-text-primary text-xs"
@@ -116,7 +119,7 @@ export function EditJobModal({
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label
               htmlFor="company"
               className="block text-text-primary text-xs"
@@ -133,7 +136,7 @@ export function EditJobModal({
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label
               htmlFor="location"
               className="block text-text-primary text-xs"
@@ -150,7 +153,7 @@ export function EditJobModal({
             />
           </div>
 
-          <div className="mb-4 relative">
+          <div className="mb-4 relative w-full">
             <label htmlFor="status" className="block text-text-primary text-xs">
               Status
             </label>
@@ -197,7 +200,7 @@ export function EditJobModal({
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <label htmlFor="URL" className="block text-text-primary text-xs">
               URL
             </label>
@@ -212,7 +215,7 @@ export function EditJobModal({
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <TagEditor
               tagIds={formData.tagIds || []}
               onTagsChange={(tagIds) => {
@@ -221,10 +224,10 @@ export function EditJobModal({
             />
           </div>
 
-          {job.timestamps?.updatedAt && (
-            <div className=" mb-4 flex justify-center items-center">
+          {formData.timestamps?.updatedAt && (
+            <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Last Updated at: {job.timestamps.updatedAt.toLocaleString()}
+                Last Updated at: {formData.timestamps.updatedAt.toLocaleString()}
               </span>
             </div>
           )}
@@ -270,7 +273,7 @@ export function EditJobModal({
           )}
         </div>
 
-        {job.URL && (
+        {formData.URL && (
           <div className="flex flex-1 flex-grow p-6 items-center justify-center">
             <div className="w-[75%] h-[75%] max-w-[100%] max-h-[100%]">
               <UrlPreviewCard job={job} size="large" />
