@@ -9,6 +9,7 @@ import { EditJobModal } from '../EditJobModal/EditJobModal';
 
 import { Job } from '../../types/job';
 import { Tag, TagMap } from '../../types/tag';
+import { EditTagModal } from '../EditTagModal/EditTagModal';
 
 interface SearchBarProps {}
 
@@ -20,7 +21,9 @@ export function SearchBar() {
 
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
+    null
+  );
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const getSearchMatches = useCallback(
@@ -66,24 +69,43 @@ export function SearchBar() {
 
   function handleModalClose(): void {
     console.log('handling close');
-    setSelectedJob(null);
+    setSelectedResult(null);
     setIsModalOpen(false);
   }
 
+  async function handleTagUpdate(updatedTag: Tag) {
+    if (!updatedTag) return;
+
+    if (
+      selectedResult &&
+      updatedTag &&
+      JSON.stringify(selectedResult) === JSON.stringify(updatedTag)
+    ) {
+      return;
+    }
+
+    handleModalClose();
+  }
+
   async function handleJobUpdate(updatedJob: Job) {
-    console.log('handling update');
     if (!updatedJob) return;
 
     // ensure job actually changed
     if (
-      selectedJob &&
+      selectedResult &&
       updatedJob &&
-      JSON.stringify(selectedJob) === JSON.stringify(updatedJob)
+      JSON.stringify(selectedResult) === JSON.stringify(updatedJob)
     ) {
       return;
     }
 
     await updateJob(updatedJob);
+    handleModalClose();
+  }
+
+  async function handleTagDelete(deletedTag: Tag) {
+    if (!deletedTag) return;
+
     handleModalClose();
   }
 
@@ -96,7 +118,7 @@ export function SearchBar() {
   }
 
   function handleSuggestionSelection(suggestion: SearchResult) {
-    setSelectedJob(suggestion.item as Job);
+    setSelectedResult(suggestion);
     setIsModalOpen(true);
   }
 
@@ -132,7 +154,7 @@ export function SearchBar() {
       </div>
 
       {isModalOpen &&
-        selectedJob &&
+        selectedResult &&
         createPortal(
           <>
             <div
@@ -148,13 +170,21 @@ export function SearchBar() {
               className="fixed inset-0 z-[1000] flex items-center justify-center"
             >
               <div className="bg-background-primary rounded-lg">
-                <h2 id="modal-title">Edit Job</h2>
-                <EditJobModal
-                  job={selectedJob}
-                  onClose={handleModalClose}
-                  onSave={handleJobUpdate}
-                  onDelete={handleJobDelete}
-                />
+                {selectedResult.type === 'job' ? (
+                  <EditJobModal
+                    job={selectedResult.item as Job}
+                    onClose={handleModalClose}
+                    onSave={handleJobUpdate}
+                    onDelete={handleJobDelete}
+                  />
+                ) : (
+                  <EditTagModal
+                    tag={selectedResult.item as Tag}
+                    onClose={handleModalClose}
+                    onSave={handleTagUpdate}
+                    onDelete={handleTagDelete}
+                  />
+                )}
               </div>
             </div>
           </>,

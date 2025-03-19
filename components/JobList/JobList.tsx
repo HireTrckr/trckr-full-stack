@@ -154,7 +154,6 @@ export const JobList: React.FC = () => {
               className="fixed inset-0 z-[1000] flex items-center justify-center"
             >
               <div className="bg-background-primary rounded-lg">
-                <h2 id="modal-title">Edit Job</h2>
                 <EditJobModal
                   job={selectedJob}
                   onClose={handleClose}

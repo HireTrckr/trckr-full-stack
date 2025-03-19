@@ -8,7 +8,7 @@ export type Tag = TagNotSavedInDB & {
 export type TagNotSavedInDB = {
   name: string;
   color: string;
-  count?: number;
+  count: number;
 };
 
 export interface TagMap {
