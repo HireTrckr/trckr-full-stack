@@ -9,7 +9,6 @@ import { createPortal } from 'react-dom';
 
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
-  const tags = useTagStore((state) => state.tagMap);
   const clearTags = useTagStore((state) => state.clearTags);
   const fetchTags = useTagStore((state) => state.fetchTags);
   const clearJobs = useJobStore((state) => state.clearJobs);
@@ -54,7 +53,7 @@ export const JobList: React.FC = () => {
     if (!deletedJob) return;
 
     deleteJob(deletedJob);
-    setSelectedJob(null);
+    handleClose();
   };
 
   const handleClose = () => {
@@ -155,7 +154,6 @@ export const JobList: React.FC = () => {
               className="fixed inset-0 z-[1000] flex items-center justify-center"
             >
               <div className="bg-background-primary rounded-lg">
-                <h2 id="modal-title">Edit Job</h2>
                 <EditJobModal
                   job={selectedJob}
                   onClose={handleClose}

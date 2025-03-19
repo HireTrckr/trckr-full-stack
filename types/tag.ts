@@ -1,11 +1,14 @@
 import { timestamps } from './timestamps';
 
-export type Tag = {
+export type Tag = TagNotSavedInDB & {
   id: string;
+  timestamps: timestamps;
+};
+
+export type TagNotSavedInDB = {
   name: string;
   color: string;
   count: number;
-  timestamps: timestamps;
 };
 
 export interface TagMap {

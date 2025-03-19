@@ -3,7 +3,7 @@ import { Tag } from './tag';
 
 export type Job = JobNotSavedInDB & {
   // server-side attribtued
-  id?: string;
+  id: string;
   timestamps: timestamps;
 };
 

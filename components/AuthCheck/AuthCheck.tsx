@@ -1,4 +1,4 @@
-import { useEffect, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import { auth } from '../../lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NotSignedIn } from '../NotSignedIn/NotSignedIn';
@@ -10,9 +10,14 @@ interface AuthCheckProps {
 
 export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const [user, loading] = useAuthState(auth);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // i hate hydration errors
-  if (loading) {
+  if (!mounted || loading) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-const TAILWIND_COLORS = [
+export const TAILWIND_COLORS: string[] = [
   'red',
   'orange',
   'amber',

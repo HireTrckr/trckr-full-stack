@@ -169,6 +169,7 @@ export const JobListing = memo(
                 <TagCard
                   tag={_tag}
                   key={_tag.id}
+                  editable={true}
                   onRemoveButtonClick={() => removeTagFromJob(job.id, _tag.id)}
                 />
               ))}

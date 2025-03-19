@@ -37,6 +37,7 @@ type TagStore = {
   removeTagFromJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
   clearTags: () => boolean; // doesn't delete from server, only clears locally saved tags
   getTagsFromJob: (job: Job) => Tag[];
+  updateTag: (tag: Tag) => Promise<boolean>;
 };
 
 type TagStorePlusPrivate = TagStore & {
@@ -385,6 +386,40 @@ export const useTagStore = create<TagStore>((set, get) => {
       } finally {
         set({ isLoading: false });
       }
+      return !get().error;
+    },
+
+    updateTag: async (updatedTag: Tag) => {
+      if (!auth.currentUser) return false;
+
+      if (!updatedTag.id) return false;
+
+      if (!get().tagMap[updatedTag.id]) return false;
+
+      set({ isLoading: true, error: null });
+      try {
+        await updateDoc(
+          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
+          {
+            [`tagMap.${updatedTag.id}`]: updatedTag,
+          }
+        );
+        set((state) => ({
+          tagMap: {
+            ...state.tagMap,
+            [updatedTag.id]: updatedTag,
+          },
+        }));
+      } catch (error) {
+        console.error(
+          `[tagStore.ts] Error updating tag: ${updatedTag.id}`,
+          error
+        );
+        set({ error: `Failed to update job: ${error}` });
+      } finally {
+        set({ isLoading: false });
+      }
+
       return !get().error;
     },
 

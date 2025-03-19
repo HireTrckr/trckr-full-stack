@@ -4,17 +4,24 @@ import { useState } from 'react';
 
 interface TagCardProps {
   tag: Tag;
+  editable: boolean;
   onRemoveButtonClick: (tagId: Tag['id']) => void;
 }
 
-export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
+export function TagCard({
+  tag,
+  onRemoveButtonClick,
+  editable = true,
+}: TagCardProps) {
   if (!tag) return null;
   const [showDeleteButton, setShowDeleteButton] = useState<Boolean>(false);
 
   return (
     <div
       className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary'} rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px]`}
-      onMouseEnter={() => setShowDeleteButton(true)}
+      onMouseEnter={() => {
+        if (editable) setShowDeleteButton(true);
+      }}
       onMouseLeave={() => setShowDeleteButton(false)}
     >
       <div
@@ -32,7 +39,9 @@ export function TagCard({ tag, onRemoveButtonClick }: TagCardProps) {
           <button
             type="button"
             className="text-white focus:outline-none rounded-full text-center hover:scale-110"
-            onClick={() => onRemoveButtonClick(tag.id)}
+            onClick={() => {
+              if (editable) onRemoveButtonClick(tag.id);
+            }}
           >
             <TiDeleteOutline />
           </button>

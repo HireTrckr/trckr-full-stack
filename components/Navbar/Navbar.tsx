@@ -2,6 +2,7 @@ import React, { JSX } from 'react';
 import { UserThumbnail } from '../UserThumbnail/UserThumbnail';
 import Link from 'next/link';
 import { NavBarOption } from '../../types/navBarOption';
+import { SearchBar } from '../SearchBar/SearchBar';
 
 const navBarOptions: NavBarOption[] = [
   { link: '/list', text: 'track' },
@@ -11,7 +12,7 @@ const navBarOptions: NavBarOption[] = [
 
 export function Navbar(): JSX.Element {
   return (
-    <nav className="fixed top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr] w-full items-center px-4 py-2 shadow-light z-50">
+    <nav className="fixed top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr_auto] w-full items-center px-4 py-1 shadow-light z-50">
       <Link href="/" className="justify-self-start">
         <div className="flex items-center space-x-2 p-1">
           <img
@@ -50,6 +51,9 @@ export function Navbar(): JSX.Element {
           settings
         </Link>
       </div>
+
+      <SearchBar />
+
       <UserThumbnail />
     </nav>
   );

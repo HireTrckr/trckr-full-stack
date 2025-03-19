@@ -56,13 +56,13 @@ export function UserThumbnail() {
             {!isOpen && (
               <TiThMenu
                 onClick={() => setIsOpen(true)}
-                className="text-text-primary transition-colors duration-text"
+                className="transition-colors duration-text text-text-primary"
               />
             )}
             {isOpen && (
               <TiDeleteOutline
                 onClick={() => setIsOpen(false)}
-                className="text-text-primary transition-colors duration-text"
+                className="transition-colors duration-text text-text-primary"
               />
             )}
           </button>

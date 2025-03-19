@@ -4,19 +4,26 @@ import { ToolTip } from '../ToolTip/ToolTip';
 import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
 import { TiArrowSortedDown, TiWarningOutline } from 'react-icons/ti';
 import { TagEditor } from '../TagEditor/TagEditor';
+import { Tag } from '../../types/tag';
+import {
+  TAILWIND_COLORS,
+  TailwindColor,
+} from '../../utils/generateRandomColor';
 
-export function EditJobModal({
-  job,
+interface EditTagModalProps {
+  tag: Tag;
+  onSave: (updatedTag: Tag) => void;
+  onClose: () => void;
+  onDelete: (tag: Tag) => void;
+}
+
+export function EditTagModal({
+  tag,
   onSave,
   onClose,
   onDelete,
-}: {
-  job: Job;
-  onSave: (updatedJob: Job) => void;
-  onClose: () => void;
-  onDelete: (job: Job) => void;
-}): JSX.Element {
-  const [formData, setFormData] = useState<Job>(job);
+}: EditTagModalProps): JSX.Element {
+  const [formData, setFormData] = useState<Tag>(tag);
 
   // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
@@ -24,13 +31,13 @@ export function EditJobModal({
   const [statusDropDownOpen, setStatusDropDownOpen] = useState<boolean>(false);
 
   const modalRef = React.useRef<HTMLDivElement>(null);
-  const statusDropDownRef = React.useRef<HTMLDivElement>(null);
+  const colorDropDownRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!job.timestamps.updatedAt) return;
+    if (!tag.timestamps.updatedAt) return;
 
     const updateTimeRemaining = () => {
-      const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
+      const timeSinceUpdate = Date.now() - tag.timestamps.updatedAt.getTime();
       const remaingSeconds = Math.max(
         0,
         30 - Math.floor(timeSinceUpdate / 1000)
@@ -45,7 +52,7 @@ export function EditJobModal({
 
     // unmount
     return () => clearInterval(interval);
-  }, [job.timestamps?.updatedAt]);
+  }, [tag.timestamps?.updatedAt]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -73,95 +80,62 @@ export function EditJobModal({
   };
 
   const handleSave = () => {
-    const updatedJob: Job = {
-      ...job,
+    const updatedTag: Tag = {
+      ...tag,
       ...formData,
     };
-    onSave(updatedJob);
+    onSave(updatedTag);
     onClose();
   };
 
   const handleDelete = () => {
-    onDelete(job);
+    onDelete(tag);
     onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
-        className={`bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light ${
-          formData.URL ? 'w-[50dvw]' : 'w-[25dvw]'
-        }`}
+        className="bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light w-[25dvw]"
         ref={modalRef}
       >
-        <div className="flex-1 flex-grow p-6 flex flex-col w-full items-center">
-          <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
-            Edit Job
+        <div className="flex-1 flex-grow p-6 flex flex-col items-center w-full">
+          <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text w-full">
+            Edit Tag
           </h2>
-          <span className='text-xs text-text-secondary'>
-            JobID: <i>{formData.id}</i>
+
+          <span className="text-xs text-text-secondary">
+            TagID: <i>{formData.id}</i>
           </span>
 
           <div className="mb-4 w-full">
-            <label
-              htmlFor="position"
-              className="block text-text-primary text-xs"
-            >
-              Position
+            <label htmlFor="name" className="block text-text-primary text-xs">
+              Name
             </label>
             <input
               type="text"
-              id="position"
-              name="position"
-              value={formData.position}
-              onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
-            />
-          </div>
-
-          <div className="mb-4 w-full">
-            <label
-              htmlFor="company"
-              className="block text-text-primary text-xs"
-            >
-              Company
-            </label>
-            <input
-              type="text"
-              id="company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
-            />
-          </div>
-
-          <div className="mb-4 w-full">
-            <label
-              htmlFor="location"
-              className="block text-text-primary text-xs"
-            >
-              Location
-            </label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              value={formData.location}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
             />
           </div>
 
           <div className="mb-4 relative w-full">
-            <label htmlFor="status" className="block text-text-primary text-xs">
-              Status
+            <label htmlFor="color" className="block text-text-primary text-xs">
+              Color
             </label>
             <button
               className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
               onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             >
-              {formData.status}
+              <div className='flex gap-2 items-center'>
+                <div
+                  className={`rounded-full aspect-square h-[1rem] bg-${formData.color}-300`}
+                />
+                {formData.color}
+              </div>
               <TiArrowSortedDown
                 className={`${
                   statusDropDownOpen ? 'rotate-0' : 'rotate-90'
@@ -170,64 +144,43 @@ export function EditJobModal({
             </button>
             {statusDropDownOpen && (
               <div
-                className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
-                ref={statusDropDownRef}
+                className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 h-[20dvh] overflow-y-scroll"
+                ref={colorDropDownRef}
               >
-                {statusOptions.map((status: Job['status']) => (
+                {TAILWIND_COLORS.map((color: TailwindColor) => (
                   <button
-                    key={status}
-                    className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
-                      formData.status === status
+                    key={color}
+                    className={`flex gap-2 items-center px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
+                      formData.color === color
                         ? 'bg-background-primary text-text-primary'
                         : 'text-text-secondary'
                     }`}
                     role="menuitem"
                     onClick={() => {
-                      setFormData({ ...formData, status });
+                      setFormData({ ...formData, color });
                       setStatusDropDownOpen(false);
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
-                        setFormData({ ...formData, status });
+                        setFormData({ ...formData, color });
                         setStatusDropDownOpen(false);
                       }
                     }}
                   >
-                    {status}
+                    <div
+                      className={`rounded-full aspect-square h-[1rem] bg-${color}-300`}
+                    />
+                    {color}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="mb-4 w-full">
-            <label htmlFor="URL" className="block text-text-primary text-xs">
-              URL
-            </label>
-            <input
-              type="url"
-              id="URL"
-              name="URL"
-              placeholder="e.g. https://www.hiretrkr.com"
-              value={formData.URL}
-              onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
-            />
-          </div>
-
-          <div className="mb-4 w-full">
-            <TagEditor
-              tagIds={formData.tagIds || []}
-              onTagsChange={(tagIds) => {
-                setFormData((prevData) => ({ ...prevData, tagIds: tagIds }));
-              }}
-            />
-          </div>
-
-          {formData.timestamps?.updatedAt && (
+          {tag.timestamps?.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Last Updated at: {formData.timestamps.updatedAt.toLocaleString()}
+                Last Updated at: {tag.timestamps.updatedAt.toLocaleString()}
               </span>
             </div>
           )}
@@ -236,9 +189,7 @@ export function EditJobModal({
             <button
               onClick={handleSave}
               className="bg-accent-primary hover:bg-accent-hover text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={
-                !formData.position || !formData.company || timeRemaining > 0
-              }
+              disabled={!formData.name || !formData.color || timeRemaining > 0}
             >
               Save
             </button>
@@ -272,14 +223,6 @@ export function EditJobModal({
             </div>
           )}
         </div>
-
-        {formData.URL && (
-          <div className="flex flex-1 flex-grow p-6 items-center justify-center">
-            <div className="w-[75%] h-[75%] max-w-[100%] max-h-[100%]">
-              <UrlPreviewCard job={job} size="large" />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
