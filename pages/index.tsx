@@ -17,6 +17,7 @@ add tag editor to editJobModal
 
 *tags
 complete tag system
+make searchbar update tag when edited
 tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
