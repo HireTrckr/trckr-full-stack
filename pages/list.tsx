@@ -5,7 +5,7 @@ export default function List() {
   return (
     <>
       <Head>
-        <title>HireTrkr | Applications</title>
+        <title>Trckr | Applications</title>
       </Head>
 
       <div

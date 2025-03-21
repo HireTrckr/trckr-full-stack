@@ -5,7 +5,7 @@ export default function settings() {
   return (
     <>
       <Head>
-        <title>HireTrkr | Settings</title>
+        <title>Trckr | Settings</title>
       </Head>
       <Settings />
     </>

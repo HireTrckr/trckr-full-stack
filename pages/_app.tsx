@@ -9,9 +9,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
       <Head>
-        <title>HireTrkr</title>
-        <meta name="title" content="HireTrkr" />
-        <meta name="og:title" content="HireTrkr" />
+        <title>Trckr</title>
+        <meta name="title" content="Trckr" />
+        <meta name="og:title" content="Trckr" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Layout>

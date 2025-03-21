@@ -6,8 +6,10 @@ import { auth, db } from '../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Job, JobNotSavedInDB } from '../types/job';
 import { Tag } from '../types/tag';
+import { ToastType } from '../types/toast';
 
 import { timestampToDate } from '../utils/timestampUtils';
+import { useToastStore } from './toastStore';
 
 type JobStore = {
   jobs: Job[];
@@ -83,7 +85,6 @@ export const useJobStore = create<JobStore>((set, get) => ({
     if (!job.status || !job.company || !job.position) return false; // will add timestamps - then type is satisfied
 
     set({ isLoading: true, error: null });
-
     try {
       const completeJob: Job = {
         ...job,
@@ -107,6 +108,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
       }));
     } catch (error) {
       console.error('[jobStore.ts] Error adding job:', error);
+      useToastStore().createToast(
+        (error as Error).message,
+        true,
+        'Error adding job',
+        'error' as ToastType,
+        10000
+      );
       set({ error: `Failed to add job: ${error}` });
     } finally {
       set({ isLoading: false });

@@ -10,7 +10,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="w-full px-6 py-16 flex-1 z-0">
         <AuthCheck>
           <ToastsComponent />
-          <main className="w-full py-4 space-y-6">{children}</main>
+          <main className="w-full space-y-6">{children}</main>
           <LoadingIndicator />
         </AuthCheck>
       </div>

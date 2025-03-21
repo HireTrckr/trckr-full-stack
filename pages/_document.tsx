@@ -11,8 +11,8 @@ class MyDocument extends Document {
           <link rel="icon" href="/HireTrckr.png" />
           <link rel="apple-touch-icon" href="/HireTrckr.png" />
 
-          <meta name="og:title" content="HireTrkr" />
-          <meta name="twitter:title" content="HireTrkr" />
+          <meta name="og:title" content="Trckr" />
+          <meta name="twitter:title" content="Trckr" />
 
           <meta name="description" content="Track your job applications" />
           <meta name="og:description" content="Track your job applications" />
@@ -24,7 +24,7 @@ class MyDocument extends Document {
           <meta name="og:image" content="/HireTrckr.png" />
           <meta name="twitter:image" content="/HireTrckr.png" />
         </Head>
-        <body>
+        <body className='bg-background-secondary'>
           <Main />
           <NextScript />
         </body>

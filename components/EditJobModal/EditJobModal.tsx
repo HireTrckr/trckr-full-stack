@@ -208,7 +208,7 @@ export function EditJobModal({
               type="url"
               id="URL"
               name="URL"
-              placeholder="e.g. https://www.hiretrkr.com"
+              placeholder="e.g. https://www.Trckr.com"
               value={formData.URL}
               onChange={handleChange}
               className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"

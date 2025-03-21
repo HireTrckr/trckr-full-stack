@@ -17,11 +17,11 @@ export function Navbar(): JSX.Element {
         <div className="flex items-center space-x-2 p-1">
           <img
             src="/HireTrckr.png"
-            alt="HireTrkr Logo"
+            alt="Trckr Logo"
             className="w-[15px] h-[15px] rounded-[50%]"
           />
           <h1 className="text-lg font-semibold text-text-primary transition-colors duration-text">
-            Trkr
+            Trckr
           </h1>
         </div>
       </Link>

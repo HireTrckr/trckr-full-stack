@@ -5,7 +5,7 @@ export default function List() {
   return (
     <>
       <Head>
-        <title>HireTrkr | New</title>
+        <title>Trckr | New</title>
       </Head>
       <div
         className="bg-background-primary 
