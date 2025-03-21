@@ -72,16 +72,14 @@ export const JobList: React.FC = () => {
           await fetchJobs();
         } catch (error) {
           console.error('Error fetching jobs:', error);
-        } finally {
-          setIsLoading(false);
         }
         try {
           await fetchTags();
         } catch (error) {
           console.error('Error fetching tags:', error);
-        } finally {
-          setIsLoading(false);
         }
+
+        setIsLoading(false);
       }
     });
 
