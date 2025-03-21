@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { SearchableItem, SearchResult } from '../../types/SearchBarItemType';
 import { SearchBarItem } from '../SearchBarItem/SearchBarItem';
 import { useJobStore } from '../../context/jobStore';
@@ -27,6 +27,8 @@ export function SearchBar() {
     null
   );
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const searchBarRef = useRef<HTMLDivElement>(null);
 
   const getSearchMatches = useCallback(
     (term: string) => {
@@ -73,8 +75,8 @@ export function SearchBar() {
   );
 
   function handleModalClose(): void {
-    console.log('handling close');
     setSelectedResult(null);
+    clearSearchBar();
     setIsModalOpen(false);
   }
 
@@ -89,7 +91,17 @@ export function SearchBar() {
       return;
     }
 
-    console.log(await updateTag(updatedTag));
+    await updateTag(updatedTag);
+
+    // replace the tag in the searchResults to force re-render
+    setSearchResults((prevResults) =>
+      prevResults.map((result) => {
+        if (result.type === 'tag' && result.item.id === updatedTag.id) {
+          return { ...result, item: updatedTag };
+        }
+        return result;
+      })
+    );
     handleModalClose();
   }
 
@@ -129,12 +141,36 @@ export function SearchBar() {
     setIsModalOpen(true);
   }
 
+  function clearSearchBar() {
+    setSearchTerm('');
+  }
+
+  // if user clicks away from search bar
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        clearSearchBar();
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchBarRef]);
+
   useEffect(() => {
     getSearchMatches(searchTerm);
   }, [searchTerm]);
 
   return (
-    <div className="transition-colors duration-text text-text-primary w-md px-8 flex-1">
+    <div
+      className="transition-colors duration-text text-text-primary w-md px-8 flex-1"
+      ref={searchBarRef}
+    >
       <input
         type="text"
         placeholder="Search your applications and tags..."
