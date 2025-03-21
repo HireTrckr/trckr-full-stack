@@ -35,11 +35,11 @@ type toastStore = {
   addToast: (toast: Toast) => boolean;
   createToast: (
     msg: string,
-    title: string,
-    type: ToastType,
-    duration: number,
-    onClick: () => void,
-    addToStore: boolean
+    addToStore: boolean,
+    title?: string,
+    type?: ToastType,
+    duration?: number,
+    onClick?: () => void
   ) => Toast;
   getNextToast: () => Toast | undefined;
   checkAndDisplayToast: () => void;
@@ -92,11 +92,11 @@ export const useToastStore = create<toastStore>((set, get) => ({
 
   createToast(
     msg,
+    addToStore = false,
     title = defaultToast.title,
     type = 'info' as ToastType,
     duration = defaultToast.duration,
-    onClick = defaultToast.onClick,
-    addToStore = false
+    onClick = defaultToast.onClick
   ) {
     const newToast: Toast = {
       message: msg,
