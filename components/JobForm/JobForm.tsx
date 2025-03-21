@@ -14,7 +14,7 @@ interface NewTag extends Tag {
 
 export function JobForm() {
   const { addJob } = useJobStore();
-  const { createTag } = useTagStore(); // Get the createTag function from the store
+  const { createTag } = useTagStore();
 
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
