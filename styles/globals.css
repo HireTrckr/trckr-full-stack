@@ -3,32 +3,31 @@
 @tailwind utilities;
 
 @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  
-  @keyframes slideOut {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(100%);
-      opacity: 0;
-    }
+  to {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .slide-in {
-    animation: slideIn 300ms ease-out forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .slide-out {
-    animation: slideOut 300ms ease-in forwards;
+  to {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  
+}
+
+.slide-in {
+  animation: slideIn 300ms ease-out forwards;
+}
+
+.slide-out {
+  animation: slideOut 300ms ease-in forwards;
+}

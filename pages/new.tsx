@@ -7,18 +7,18 @@ export default function List() {
       <Head>
         <title>HireTrkr | New</title>
       </Head>
-        <div
-          className="bg-background-primary 
+      <div
+        className="bg-background-primary 
                            rounded-lg p-6
                            shadow-light
                            
                            transition-all duration-bg ease-in-out
                            flex flex-col items-center
                            hover:scale-[1.02]"
-        >
-          <div className="w-full">
-            <JobForm />
-          </div>
+      >
+        <div className="w-full">
+          <JobForm />
+        </div>
       </div>
     </>
   );
