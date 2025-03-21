@@ -56,7 +56,7 @@ export function ToastMessageComponent({
       onMouseLeave={() => setShowSkipButton(false)}
     >
       <div className="p-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center min-h-[1rem]">
           {toast.title && (
             <span className="text-xs text-text-secondary text-center felx items-center justify-center h-full">
               {toast.title}
