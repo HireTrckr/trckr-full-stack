@@ -168,7 +168,7 @@ export function SearchBar() {
 
   return (
     <div
-      className="transition-colors duration-text text-text-primary w-md px-8 flex-1"
+      className='transition-colors duration-text text-text-primary w-md px-2 flex-1'
       ref={searchBarRef}
     >
       <input
