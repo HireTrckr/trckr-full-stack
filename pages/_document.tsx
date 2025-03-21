@@ -24,7 +24,7 @@ class MyDocument extends Document {
           <meta name="og:image" content="/HireTrckr.png" />
           <meta name="twitter:image" content="/HireTrckr.png" />
         </Head>
-        <body className='bg-background-secondary'>
+        <body className="bg-background-secondary">
           <Main />
           <NextScript />
         </body>
