@@ -21,7 +21,7 @@ export function Navbar(): JSX.Element {
             className="w-[15px] h-[15px] rounded-[50%]"
           />
           <h1 className="text-lg font-semibold text-text-primary transition-colors duration-text">
-            HireTrkr
+            Trkr
           </h1>
         </div>
       </Link>
