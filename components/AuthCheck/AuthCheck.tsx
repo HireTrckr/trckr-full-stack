@@ -32,7 +32,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   return fallback ? (
     <>{fallback}</>
   ) : (
-    <main className="mx-auto px-4 py-16 flex-1 z-0">
+    <main>
       <NotSignedIn />
     </main>
   );
