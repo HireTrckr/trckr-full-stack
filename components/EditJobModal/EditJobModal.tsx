@@ -89,7 +89,7 @@ export function EditJobModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
       <div
-        className={`bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light ${
+        className={`bg-background-secondary rounded-lg transition-all duration-bg ease-in-out flex shadow-light min-w-fit ${
           formData.URL ? 'w-[50dvw]' : 'w-[25dvw]'
         }`}
         ref={modalRef}
