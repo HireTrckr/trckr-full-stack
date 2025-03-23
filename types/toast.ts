@@ -4,15 +4,20 @@ export type confirmedToast = {
 
 export type Toast = {
   message: string;
+  _id: string;
+  _createdAt: number;
 } & Partial<MetaToast>;
 
 export type MetaToast = {
   title: string;
-  type: ToastType;
+  type: ToastCategory;
   duration: number;
   onClick: () => void;
+  undo: (toast: Toast) => void;
 };
 
-const toastTypes = ['success', 'error', 'warning', 'info'];
-
-export type ToastType = (typeof toastTypes)[number];
+export enum ToastCategory {
+  ERROR = 'error',
+  WARNING = 'warning',
+  INFO = 'info',
+}

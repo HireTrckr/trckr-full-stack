@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import { Toast, ToastType, MetaToast } from '../types/toast';
+import { Toast, ToastCategory, MetaToast } from '../types/toast';
+
+const generateToastId = (
+  severity: ToastCategory = ToastCategory.INFO
+): string => {
+  return `toast-${Date.now()}-${severity}-${Math.random().toString(36).substring(2, 9)}`;
+};
 
 class ToastQueue {
   private items: Toast[];
@@ -37,9 +43,10 @@ type toastStore = {
     msg: string,
     addToStore: boolean,
     title?: string,
-    type?: ToastType,
+    type?: ToastCategory,
     duration?: number,
-    onClick?: () => void
+    onClick?: () => void,
+    undo?: (toast: Toast) => void
   ) => Toast;
   getNextToast: () => Toast | undefined;
   checkAndDisplayToast: () => void;
@@ -48,9 +55,10 @@ type toastStore = {
 
 const defaultToast: MetaToast = {
   title: '',
-  type: 'info' as ToastType,
+  type: ToastCategory.INFO,
   duration: 5000,
   onClick: () => {},
+  undo: (toast) => {},
 };
 
 export const useToastStore = create<toastStore>((set, get) => ({
@@ -94,9 +102,10 @@ export const useToastStore = create<toastStore>((set, get) => ({
     msg,
     addToStore = false,
     title = defaultToast.title,
-    type = 'info' as ToastType,
+    type = ToastCategory.INFO,
     duration = defaultToast.duration,
-    onClick = defaultToast.onClick
+    onClick,
+    undo
   ) {
     const newToast: Toast = {
       message: msg,
@@ -104,6 +113,9 @@ export const useToastStore = create<toastStore>((set, get) => ({
       type,
       duration,
       onClick,
+      undo,
+      _id: generateToastId(type),
+      _createdAt: Date.now(),
     };
 
     if (addToStore) {
