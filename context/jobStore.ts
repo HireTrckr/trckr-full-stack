@@ -24,6 +24,8 @@ type JobStore = {
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 };
 
+const { createToast } = useToastStore.getState();
+
 export const useJobStore = create<JobStore>((set, get) => ({
   jobs: [],
 
@@ -106,12 +108,26 @@ export const useJobStore = create<JobStore>((set, get) => ({
       set((state) => ({
         jobs: [...state.jobs, { ...completeJob, id: docRef.id }],
       }));
+
+      // send toast notification
+      createToast(
+        `Job ${job.position} at ${job.company} added successfully`,
+        true,
+        'Job added',
+        ToastCategory.INFO,
+        3000,
+        () => {},
+        (toast) => {
+          // undo function
+          get().deleteJob({ ...completeJob, id: docRef.id } as Job);
+        }
+      );
     } catch (error) {
       console.error('[jobStore.ts] Error adding job:', error);
-      useToastStore().createToast(
+      createToast(
         (error as Error).message,
         true,
-        'Error adding job',
+        `Error adding job ${job.position} at ${job.company}`,
         ToastCategory.ERROR,
         10000
       );
@@ -147,8 +163,28 @@ export const useJobStore = create<JobStore>((set, get) => ({
       set((state) => ({
         jobs: state.jobs.filter((j) => j.id !== job.id),
       }));
+      // send toast notification
+      createToast(
+        `Job ${job.position} at ${job.company} deleted successfully`,
+        true,
+        'Job added',
+        ToastCategory.INFO,
+        3000,
+        () => {},
+        (toast) => {
+          // undo function
+          get().updateJob(job);
+        }
+      );
     } catch (error) {
       console.error(`[jobStore.ts] Error deleting job: ${job.id}`, error);
+      createToast(
+        (error as Error).message,
+        true,
+        `Error deleting job ${job.position} at ${job.company}`,
+        ToastCategory.ERROR,
+        10000
+      );
       set({ error: `Failed to delete job: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -171,6 +207,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
       job.timestamps = {
         ...job.timestamps,
         updatedAt: new Date(),
+        deletedAt: null,
       };
       await updateDoc(jobRef, job);
       set((state) => ({
