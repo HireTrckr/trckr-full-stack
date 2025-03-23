@@ -129,7 +129,6 @@ export function SearchBar() {
   }
 
   async function handleJobDelete(deletedJob: Job) {
-    console.log('handling delete');
     if (!deletedJob) return;
 
     await deleteJob(deletedJob);
