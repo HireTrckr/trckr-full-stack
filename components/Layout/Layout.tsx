@@ -5,12 +5,15 @@ import { ToastsComponent } from '../ToastsComponent/ToastsComponent';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen min-w-screen max-w-screen bg-background-secondary flex flex-col items-center z-0">
+    <div
+      className="h-screen w-screen bg-background-secondary flex flex-col overflow-hidden"
+      style={{ overscrollBehavior: 'contain' }}
+    >
       <Navbar />
-      <div className="w-full px-6 py-16 flex-1 z-0">
+      <div className="flex-1 overflow-y-auto">
         <AuthCheck>
           <ToastsComponent />
-          <main className="w-full space-y-6">{children}</main>
+          <main className="w-full p-6">{children}</main>
           <LoadingIndicator />
         </AuthCheck>
       </div>
