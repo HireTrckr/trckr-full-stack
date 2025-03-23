@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Toast } from '../../types/toast';
+import { Toast, ToastCategory } from '../../types/toast';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { TailwindColor } from '../../utils/generateRandomColor';
 interface ToastMessageComponentProps {
   toast: Toast;
   onExpire: () => void;
@@ -8,6 +9,16 @@ interface ToastMessageComponentProps {
 }
 
 const ANIMATION_LENGTH = 300;
+
+type ToastColorScheme = {
+  readonly [key in ToastCategory]: TailwindColor;
+};
+
+const toastColorSchemes: ToastColorScheme = {
+  [ToastCategory.ERROR]: 'red',
+  [ToastCategory.WARNING]: 'yellow',
+  [ToastCategory.INFO]: 'blue',
+};
 
 export function ToastMessageComponent({
   toast,
@@ -21,6 +32,8 @@ export function ToastMessageComponent({
   const [showSkipButton, setShowSkipButton] = useState(false);
 
   const progressWidth = `${(timeRemaining! / toast.duration!) * 100}%`;
+
+  const toastColor = toastColorSchemes[toast.type || ToastCategory.INFO];
 
   const handleExpire = () => {
     setIsLeaving(true);
@@ -50,15 +63,16 @@ export function ToastMessageComponent({
 
   return (
     <div
-      onClick={toast.onClick}
-      className={`bg-accent-primary pb-0 rounded-sm flex flex flex-col ${isLeaving ? 'slide-out' : 'slide-in'}`}
+      className={`bg-${toastColor}-300 pb-0 rounded-sm flex flex flex-col ${isLeaving ? 'slide-out' : 'slide-in'} z-[100]`}
       onMouseEnter={() => setShowSkipButton(true)}
       onMouseLeave={() => setShowSkipButton(false)}
     >
-      <div className="p-2">
+      <div className="p-2 flex flex-col pb-0">
         <div className="flex justify-between items-center min-h-[1rem]">
           {toast.title && (
-            <span className="text-xs text-text-secondary text-center felx items-center justify-center h-full">
+            <span
+              className={`text-sm text-center text-${toastColor}-400 flex items-center justify-center h-full`}
+            >
               {toast.title}
             </span>
           )}
@@ -66,19 +80,41 @@ export function ToastMessageComponent({
           {showSkipButton && (
             <button
               onClick={() => handleSkip()}
-              className="text-accent-hover text-center"
+              className={`text-${toastColor}-600 text-center`}
             >
               <TiDeleteOutline />
             </button>
           )}
         </div>
 
-        <span className="text-sm text-text-primary">{toast.message}</span>
+        <span
+          className={`text-md text-${toastColor}-600 ${toast.onClick ? `cursor-pointer hover:underline` : ''}`}
+          onClick={toast.onClick}
+        >
+          {toast.message}
+        </span>
+
+        <div className="flex justify-between">
+          <span className={`text-xs text-${toastColor}-400`}>
+            {new Date(toast._createdAt).toLocaleTimeString()}
+          </span>
+          {toast.undo && typeof toast.undo === 'function' && (
+            <button
+              onClick={() => {
+                (toast.undo as (toast: Toast) => void)(toast);
+                onSkip();
+              }}
+              className={`text-${toastColor}-600 text-xs hover:underline`}
+            >
+              Undo
+            </button>
+          )}
+        </div>
       </div>
       {toast.duration && (
         <div className="w-full h-1 bg-black/25 mt-2 ">
           <div
-            className="h-full bg-accent-hover transition-all duration-500 ease-linear"
+            className={`h-full bg-${toastColor}-500 transition-all duration-500 ease-linear`}
             style={{ width: progressWidth }}
           />
         </div>

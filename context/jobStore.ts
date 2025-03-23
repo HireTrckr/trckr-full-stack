@@ -6,7 +6,7 @@ import { auth, db } from '../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Job, JobNotSavedInDB } from '../types/job';
 import { Tag } from '../types/tag';
-import { ToastType } from '../types/toast';
+import { ToastCategory } from '../types/toast';
 
 import { timestampToDate } from '../utils/timestampUtils';
 import { useToastStore } from './toastStore';
@@ -112,7 +112,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
         (error as Error).message,
         true,
         'Error adding job',
-        'error' as ToastType,
+        ToastCategory.ERROR,
         10000
       );
       set({ error: `Failed to add job: ${error}` });
