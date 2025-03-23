@@ -10,7 +10,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       style={{ overscrollBehavior: 'contain' }}
     >
       <Navbar />
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto flex flex-row-reverse">
         <AuthCheck>
           <ToastsComponent />
           <main className="w-full p-6">{children}</main>
