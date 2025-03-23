@@ -10,10 +10,7 @@ export function ToastsComponent() {
   }
 
   return (
-    <div
-      className="fixed justify-start z-[100]"
-      id="toast-overlay"
-    >
+    <div className="fixed justify-start z-[100]" id="toast-overlay">
       <div className="mr-4">
         <ToastMessageComponent
           key={currentToast._id}
