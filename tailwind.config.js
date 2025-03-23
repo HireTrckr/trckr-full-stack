@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  safelist: [{ pattern: /^bg-.*-300$/ }],
+  safelist: [
+    { pattern: /^(bg|text)-.*-(50|100|200|300|400|500|600|700|800|900|950)$/ },
+  ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
