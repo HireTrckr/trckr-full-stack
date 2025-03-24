@@ -2,6 +2,7 @@
 module.exports = {
   safelist: [
     { pattern: /^(bg|text)-.*-(50|100|200|300|400|500|600|700|800|900|950)$/ },
+    { pattern: /^hover:scale-\[[1-9](\.[0-9]{1,2})?\]$/ },
   ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
