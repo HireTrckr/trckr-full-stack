@@ -21,9 +21,9 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     return null;
   }
 
-  if (loading) {
-    return (
-      <div className="bg-background-primary rounded-lg p-6 transition-all duration-bg ease-in-out flex flex-col items-center gap-2 hover:scale-[1.02] [transform-style:preserve-3d]">
+  return (
+    <div className="w-full p-6">
+      <div className="bg-background-primary rounded-lg p-6 transition-all duration-bg ease-in-out flex flex-col items-center gap-2 hover:scale-[1.02]">
         <span className="text-md font-semibold text-text-primary flex items-center transition-colors duration-text capitalize">
           Loading...
         </span>
@@ -43,8 +43,8 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
           />
         </svg>
       </div>
-    );
-  }
+    </div>
+  );
 
   if (user) {
     return <>{children}</>;
