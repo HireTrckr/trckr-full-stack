@@ -24,9 +24,6 @@ tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
 changing tag color
-
-FIX BUG where scale doesnt trigger on padding when toast message is present
-FIX BUG where scale makes jobForm scale over any toast notifcations
 */
 
 export default function Home() {
