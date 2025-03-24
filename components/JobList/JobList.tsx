@@ -105,7 +105,7 @@ export const JobList: React.FC = () => {
           </p>
         </div>
       ) : (
-        <ul className="relative">
+        <ul className="relativ px-3">
           {jobs.map((job) => {
             const isActive =
               jobWithOpenDropdown === job ||
@@ -125,6 +125,7 @@ export const JobList: React.FC = () => {
                   job={job}
                   onUpdate={handleJobUpdate}
                   onEdit={handleEdit}
+                  onDelete={handleJobDelete}
                   showControls={isActive}
                   onDropdownOpen={() => setJobWithOpenDropdown(job)}
                   onDropdownClose={() => setJobWithOpenDropdown(null)}

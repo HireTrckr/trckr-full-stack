@@ -4,6 +4,7 @@ import { useState, memo } from 'react';
 import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
 import { useTagStore } from '../../context/tagStore';
 import { TagCard } from '../TagCard/TagCard';
+import { TiTrash } from 'react-icons/ti';
 import { Tag } from '../../types/tag';
 
 export const JobListing = memo(
@@ -11,6 +12,7 @@ export const JobListing = memo(
     job,
     onUpdate,
     onEdit,
+    onDelete,
     showControls,
     onDropdownOpen,
     onDropdownClose,
@@ -18,6 +20,7 @@ export const JobListing = memo(
     job: Job;
     onUpdate?: (updatedJob: Job) => void;
     onEdit: (jobId: Job['id']) => void;
+    onDelete: (job: Job) => void;
     showControls: boolean;
     onDropdownOpen: () => void;
     onDropdownClose: () => void;
@@ -219,6 +222,12 @@ export const JobListing = memo(
               onClick={() => onEdit(job.id)} // Pass job ID to the handler
             >
               Edit
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-bg ease-in-out min-h-full"
+              onClick={() => onDelete(job)}
+            >
+              <TiTrash size={24} />
             </button>
           </div>
         )}
