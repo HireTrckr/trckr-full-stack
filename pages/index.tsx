@@ -11,6 +11,11 @@ settings backend
 
 pagination (if needed)
 
+properly implement toast notifications (plus undo)
+properly implement loading notifications
+
+when job is deleted and then undone it should reappear
+
 *modal*
 confirmation popup for delete
 make better link preview in modal
@@ -24,6 +29,8 @@ tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
 changing tag color
+
+add a delete button to joblisting
 */
 
 export default function Home() {
