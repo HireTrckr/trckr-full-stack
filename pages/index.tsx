@@ -19,8 +19,6 @@ when job is deleted and then undone it should reappear
 *modal*
 confirmation popup for delete
 make better link preview in modal
-make edit job modal responsive for when use adds a link
-add tag editor to editJobModal
 
 *tags
 complete tag system
