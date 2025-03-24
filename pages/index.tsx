@@ -29,8 +29,6 @@ tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
 changing tag color
-
-add a delete button to joblisting
 */
 
 export default function Home() {
