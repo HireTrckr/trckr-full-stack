@@ -118,7 +118,7 @@ export function EditTagModal({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
+              className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
             />
           </div>
 
@@ -127,7 +127,7 @@ export function EditTagModal({
               Color
             </label>
             <button
-              className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
+              className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
               onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             >
               <div className="flex gap-2 items-center">
@@ -188,7 +188,7 @@ export function EditTagModal({
           <div className="mt-2 flex justify-center space-x-3">
             <button
               onClick={handleSave}
-              className="bg-accent-primary hover:bg-accent-hover text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!formData.name || !formData.color || timeRemaining > 0}
             >
               Save

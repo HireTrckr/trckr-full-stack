@@ -2,6 +2,9 @@ import { useEffect, useState, ReactNode } from 'react';
 import { auth } from '../../lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NotSignedIn } from '../NotSignedIn/NotSignedIn';
+import { useJobStore } from '../../context/jobStore';
+import { useSettingsStore } from '../../context/settingStore';
+import { useTagStore } from '../../context/tagStore';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -12,8 +15,22 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const [user, loading] = useAuthState(auth);
   const [mounted, setMounted] = useState(false);
 
+  const fetchTags = useTagStore((state) => state.fetchTags);
+  const fetchJobs = useJobStore((state) => state.fetchJobs);
+  const fetchSettings = useSettingsStore((state) => state.fetchSettings);
+
+  const loadUserDataIntoStores = async () => {
+    if (!user) return;
+
+    // load user data into stores
+    await fetchTags();
+    await fetchJobs();
+    await fetchSettings();
+  };
+
   useEffect(() => {
     setMounted(true);
+    loadUserDataIntoStores();
   }, []);
 
   // i hate hydration errors
@@ -49,13 +66,14 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   }
 
   if (user) {
+    loadUserDataIntoStores();
     return <>{children}</>;
   }
 
   return fallback ? (
     <>{fallback}</>
   ) : (
-    <main>
+    <main className="w-full p-6">
       <NotSignedIn />
     </main>
   );

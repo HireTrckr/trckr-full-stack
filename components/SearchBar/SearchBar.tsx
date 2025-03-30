@@ -178,7 +178,7 @@ export function SearchBar() {
                      bg-background-primary 
                      text-text-primary
                      border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
                      transition-all duration-text"
         onChange={(e) => setSearchTerm(e.target.value)}

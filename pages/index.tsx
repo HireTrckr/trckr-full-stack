@@ -9,6 +9,7 @@ system theme override
 settings component
 settings backend
 
+skeleton page
 pagination (if needed)
 
 properly implement toast notifications (plus undo)
@@ -27,6 +28,9 @@ tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
 changing tag color
+add loading spinner to joblisting delete button
+
+fix tags lol again
 */
 
 export default function Home() {

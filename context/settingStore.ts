@@ -12,6 +12,7 @@ type SettingsStore = {
     key: K,
     value: Settings[K]
   ) => Promise<boolean>;
+  getSettingDisplayName: (key: string) => string;
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
@@ -63,6 +64,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         `${settings.theme.primaryColor}`
       );
 
+      console.log(document.documentElement.style);
+
       set({ settings });
     } catch (error) {
       console.error('[tagStore.ts] Error fetching tags:', error);
@@ -72,6 +75,16 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     }
 
     return !get().error;
+  },
+
+  getSettingDisplayName: (key: string) => {
+    // undo camel case
+    const words = key.split(/(?=[A-Z])/);
+    const capitalizedWords = words.map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    );
+    const displayName = capitalizedWords.join(' ');
+    return displayName.replace(/([a-z])([A-Z])/g, '$1 $2');
   },
 
   updateSettings: async (key, value) => {

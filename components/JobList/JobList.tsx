@@ -93,9 +93,9 @@ export const JobList: React.FC = () => {
   return (
     <div className="w-full transition-colors duration-bg">
       <div className="flex justify-center items-center mb-6">
-        <h2 className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
+        <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
           My Job Applications {jobs.length ? `(${jobs.length})` : ''}
-        </h2>
+        </span>
       </div>
 
       {jobs.length === 0 ? (

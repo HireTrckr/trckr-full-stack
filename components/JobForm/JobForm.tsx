@@ -109,7 +109,7 @@ export function JobForm() {
                      bg-background-primary 
                      text-text-primary
                      border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
                      transition-all duration-text"
             value={job.company}
@@ -122,7 +122,7 @@ export function JobForm() {
                      bg-background-primary 
                      text-text-primary
                      border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
                      transition-all duration-text"
             value={job.position}
@@ -130,7 +130,7 @@ export function JobForm() {
           />
 
           <button
-            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 transition-all duration-text capitalize text-left"
+            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left"
             onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             ref={statusDropDownButtonRef}
           >
@@ -192,7 +192,7 @@ export function JobForm() {
                      bg-background-primary 
                      text-text-primary
                      border border-background-secondary
-                     focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary
+                     focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
                      transition-all duration-text"
               value={job.location}
@@ -202,7 +202,7 @@ export function JobForm() {
             <input
               type="url"
               placeholder="URL"
-              className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
+              className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
               value={job?.URL}
               onChange={(e) => setJob({ ...job, URL: e.target.value })}
             ></input>
@@ -216,7 +216,7 @@ export function JobForm() {
 
         <button
           type="submit"
-          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:bg-accent-hover text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:bg-accent-primary/90 text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
           disabled={!job.company || !job.position}
         >
           add job
