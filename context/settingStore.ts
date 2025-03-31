@@ -64,7 +64,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         `${settings.theme.primaryColor}`
       );
 
-
       set({ settings });
     } catch (error) {
       console.error('[tagStore.ts] Error fetching tags:', error);
