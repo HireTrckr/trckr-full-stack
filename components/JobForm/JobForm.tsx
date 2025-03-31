@@ -105,7 +105,6 @@ export function JobForm() {
           <input
             type="text"
             placeholder="Company*"
-            required
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -119,7 +118,6 @@ export function JobForm() {
           <input
             type="text"
             placeholder="Position*"
-            required
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
