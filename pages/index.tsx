@@ -30,6 +30,8 @@ rate limiting for requests, creations, deletions, edits
 changing tag color
 add loading spinner to joblisting delete button
 
+this website uses cookies popup
+
 fix tags lol again
 */
 
