@@ -64,7 +64,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         `${settings.theme.primaryColor}`
       );
 
-      console.log(document.documentElement.style);
 
       set({ settings });
     } catch (error) {
