@@ -20,7 +20,6 @@ export default {
         },
         accent: {
           primary: 'var(--accent-color)',
-          hover: 'var(--accent-hover)',
         },
       },
     },

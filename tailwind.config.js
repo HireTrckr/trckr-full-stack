@@ -36,7 +36,6 @@ module.exports = {
         },
         accent: {
           primary: 'var(--accent-color)',
-          hover: 'var(--accent-hover)',
         },
       },
     },

@@ -5,7 +5,6 @@ export const themeConfig = {
     textPrimary: '#333333',
     textSecondary: '#666666',
     accentColor: '#4dabf7',
-    accentHover: '#3994e4',
   },
   dark: {
     backgroundPrimary: '#1a1a1a',
@@ -13,7 +12,6 @@ export const themeConfig = {
     textPrimary: '#ffffff',
     textSecondary: '#b3b3b3',
     accentColor: '#4dabf7', //77, 171, 247
-    accentHover: '#3994e4',
   },
 };
 
