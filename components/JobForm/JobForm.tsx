@@ -105,6 +105,7 @@ export function JobForm() {
           <input
             type="text"
             placeholder="Company*"
+            required
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -118,6 +119,7 @@ export function JobForm() {
           <input
             type="text"
             placeholder="Position*"
+            required
             className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -216,7 +218,7 @@ export function JobForm() {
 
         <button
           type="submit"
-          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:bg-accent-primary/90 text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
+          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:brightness-[80%] text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
           disabled={!job.company || !job.position}
         >
           add job

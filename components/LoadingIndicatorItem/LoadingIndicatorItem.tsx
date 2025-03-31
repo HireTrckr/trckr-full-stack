@@ -28,7 +28,7 @@ export function LoadingIndicatorItem({
             <div className="bg-background-primary p-6 rounded-lg shadow-lg">
               <p className="text-text-primary">{errorMessage}</p>
               <button
-                className="mt-4 px-4 py-2 bg-accent-primary text-text-primary rounded hover:bg-accent-hover"
+                className="mt-4 px-4 py-2 bg-accent-primary text-text-primary rounded hover:brightness-[80%]"
                 onClick={() => setShowModal(false)}
               >
                 Close

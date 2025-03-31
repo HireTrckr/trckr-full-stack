@@ -11,7 +11,7 @@ export function NotSignedIn(): JSX.Element {
       <button
         onClick={signInWithGoogle}
         className="px-3 py-1.5 rounded-lg text-sm font-medium
-             bg-accent-primary hover:bg-accent-hover
+             bg-accent-primary hover:brightness-[80%]
              text-white
              transition-all duration-text ease-in-out
              flex items-center gap-2 shadow-light"

@@ -16,7 +16,7 @@ export function AccountSettingsThumbnail() {
       <div className="flex items-center justify-evenly">
         <Link
           href="/settings"
-          className="flex items-center gap-2 p-1.5 px-2 py-1 h-7 bg-accent-primary rounded-lg hover:bg-accent-hover transition-colors duration-text"
+          className="flex items-center gap-2 p-1.5 px-2 py-1 h-7 bg-accent-primary rounded-lg hover:brightness-[80%] transition-colors duration-text"
         >
           <span className="text-xs text-white transition-colors duration-text">
             Settings
@@ -30,7 +30,7 @@ export function AccountSettingsThumbnail() {
         </Link>
         <button
           onClick={handleSignOut}
-          className="text-center px-2 py-1 h-7 text-sm rounded-lg text-white bg-accent-primary hover:bg-accent-hover transition-colors duration-text text-xs"
+          className="text-center px-2 py-1 h-7 text-sm rounded-lg text-white bg-accent-primary hover:brightness-[80%] transition-colors duration-text text-xs"
         >
           Sign Out
         </button>
