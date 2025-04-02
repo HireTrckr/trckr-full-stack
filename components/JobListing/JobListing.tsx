@@ -87,6 +87,8 @@ export const JobListing = memo(
       const baseClasses =
         'text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed';
       switch (status.toLowerCase()) {
+        case 'not applied':
+          return `bg-gray-500 ${baseClasses}`;
         case 'applied':
           return `bg-blue-500 ${baseClasses}`;
         case 'interview':

@@ -17,6 +17,7 @@ export type JobNotSavedInDB = {
 };
 
 export const statusOptions = [
+  'not applied',
   'applied',
   'interview',
   'offer',
