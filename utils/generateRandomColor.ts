@@ -1,7 +1,6 @@
 export const TAILWIND_COLORS: string[] = [
   'red',
   'orange',
-  'amber',
   'yellow',
   'lime',
   'green',
