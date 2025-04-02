@@ -241,6 +241,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
               key={tagId}
               tag={tag}
               onRemoveButtonClick={() => removeTag(tagId)}
+              editable={true}
             />
           );
         })}
