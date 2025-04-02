@@ -1,18 +1,26 @@
 import { create } from 'zustand';
 import { DEFAULT_SETTINGS, Settings } from '../types/settings';
 import { auth, db } from '../lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { TailwindColor } from '../utils/generateRandomColor';
 
 type SettingsStore = {
   settings: Settings;
   isLoading: boolean;
   error: string | null;
   fetchSettings: () => Promise<boolean>;
-  updateSettings: <K extends keyof Settings>(
+  updateSetting: <K extends keyof Settings>(
     key: K,
     value: Settings[K]
   ) => Promise<boolean>;
+  updateSettings: (newSettings: Settings) => Promise<boolean>;
   getSettingDisplayName: (key: string) => string;
+};
+
+const applyTailwindThemeColor = (
+  color: TailwindColor = DEFAULT_SETTINGS.theme.primaryColor
+) => {
+  document.documentElement.style.setProperty('--accent-color', color);
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
@@ -52,12 +60,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         ...settingsData.settings,
       } as Settings;
 
-      settings.theme.primaryColor = 'red';
-
-      document.documentElement.style.setProperty(
-        '--accent-color',
-        settings.theme.primaryColor
-      );
+      applyTailwindThemeColor(settings.theme.primaryColor);
 
       set({ settings });
     } catch (error) {
@@ -80,7 +83,42 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     return displayName.replace(/([a-z])([A-Z])/g, '$1 $2');
   },
 
-  updateSettings: async (key, value) => {
+  updateSettings: async (newSettings: Settings) => {
+    if (!auth.currentUser) return false;
+    if (!get().settings) return false;
+
+    const currentSettings = get().settings;
+
+    const updatedSettings: Settings = {
+      ...currentSettings,
+      ...newSettings,
+      timestamps: {
+        ...currentSettings.timestamps,
+        updatedAt: new Date(),
+      },
+    };
+
+    set({ isLoading: true, error: null });
+    try {
+      await updateDoc(
+        doc(db, `users/${auth.currentUser.uid}/metadata/settings`),
+        {
+          settings: newSettings,
+        }
+      );
+
+      set({ settings: newSettings });
+      applyTailwindThemeColor(newSettings.theme.primaryColor);
+    } catch (error) {
+      console.error('[settingsStore.ts] Error updating settings:', error);
+      set({ error: `Failed to update settings: ${error}` });
+    } finally {
+      set({ isLoading: false });
+    }
+    return !get().error;
+  },
+
+  updateSetting: async (key, value) => {
     if (!auth.currentUser) return false;
 
     if (!get().settings) return false;
@@ -98,7 +136,23 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       },
     };
 
-    set({ settings: newSettings });
-    return true;
+    set({ isLoading: true, error: null });
+    try {
+      await updateDoc(
+        doc(db, `users/${auth.currentUser.uid}/metadata/settings`),
+        {
+          settings: newSettings,
+        }
+      );
+
+      set({ settings: newSettings });
+      applyTailwindThemeColor(newSettings.theme.primaryColor);
+    } catch (error) {
+      console.error('[settingsStore.ts] Error updating settings:', error);
+      set({ error: `Failed to update settings: ${error}` });
+    } finally {
+      set({ isLoading: false });
+    }
+    return !get().error;
   },
 }));
