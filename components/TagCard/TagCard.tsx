@@ -18,7 +18,7 @@ export function TagCard({
 
   return (
     <div
-      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary'} rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px]`}
+      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px]`}
       onMouseEnter={() => {
         if (editable) setShowDeleteButton(true);
       }}
@@ -29,7 +29,10 @@ export function TagCard({
           showDeleteButton ? 'justify-start' : 'justify-center'
         } w-full`}
       >
-        <span key={tag.id} className="text-text-primary text-xs">
+        <span
+          key={tag.id}
+          className={`${tag.color ? 'text-text-primary' : 'text-text-accent'} text-xs`}
+        >
           {tag?.name || tag.id}
         </span>
       </div>

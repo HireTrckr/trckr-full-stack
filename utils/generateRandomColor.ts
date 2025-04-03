@@ -1,4 +1,4 @@
-export const TAILWIND_COLORS: string[] = [
+const _tailwindColorNames: string[] = [
   'red',
   'orange',
   'yellow',
@@ -17,9 +17,9 @@ export const TAILWIND_COLORS: string[] = [
   'rose',
 ] as const;
 
-export type TailwindColor = (typeof TAILWIND_COLORS)[number];
+export type TailwindColorName = (typeof _tailwindColorNames)[number];
 
-export const getRandomTailwindColor = (): TailwindColor => {
-  const randomIndex = Math.floor(Math.random() * TAILWIND_COLORS.length);
-  return TAILWIND_COLORS[randomIndex];
+export const getRandomTailwindColor = (): TailwindColorName => {
+  const randomIndex = Math.floor(Math.random() * _tailwindColorNames.length);
+  return _tailwindColorNames[randomIndex];
 };

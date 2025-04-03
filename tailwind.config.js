@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
+
+import colors from 'tailwindcss/colors';
+
 module.exports = {
   safelist: [
     { pattern: /^(bg|text)-.*-(50|100|200|300|400|500|600|700|800|900|950)$/ },
-    { pattern: /^hover:scale-\[[1-9](\.[0-9]{1,2})?\]$/ },
   ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -16,6 +18,9 @@ module.exports = {
   darkMode: 'class', // or 'media' if you want to respect system preferences
   theme: {
     extend: {
+      colors: {
+        ...colors,
+      },
       transitionDuration: {
         text: '100ms',
         bg: '300ms',
@@ -33,6 +38,7 @@ module.exports = {
         text: {
           primary: 'var(--text-primary)',
           secondary: 'var(--text-secondary)',
+          accent: 'var(--text-accent)',
         },
         accent: {
           primary: 'var(--accent-color)',

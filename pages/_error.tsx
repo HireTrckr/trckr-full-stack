@@ -18,7 +18,7 @@ function Error({ statusCode }: ErrorProps) {
       </p>
       <a
         href="/"
-        className="px-4 py-2 bg-accent-primary text-white rounded-md
+        className="px-4 py-2 bg-accent-primary text-text-accent rounded-md
                   hover:brightness-[80%] transition-colors duration-text"
       >
         Return Home

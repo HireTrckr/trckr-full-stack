@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSettingsStore } from '../../context/settingStore';
 import { ThemeSettingsDropdown } from '../ThemeSettingsDropdown/ThemeSettingsDropdown';
 import { ColorPicker } from '../ColorPicker/ColorPicker';
+import { TailwindColor } from '../../types/tailwindColor';
 
 export function Settings() {
   const settings = useSettingsStore((state) => state.settings);
@@ -33,7 +34,7 @@ export function Settings() {
     }
   };
 
-  const handleColorSelect = (color: string) => {
+  const handleColorSelect = (color: TailwindColor) => {
     setFormData((prev) => ({
       ...prev,
       theme: {
@@ -89,7 +90,7 @@ export function Settings() {
       </div>
       <div className="flex items-center gap-4" id="settings-button-container">
         <button
-          className="bg-blue-300 hover:brightness-[80%] text-white p-1.5 px-2 py-1 rounded-lg transition-colors duration-bg ease-in-out"
+          className="bg-accent-primary hover:brightness-[80%] text-text-accent p-1.5 px-2 py-1 rounded-lg transition-colors duration-bg ease-in-out"
           onClick={() => handleSave()}
         >
           Save

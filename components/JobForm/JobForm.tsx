@@ -216,7 +216,7 @@ export function JobForm() {
 
         <button
           type="submit"
-          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:brightness-[80%] text-white font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
+          className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:brightness-[80%] text-text-accent font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed capitalize focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
           disabled={!job.company || !job.position}
         >
           add job

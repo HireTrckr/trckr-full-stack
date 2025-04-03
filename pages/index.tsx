@@ -9,8 +9,13 @@ system theme override
 settings component
 settings backend
 
+allow custom status'
+allow custom fields
+
 skeleton page
 pagination (if needed)
+
+fix tailwind errors (on sign out)
 
 properly implement toast notifications (plus undo)
 properly implement loading notifications

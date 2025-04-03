@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { DEFAULT_SETTINGS, Settings } from '../types/settings';
 import { auth, db } from '../lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { TailwindColor } from '../utils/generateRandomColor';
+import { TailwindColor } from '../types/tailwindColor';
 
 type SettingsStore = {
   settings: Settings;
@@ -17,10 +17,14 @@ type SettingsStore = {
   getSettingDisplayName: (key: string) => string;
 };
 
-const applyTailwindThemeColor = (
+export const applyTailwindThemeColor = (
   color: TailwindColor = DEFAULT_SETTINGS.theme.primaryColor
 ) => {
-  document.documentElement.style.setProperty('--accent-color', color);
+  document.documentElement.style.setProperty(
+    '--accent-color',
+    color.tailwindColorName
+  );
+  document.documentElement.style.setProperty('--text-accent', color.textColor);
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
@@ -103,7 +107,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       await updateDoc(
         doc(db, `users/${auth.currentUser.uid}/metadata/settings`),
         {
-          settings: newSettings,
+          settings: updatedSettings,
         }
       );
 

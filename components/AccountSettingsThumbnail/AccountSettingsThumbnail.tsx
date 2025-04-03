@@ -18,7 +18,7 @@ export function AccountSettingsThumbnail() {
           href="/settings"
           className="flex items-center gap-2 p-1.5 px-2 py-1 h-7 bg-accent-primary rounded-lg hover:brightness-[80%] transition-colors duration-text"
         >
-          <span className="text-xs text-white transition-colors duration-text">
+          <span className="text-xs text-text-accent transition-colors duration-text">
             Settings
           </span>
           <img
@@ -30,7 +30,7 @@ export function AccountSettingsThumbnail() {
         </Link>
         <button
           onClick={handleSignOut}
-          className="text-center px-2 py-1 h-7 text-sm rounded-lg text-white bg-accent-primary hover:brightness-[80%] transition-colors duration-text text-xs"
+          className="text-center px-2 py-1 h-7 text-sm rounded-lg text-text-accent bg-accent-primary hover:brightness-[80%] transition-colors duration-text text-xs"
         >
           Sign Out
         </button>

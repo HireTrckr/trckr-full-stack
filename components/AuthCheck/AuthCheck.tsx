@@ -3,8 +3,12 @@ import { auth } from '../../lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { NotSignedIn } from '../NotSignedIn/NotSignedIn';
 import { useJobStore } from '../../context/jobStore';
-import { useSettingsStore } from '../../context/settingStore';
+import {
+  applyTailwindThemeColor,
+  useSettingsStore,
+} from '../../context/settingStore';
 import { useTagStore } from '../../context/tagStore';
+import { DEFAULT_SETTINGS } from '../../types/settings';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -69,6 +73,8 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     loadUserDataIntoStores();
     return <>{children}</>;
   }
+
+  applyTailwindThemeColor(DEFAULT_SETTINGS.theme.primaryColor);
 
   return fallback ? (
     <>{fallback}</>

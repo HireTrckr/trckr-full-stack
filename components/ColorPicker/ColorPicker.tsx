@@ -1,8 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import {
-  TailwindColor,
-  TAILWIND_COLORS,
-} from '../../utils/generateRandomColor';
+import { TAILWIND_COLORS, TailwindColor } from '../../types/tailwindColor';
 import { TiArrowSortedDown } from 'react-icons/ti';
 
 interface ColorPickerProps {
@@ -56,10 +53,10 @@ export function ColorPicker({
       >
         <div className="flex gap-2 items-center">
           <div
-            className={`rounded-full aspect-square h-[1rem] bg-${selectedColor}-300`}
+            className={`rounded-full aspect-square h-[1rem] bg-${selectedColor.tailwindColorName}-300`}
           />
-          <span className="text-text-primary transition-all duration-text">
-            {selectedColor}
+          <span className="text-text-primary transition-all duration-text capitalize">
+            {selectedColor.tailwindColorName}
           </span>
         </div>
         <TiArrowSortedDown
@@ -73,9 +70,11 @@ export function ColorPicker({
           className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 h-[20dvh] overflow-y-scroll"
           ref={colorDropDownRef}
         >
-          {TAILWIND_COLORS.map((color: TailwindColor) => (
+          {TAILWIND_COLORS.filter(
+            (color: TailwindColor) => color.status != 'disabled'
+          ).map((color: TailwindColor) => (
             <button
-              key={color}
+              key={color.id}
               className={`flex gap-2 items-center px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
                 selectedColor === color
                   ? 'bg-background-primary text-text-primary'
@@ -92,9 +91,9 @@ export function ColorPicker({
               }}
             >
               <div
-                className={`rounded-full aspect-square h-[1rem] bg-${color}-300`}
+                className={`rounded-full aspect-square h-[1rem] bg-${color.tailwindColorName}-300`}
               />
-              {color}
+              {color.tailwindColorName}
             </button>
           ))}
         </div>
