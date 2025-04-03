@@ -1,5 +1,6 @@
 import { AuthCheck } from '../AuthCheck/AuthCheck';
 import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator';
+import { ModalHousing } from '../Modals/CreateTagModal/ModalHousing/ModalHousing';
 import { Navbar } from '../Navbar/Navbar';
 import { ToastsComponent } from '../ToastsComponent/ToastsComponent';
 
@@ -12,9 +13,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       <div className="flex-1 overflow-y-auto flex flex-row-reverse">
         <AuthCheck>
-          <ToastsComponent />
-          <main className="w-full p-6">{children}</main>
-          <LoadingIndicator />
+          <ModalHousing>
+            <ToastsComponent />
+            <main className="w-full p-6">{children}</main>
+            <LoadingIndicator />
+          </ModalHousing>
         </AuthCheck>
       </div>
     </div>

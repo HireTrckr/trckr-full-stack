@@ -14,14 +14,13 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center gap-2 justify-between">
+    <div className={`flex items-center gap-2 justify-between ${className}`}>
       <button
         onClick={toggleTheme}
         className={`
         relative w-14 h-7 rounded-full
         bg-gray-200 dark:bg-gray-700
         transition-colors duration-bg ease-in-out
-        ${className || ''}
       `}
         aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
       >

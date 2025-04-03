@@ -5,13 +5,10 @@ import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
 import { TiArrowSortedDown, TiWarningOutline } from 'react-icons/ti';
 import { TagEditor } from '../TagEditor/TagEditor';
 import { Tag } from '../../types/tag';
-import {
-  TAILWIND_COLORS,
-  TailwindColor,
-} from '../../utils/generateRandomColor';
 import { ColorPicker } from '../ColorPicker/ColorPicker';
+import { getTailwindColorObjectFromName } from '../../utils/getTailwindColorObject';
 
-interface EditTagModalProps {
+export interface EditTagModalProps {
   tag: Tag;
   onSave: (updatedTag: Tag) => void;
   onClose: () => void;
@@ -125,9 +122,12 @@ export function EditTagModal({
 
           <div className="mb-4 w-full">
             <ColorPicker
-              color={formData.color}
+              color={getTailwindColorObjectFromName(formData.color)}
               onColorSelect={(color) => {
-                setFormData({ ...formData, color });
+                setFormData({
+                  ...formData,
+                  color: color.tailwindColorName,
+                });
               }}
             />
           </div>

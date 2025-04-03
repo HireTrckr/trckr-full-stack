@@ -4,7 +4,10 @@ import colors from 'tailwindcss/colors';
 
 module.exports = {
   safelist: [
-    { pattern: /^(bg|text)-.*-(50|100|200|300|400|500|600|700|800|900|950)$/ },
+    {
+      pattern:
+        /^(bg|text|ring|border)-.*-(50|100|200|300|400|500|600|700|800|900|950)$/,
+    },
   ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',

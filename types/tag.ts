@@ -1,3 +1,4 @@
+import { TailwindColorName } from '../utils/generateRandomColor';
 import { timestamps } from './timestamps';
 
 export type Tag = TagNotSavedInDB & {
@@ -7,7 +8,7 @@ export type Tag = TagNotSavedInDB & {
 
 export type TagNotSavedInDB = {
   name: string;
-  color: string;
+  color: TailwindColorName;
   count: number;
 };
 

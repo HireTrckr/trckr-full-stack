@@ -77,7 +77,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   applyTailwindThemeColor(DEFAULT_SETTINGS.theme.primaryColor);
 
   return fallback ? (
-    <>{fallback}</>
+    fallback
   ) : (
     <main className="w-full p-6">
       <NotSignedIn />
