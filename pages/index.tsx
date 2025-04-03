@@ -15,8 +15,6 @@ allow custom fields
 skeleton page
 pagination (if needed)
 
-fix tailwind errors (on sign out)
-
 properly implement toast notifications (plus undo)
 properly implement loading notifications
 
@@ -32,7 +30,6 @@ make searchbar update tag when edited
 tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
-changing tag color
 add loading spinner to joblisting delete button
 
 this website uses cookies popup
