@@ -1,6 +1,4 @@
-import {
-  getDefaultTailwindColorObject,
-} from '../utils/getTailwindColorObject';
+import { getDefaultTailwindColorObject } from '../utils/getTailwindColorObject';
 import { TailwindColor } from './tailwindColor';
 import { timestamps } from './timestamps';
 
