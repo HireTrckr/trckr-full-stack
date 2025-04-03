@@ -1,4 +1,6 @@
-import { getTailwindColorObjectFromName } from '../utils/getTailwindColorObject';
+import {
+  getDefaultTailwindColorObject,
+} from '../utils/getTailwindColorObject';
 import { TailwindColor } from './tailwindColor';
 import { timestamps } from './timestamps';
 
@@ -19,7 +21,7 @@ export type Settings = {
 export const DEFAULT_SETTINGS: Settings = {
   theme: {
     mode: 'light',
-    primaryColor: getTailwindColorObjectFromName('sky'),
+    primaryColor: getDefaultTailwindColorObject(),
   },
 
   preferences: {

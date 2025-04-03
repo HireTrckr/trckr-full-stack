@@ -4,6 +4,9 @@ import { auth, db } from '../lib/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { TailwindColor } from '../types/tailwindColor';
 
+import colors from 'tailwindcss/colors';
+import { DefaultColors } from 'tailwindcss/types/generated/colors';
+
 type SettingsStore = {
   settings: Settings;
   isLoading: boolean;
@@ -22,7 +25,7 @@ export const applyTailwindThemeColor = (
 ) => {
   document.documentElement.style.setProperty(
     '--accent-color',
-    color.tailwindColorName
+    colors[color.tailwindColorName][500]
   );
   document.documentElement.style.setProperty('--text-accent', color.textColor);
 };

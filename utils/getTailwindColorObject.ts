@@ -13,3 +13,11 @@ export const getTailwindColorObjectFromName = (
 
   return TAILWIND_COLORS[0]; // Default to the first color if not found
 };
+
+export const getDefaultTailwindColorObject = (): TailwindColor => {
+  return (
+    TAILWIND_COLORS.find(
+      (color: TailwindColor) => color.status === 'default'
+    ) || TAILWIND_COLORS[0]
+  );
+};
