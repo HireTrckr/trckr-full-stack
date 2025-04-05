@@ -1,26 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSettingsStore } from '../../context/settingStore';
 import { ThemeSettings } from '../ThemeSettings/ThemeSettings';
 import { ColorPicker } from '../ColorPicker/ColorPicker';
 import { TailwindColor } from '../../types/tailwindColor';
 import { useTheme } from '../../context/themeContext';
 import { useTagStore } from '../../context/tagStore';
-import { Tag } from '../../types/tag';
-import { useModalStore } from '../../context/modalStore';
-import { EditTagModalProps } from '../EditTagModal/EditTagModal';
+import { Tag, TagNotSavedInDB } from '../../types/tag';
+import { ModalProps, useModalStore } from '../../context/modalStore';
+import { ModalTypes } from '../../types/modalTypes';
+import { Job } from '../../types/job';
+import { useJobStore } from '../../context/jobStore';
 
 export function Settings() {
   const settings = useSettingsStore((state) => state.settings);
   const isLoading = useSettingsStore((state) => state.isLoading);
 
-  const openModal = useModalStore((state) => state.openTagCreatorModal);
+  const openTagCreatorModal = useModalStore(
+    (state) => state.openTagCreatorModal
+  );
   const openTagEditor = useModalStore((state) => state.openTagEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
 
   const tags = useTagStore((state) => state.tagMap);
+  const createTag = useTagStore((state) => state.createTag);
+  const addTagsToJob = useTagStore((state) => state.addTagToJob);
 
   const updateSettings = useSettingsStore((state) => state.updateSettings);
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
   const [formData, setFormData] = useState(settings);
 
@@ -29,28 +35,60 @@ export function Settings() {
     setFormData(settings);
   };
 
-  const openCreateTagModal = () => {
-    // Open modal to create a new tag
-    openModal();
+  const getTagCreatorProps = (): ModalProps => {
+    return {
+      props: {
+        onCancel: () => {
+          // Handle cancel action
+          closeModal();
+        },
+        onSave: async (
+          newTag: Partial<TagNotSavedInDB>,
+          tagJobs: Job['id'][]
+        ) => {
+          const id = await createTag(newTag);
+          if (!id) {
+            console.error('Failed to create tag');
+            return;
+          }
+          // add tags to each job
+          tagJobs.forEach((jobId: Job['id']) => {
+            console.log('adding tag to job', jobId);
+            addTagsToJob(jobId, id);
+          });
+
+          closeModal();
+        },
+      },
+      type: ModalTypes.tagCreator,
+    };
   };
 
-  const getTagEditorProps = (tag: Tag): EditTagModalProps => {
+  const openCreateTagModal = () => {
+    // Open modal to create a new tag
+    openTagCreatorModal(getTagCreatorProps());
+  };
+
+  const getTagEditorProps = (tag: Tag): ModalProps => {
     return {
-      tag,
-      onSave: async (updatedTag: Tag) => {
-        // Handle saving the updated tag
-        await useTagStore.getState().updateTag(updatedTag);
-        closeModal();
+      props: {
+        tag,
+        onSave: async (updatedTag: Tag) => {
+          // Handle saving the updated tag
+          await useTagStore.getState().updateTag(updatedTag);
+          closeModal();
+        },
+        onDelete: async (tag: Tag) => {
+          // Handle deleting the tag
+          await useTagStore.getState().deleteTag(tag.id);
+          closeModal();
+        },
+        onClose: () => {
+          // Handle closing the modal
+          closeModal();
+        },
       },
-      onDelete: async (tag: Tag) => {
-        // Handle deleting the tag
-        await useTagStore.getState().deleteTag(tag.id);
-        closeModal();
-      },
-      onClose: () => {
-        // Handle closing the modal
-        closeModal();
-      },
+      type: ModalTypes.tagEditor,
     };
   };
 
@@ -90,9 +128,12 @@ export function Settings() {
       <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
         Settings
       </span>
-      <div className="flex w-full gap-4" id="settings-column-container">
+      <div
+        className="grid grid-cols-2 w-full gap-4"
+        id="settings-column-container"
+      >
         <div
-          className="flex flex-col flex-1 items-start w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg"
+          className="flex flex-col items-start w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg"
           id="settings-theme-container"
         >
           <div className="w-full mb-2">
@@ -142,7 +183,7 @@ export function Settings() {
           </div>
         </div>
         <div
-          className="flex flex-col flex-1 items-start w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg gap-2 min-h-full"
+          className="flex flex-col items-start w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg gap-2 min-h-full"
           id="settings-tag-editor-container"
         >
           <div className="flex items-center justify-between w-full">
@@ -166,15 +207,20 @@ export function Settings() {
                   }}
                 >
                   <span className="text-text-primary">{tag.name}</span>
-                  <span className="text-text-secondary capitalize">
-                    {tag.color}
-                  </span>
+
                   <span className="text-text-secondary">
                     {tag.count} job{tag.count !== 1 && 's'}
                   </span>
                 </button>
               ))}
           </div>
+        </div>
+        <div className="w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg">
+          lolll
+        </div>
+        <div className="w-full ring-2 ring-background-secondary rounded-lg p-4 transition-all duration-bg">
+          {' '}
+          lol2
         </div>
       </div>
     </div>
