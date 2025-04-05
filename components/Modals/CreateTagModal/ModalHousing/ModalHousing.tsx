@@ -1,11 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { CreateTagModal } from '../CreateTagModal';
 import { useModalStore } from '../../../../context/modalStore';
-import {
-  EditTagModal,
-  EditTagModalProps,
-} from '../../../EditTagModal/EditTagModal';
+import { EditTagModal } from '../../../EditTagModal/EditTagModal';
 import { EditJobModal } from '../../../EditJobModal/EditJobModal';
+import { ModalTypes } from '../../../../types/modalTypes';
 
 interface ModalHousingProps {
   children: React.ReactNode;
@@ -20,11 +18,16 @@ export function ModalHousing({ children }: ModalHousingProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // not type-safe but 🥶
-  const getModal = () => {
+  const getModalContent = () => {
     switch (modalType) {
-      case 'tagCreator':
-        return <CreateTagModal />;
-      case 'tagEditor':
+      case ModalTypes.tagCreator:
+        return (
+          <CreateTagModal
+            onCancel={modalProps.onCancel}
+            onSave={modalProps.onSave}
+          />
+        );
+      case ModalTypes.tagEditor:
         return (
           <EditTagModal
             tag={modalProps.tag}
@@ -33,7 +36,7 @@ export function ModalHousing({ children }: ModalHousingProps) {
             onDelete={modalProps.onDelete}
           />
         );
-      case 'editJob':
+      case ModalTypes.jobEditor:
         return (
           <EditJobModal
             job={modalProps.job}
@@ -42,11 +45,21 @@ export function ModalHousing({ children }: ModalHousingProps) {
             onSave={modalProps.onSave}
           />
         );
-      default:
-        closeModal();
-        return null;
     }
   };
+
+  useEffect(() => {
+    if (
+      modalType &&
+      ![
+        ModalTypes.tagCreator,
+        ModalTypes.tagEditor,
+        ModalTypes.jobEditor,
+      ].includes(modalType as ModalTypes)
+    ) {
+      closeModal();
+    }
+  }, [modalType]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -68,12 +81,16 @@ export function ModalHousing({ children }: ModalHousingProps) {
     <>
       {children}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50">
+        <div
+          className="fixed inset-0 bg-black/50 flex justify-center items-center backdrop-blur-sm z-50"
+          id="modal--blur-overlay"
+        >
           <div
             ref={modalRef}
-            className="w-full flex items-center justify-center"
+            className="bg-background-secondary rounded-lg transition-all duration-bg ease-in-out p-6 shadow-light"
+            id="modal-housing--onclick-listener"
           >
-            {getModal()}
+            {getModalContent()}
           </div>
         </div>
       )}
