@@ -3,9 +3,10 @@ import { useJobStore } from '../../context/jobStore';
 import { useTagStore } from '../../context/tagStore';
 import { Job } from '../../types/job';
 import { auth } from '../../lib/firebase';
-import { EditJobModal } from '../EditJobModal/EditJobModal';
 import { JobListing } from '../JobListing/JobListing';
-import { createPortal } from 'react-dom';
+
+import { ModalProps, useModalStore } from '../../context/modalStore';
+import { ModalTypes } from '../../types/modalTypes';
 
 export const JobList: React.FC = () => {
   const jobs = useJobStore((state) => state.jobs);
@@ -16,9 +17,8 @@ export const JobList: React.FC = () => {
   const updateJob = useJobStore((state) => state.updateJob);
   const deleteJob = useJobStore((state) => state.deleteJob);
 
-  // states for editing pannel
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const openJobEditorModal = useModalStore((state) => state.openJobEditorModal);
+  const closeModal = useModalStore((state) => state.closeModal);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,24 +27,30 @@ export const JobList: React.FC = () => {
   );
   const [hoveredJob, setHoveredJob] = useState<Job | null>(null);
 
+  const getJobEditorProps = (job: Job): ModalProps => {
+    return {
+      props: {
+        job,
+        onSave: handleJobUpdate,
+        onDelete: handleJobDelete,
+        onClose: handleClose,
+      },
+      type: ModalTypes.jobEditor,
+    };
+  };
+
+  // triggered when job is updated from within the EditJobModal
   const handleJobUpdate = async (updatedJob: Job) => {
     // check updatedJob has actually changed from the selectedJob
-    if (
-      selectedJob &&
-      updatedJob &&
-      JSON.stringify(selectedJob) === JSON.stringify(updatedJob)
-    ) {
-      return;
-    }
     updateJob(updatedJob);
     handleClose();
   };
 
+  // triggered from within the JobListing component -> opens the editJobModal
   const handleEdit = (jobId: Job['id']) => {
     const job = jobs.find((job) => job.id === jobId);
     if (job) {
-      setSelectedJob(job);
-      setIsModalOpen(true);
+      openJobEditorModal(getJobEditorProps(job));
     }
   };
 
@@ -56,9 +62,9 @@ export const JobList: React.FC = () => {
     handleClose();
   };
 
+  // tell's the modalHandler to close the currently open modal
   const handleClose = () => {
-    setIsModalOpen(false);
-    setSelectedJob(null);
+    closeModal();
   };
 
   useEffect(() => {
@@ -135,35 +141,6 @@ export const JobList: React.FC = () => {
           })}
         </ul>
       )}
-
-      {isModalOpen &&
-        selectedJob &&
-        createPortal(
-          <>
-            <div
-              id="modal-overlay"
-              className="fixed inset-0 bg-black/10 z-[999] backdrop-blur-sm"
-              onClick={handleClose}
-              aria-hidden="true"
-            />
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-title"
-              className="fixed inset-0 z-[1000] flex items-center justify-center"
-            >
-              <div className="bg-background-primary rounded-lg">
-                <EditJobModal
-                  job={selectedJob}
-                  onClose={handleClose}
-                  onSave={handleJobUpdate}
-                  onDelete={handleJobDelete}
-                />
-              </div>
-            </div>
-          </>,
-          document.body
-        )}
     </div>
   );
 };
