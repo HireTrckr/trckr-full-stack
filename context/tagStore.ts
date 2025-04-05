@@ -1,14 +1,8 @@
 // context/tagStore.ts
 
 import { create } from 'zustand';
-import { TagMap } from '../types/tag';
-import {
-  getDoc,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
-  deleteField,
-} from 'firebase/firestore';
+import { TagMap, TagNotSavedInDB } from '../types/tag';
+import { getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { doc } from 'firebase/firestore';
 import { timestampToDate } from '../utils/timestampUtils';
@@ -28,9 +22,9 @@ type TagStore = {
   /**
    * Takes in a tag name to create and assigns necesary server atributes
    * @param tagName - name of tag to create
-   * @returns true if successful tag creation, false otherwise
+   * @returns the id of the tag if successful tag creation, false otherwise
    * */
-  createTag: (tagName: Tag['name']) => Promise<boolean>;
+  createTag: (tag: Partial<TagNotSavedInDB>) => Promise<string | false>;
   deleteTag: (tagId: Tag['id']) => Promise<boolean>;
   getRecentTags: (limit: number) => Tag[];
   addTagToJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
@@ -168,14 +162,14 @@ export const useTagStore = create<TagStore>((set, get) => {
       return !get().error;
     },
 
-    createTag: async (tagName: Tag['name']) => {
+    createTag: async (tag: Partial<TagNotSavedInDB>) => {
       if (!auth.currentUser) return false;
-      if (!tagName) return false;
+      if (!tag || !tag.name) return false;
 
       set({ isLoading: true, error: null });
       try {
         // create tag object
-        const newID = tagName.toLowerCase().replace(/\s/g, '-');
+        const newID = tag.name.toLowerCase().replace(/\s/g, '-');
         if (get().tagMap[newID]) {
           set(
             (state) =>
@@ -198,10 +192,10 @@ export const useTagStore = create<TagStore>((set, get) => {
           );
         } else {
           const newTag: Tag = {
-            id: tagName.toLowerCase().replace(/\s/g, '-'),
-            name: tagName,
-            color: getRandomTailwindColor(),
-            count: 1,
+            name: tag.name,
+            color: tag.color || getRandomTailwindColor().tailwindColorName,
+            count: 0,
+            id: tag.name.toLowerCase().replace(/\s/g, '-'),
             timestamps: {
               createdAt: new Date(),
               updatedAt: new Date(),
@@ -215,8 +209,9 @@ export const useTagStore = create<TagStore>((set, get) => {
             }
           );
         }
+        return newID;
       } catch (error) {
-        console.error(`[tagStore.ts] Error creating tag: ${tagName}`, error);
+        console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
         set({ error: `Failed to create tag: ${error}` });
       } finally {
         set({ isLoading: false });
@@ -239,8 +234,6 @@ export const useTagStore = create<TagStore>((set, get) => {
         const jobStore = useJobStore.getState();
         const job = jobStore.jobs.find((job: Job) => job.id === jobId);
 
-        let tag = get().tagMap[tagId];
-
         if (!job) {
           throw new Error('Job not found');
         }
@@ -259,9 +252,19 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Job already has this tag');
         }
 
+        let tag = get().tagMap[tagId];
+
         if (!tag) {
           // need to create new tag
-          await get().createTag(tagId);
+          if (
+            !(await get().createTag({
+              name: 'untitled',
+              color: getRandomTailwindColor().tailwindColorName,
+              count: 1,
+            } as TagNotSavedInDB))
+          ) {
+            throw new Error('Failed to create tag');
+          }
           tag = get().tagMap[tagId];
         }
 
@@ -271,12 +274,14 @@ export const useTagStore = create<TagStore>((set, get) => {
         };
         await jobStore.updateJob(updatedJob);
 
+        const newCount = self()._calculateTagCount(tagId);
+
         await updateDoc(
           doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
           {
             [`tagMap.${tagId}`]: {
               ...tag,
-              count: tag.count + 1,
+              count: newCount,
               timestamps: {
                 ...tag.timestamps,
                 updatedAt: new Date(),
@@ -284,6 +289,15 @@ export const useTagStore = create<TagStore>((set, get) => {
             },
           }
         );
+        set((state) => ({
+          tagMap: {
+            ...state.tagMap,
+            [tagId]: {
+              ...state.tagMap[tagId],
+              count: newCount,
+            },
+          },
+        }));
       } catch (error) {
         console.error(`[tagStore.ts] Error adding tag to job: ${jobId}`, error);
         set({
