@@ -34,6 +34,8 @@ add loading spinner to joblisting delete button
 
 this website uses cookies popup
 
+add salary tag
+
 fix tags lol again
 */
 
