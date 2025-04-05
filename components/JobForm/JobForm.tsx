@@ -69,7 +69,7 @@ export function JobForm() {
 
     // save any new tags to Firestore
     for (const newTag of newTags) {
-      if (await createTag(newTag.name)) {
+      if (await createTag({ name: newTag.name, count: 1 } as Partial<Tag>)) {
         setJob((prevJob) => ({
           ...prevJob,
           tagIds: [...(prevJob.tagIds || []), newTag.id],
