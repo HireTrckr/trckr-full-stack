@@ -1,4 +1,4 @@
-import { TailwindColorName } from '../utils/generateRandomColor';
+import { DefaultColors } from 'tailwindcss/types/generated/colors';
 
 export type TailwindColor = {
   id: string;
@@ -6,6 +6,11 @@ export type TailwindColor = {
   textColor: 'white' | 'black';
   status: 'active' | 'disabled' | 'default';
 };
+
+export type TailwindColorName = keyof Omit<
+  DefaultColors,
+  'inherit' | 'current' | 'transparent' | 'black' | 'white'
+>;
 
 const _TailwindColors: TailwindColor[] = [
   {
