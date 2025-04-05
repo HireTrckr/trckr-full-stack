@@ -2,6 +2,17 @@
 
 import colors from 'tailwindcss/colors';
 
+// @ts-ignore
+delete defaultColors.lightBlue;
+// @ts-ignore
+delete defaultColors.warmGray;
+// @ts-ignore
+delete defaultColors.trueGray;
+// @ts-ignore
+delete defaultColors.coolGray;
+// @ts-ignore
+delete defaultColors.blueGray;
+
 module.exports = {
   safelist: [
     {
