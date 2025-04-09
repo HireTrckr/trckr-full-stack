@@ -20,7 +20,7 @@ export function Settings() {
           <PreferencesPanelComponent />
         </div>
         <div
-          className="flex flex-col items-start w-full gap-2 ring-2 ring-background-secondary rounded-lg py-2 px-4 transition-all duration-bg"
+          className="flex flex-col items-start w-full ring-2 ring-background-secondary rounded-lg py-2 px-4 transition-all duration-bg"
           id="settings-tag-editor-container"
         >
           <TagSettingsPanelComponent />

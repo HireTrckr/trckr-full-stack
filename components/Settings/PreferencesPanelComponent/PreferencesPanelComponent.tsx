@@ -6,16 +6,16 @@ import { useSettingsStore } from '../../../context/settingStore';
 import { TailwindColor } from '../../../types/tailwindColor';
 import { SkeletonPreferencesPanelComponent } from '../../SkeletonPreferencesPanelComponent/SkeletonPreferencesPanelComponent';
 import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
+import { Settings } from '../../../types/settings';
 
 export function PreferencesPanelComponent(): JSX.Element {
   const { theme } = useTheme();
 
   const settings = useSettingsStore((state) => state.settings);
   const isLoading = useSettingsStore((state) => state.isLoading);
-
   const updateSettings = useSettingsStore((state) => state.updateSettings);
 
-  const [formData, setFormData] = useState(settings);
+  const [formData, setFormData] = useState<Settings>(settings);
 
   const resetFormData = () => {
     // Reset form data to the initial settings, ensure re-render of color picker
@@ -49,10 +49,7 @@ export function PreferencesPanelComponent(): JSX.Element {
     }));
   };
 
-  if (isLoading) {
-    // skeleton component
-    return <SkeletonPreferencesPanelComponent />;
-  }
+  if (isLoading) return <SkeletonPreferencesPanelComponent />;
 
   return (
     <>
@@ -61,7 +58,7 @@ export function PreferencesPanelComponent(): JSX.Element {
           Preferences
         </span>
       </div>
-      <div className="flex-1 w-full">
+      <div className="flex-1 w-full flex flex-col gap-2">
         <div className="w-full">
           <span className="text-xs text-text-secondary">
             Dark Mode: {theme === 'dark' ? 'ON' : 'OFF'}
@@ -69,13 +66,13 @@ export function PreferencesPanelComponent(): JSX.Element {
           <ThemeSettings />
         </div>
 
-        <div className="w-full flex-1">
+        <div className="w-full">
           <span className="text-xs text-text-secondary">Primary Color</span>
           <div
             className="w-full flex justify-evenly items-center gap-4"
             id="settings-color-picker-container"
           >
-            <span className="text-text-primary text-md transition-all duration-text min-w-[25%]">
+            <span className="text-text-primary text-sm transition-all duration-text min-w-[25%]">
               Theme Color
             </span>
             <ColorPicker

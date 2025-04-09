@@ -34,12 +34,17 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
 
   useEffect(() => {
     setMounted(true);
-    loadUserDataIntoStores();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadUserDataIntoStores();
+    }
+  }, [user]);
 
   // i hate hydration errors
   if (!mounted) {
-    return null;
+    return <></>;
   }
 
   if (loading) {
@@ -70,7 +75,6 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   }
 
   if (user) {
-    loadUserDataIntoStores();
     return <>{children}</>;
   }
 
