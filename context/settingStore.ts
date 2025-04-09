@@ -17,7 +17,6 @@ type SettingsStore = {
     value: Settings[K]
   ) => Promise<boolean>;
   updateSettings: (newSettings: Settings) => Promise<boolean>;
-  getSettingDisplayName: (key: string) => string;
 };
 
 export const applyTailwindThemeColor = (
@@ -32,10 +31,11 @@ export const applyTailwindThemeColor = (
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({
   settings: DEFAULT_SETTINGS,
-  isLoading: false,
+  isLoading: true,
   error: null,
 
   fetchSettings: async () => {
+    console.debug('fetching settings');
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
@@ -74,20 +74,11 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       console.error('[tagStore.ts] Error fetching settings:', error);
       set({ error: `Failed to fetch settings: ${error}` });
     } finally {
+      console.debug('got setting successfully');
       set({ isLoading: false });
     }
 
     return !get().error;
-  },
-
-  getSettingDisplayName: (key: string) => {
-    // undo camel case
-    const words = key.split(/(?=[A-Z])/);
-    const capitalizedWords = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.slice(1)
-    );
-    const displayName = capitalizedWords.join(' ');
-    return displayName.replace(/([a-z])([A-Z])/g, '$1 $2');
   },
 
   updateSettings: async (newSettings: Settings) => {
@@ -126,6 +117,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   },
 
   updateSetting: async (key, value) => {
+    console.log('updating setting', key, value);
     if (!auth.currentUser) return false;
 
     if (!get().settings) return false;
@@ -160,6 +152,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
+    console.log('updated setting');
     return !get().error;
   },
 }));
