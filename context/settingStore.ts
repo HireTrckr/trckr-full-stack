@@ -71,8 +71,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
       set({ settings });
     } catch (error) {
-      console.error('[tagStore.ts] Error fetching tags:', error);
-      set({ error: `Failed to fetch tags: ${error}` });
+      console.error('[tagStore.ts] Error fetching settings:', error);
+      set({ error: `Failed to fetch settings: ${error}` });
     } finally {
       set({ isLoading: false });
     }
