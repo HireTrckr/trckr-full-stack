@@ -8,16 +8,16 @@ import { ModalTypes } from '../../../types/modalTypes';
 interface TagSettingsPanelComponentProps {}
 
 export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): JSX.Element {
-  const tags = useTagStore((state) => state.tagMap);
-
   const openTagCreatorModal = useModalStore(
     (state) => state.openTagCreatorModal
   );
   const openTagEditor = useModalStore((state) => state.openTagEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
 
+  const tags = useTagStore((state) => state.tagMap);
   const createTag = useTagStore((state) => state.createTag);
   const addTagsToJob = useTagStore((state) => state.addTagToJob);
+  const isLoading = useTagStore((state) => state.isLoading);
 
   const getTagCreatorProps = (): ModalProps => {
     return {
