@@ -28,7 +28,7 @@ const _TailwindColors: TailwindColor[] = [
   {
     id: '3',
     tailwindColorName: 'yellow',
-    textColor: 'black',
+    textColor: 'white',
     status: 'active',
   },
   {
