@@ -92,10 +92,7 @@ export function PreferencesPanelComponent(): JSX.Element {
         </div>
       </div>
 
-      <div
-        className="w-[25%]"
-        id="settings-button-container"
-      >
+      <div className="w-[25%]" id="settings-button-container">
         <ButtonsComponent
           onSave={() => handleSave()}
           onCancel={() => resetFormData()}
