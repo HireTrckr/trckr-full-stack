@@ -6,6 +6,8 @@ import { useTagStore } from '../../context/tagStore';
 import { TagCard } from '../TagCard/TagCard';
 import { TiTrash } from 'react-icons/ti';
 import { Tag } from '../../types/tag';
+import { JobStatus } from '../../types/jobStatus';
+import { useStatusStore } from '../../context/statusStore';
 
 export const JobListing = memo(
   function JobListing({
@@ -33,6 +35,10 @@ export const JobListing = memo(
 
     const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
     const removeTagFromJob = useTagStore((state) => state.removeTagFromJob);
+
+    const { statusMap, getStatusFromID } = useStatusStore.getState();
+
+    let status = getStatusFromID(job.statusID);
 
     let tags: Tag[] = getTagsFromJob(job);
 
@@ -71,35 +77,27 @@ export const JobListing = memo(
       }
     }, [job.tagIds]);
 
-    const updateStatus = (newStatus: Job['status']): void => {
-      if (job.status === newStatus) {
+    useEffect(() => {
+      if (job.statusID) {
+        status = getStatusFromID(job.statusID);
+      }
+    });
+
+    const updateStatus = (newStatus: JobStatus): void => {
+      if (job.statusID === newStatus.id) {
         setIsDropDownOpen(false);
         onDropdownClose();
         return;
       }
-      const updatedJob = { ...job, status: newStatus };
+      const updatedJob = { ...job, statusID: newStatus.id };
+      status = newStatus;
       onUpdate?.(updatedJob);
       setIsDropDownOpen(false);
       onDropdownClose();
     };
 
-    const getStatusColor = (status: Job['status']): string => {
-      const baseClasses =
-        'text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed';
-      switch (status.toLowerCase()) {
-        case 'not applied':
-          return `bg-gray-500 ${baseClasses}`;
-        case 'applied':
-          return `bg-blue-500 ${baseClasses}`;
-        case 'interview':
-          return `bg-yellow-500 ${baseClasses}`;
-        case 'offer':
-          return `bg-green-500 ${baseClasses}`;
-        case 'rejected':
-          return `bg-red-500 ${baseClasses}`;
-        default:
-          return `bg-gray-500 ${baseClasses}`;
-      }
+    const getStatusColor = (status: JobStatus): string => {
+      return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
     };
 
     useEffect(() => {
@@ -195,10 +193,10 @@ export const JobListing = memo(
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => toggleDropDown()}
-                className={getStatusColor(job.status)}
+                className={getStatusColor(status)}
                 disabled={timeRemaining > 0}
               >
-                {job.status}
+                {status?.statusName}
               </button>
               {isDropDownOpen && (
                 <div
@@ -208,19 +206,19 @@ export const JobListing = memo(
                     handleDropDownOpen();
                   }}
                 >
-                  {statusOptions.map((status: Job['status']) => (
+                  {Object.values(statusMap).map((status: JobStatus) => (
                     <button
-                      key={status}
+                      key={status.id}
                       className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
                         ${
-                          job.status === status
+                          job.statusID === status.id
                             ? 'bg-background-primary text-text-primary'
                             : 'text-text-secondary'
                         }`}
                       onClick={() => updateStatus(status)}
                       role="menuitem"
                     >
-                      {status}
+                      {status.statusName}
                     </button>
                   ))}
                 </div>
@@ -268,7 +266,7 @@ export const JobListing = memo(
   (prevProps, nextProps) => {
     return (
       prevProps.job.id === nextProps.job.id &&
-      prevProps.job.status === nextProps.job.status &&
+      prevProps.job.statusID === nextProps.job.statusID &&
       prevProps.job.company === nextProps.job.company &&
       prevProps.job.position === nextProps.job.position &&
       prevProps.job.location === nextProps.job.location &&

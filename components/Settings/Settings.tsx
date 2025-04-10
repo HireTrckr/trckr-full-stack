@@ -25,7 +25,10 @@ export function Settings() {
         >
           <TagSettingsPanelComponent />
         </div>
-        <div className="w-full ring-2 ring-background-secondary rounded-lg py-2 px-4 transition-all duration-bg flex flex-col items-center">
+        <div
+          className="flex flex-col items-start w-full ring-2 ring-background-secondary rounded-lg py-2 px-4 transition-all duration-bg"
+          id="settings-status-editor-container"
+        >
           <CustomJobStatusPanelComponent />
         </div>
         <div className="w-full ring-2 ring-background-secondary rounded-lg py-2 px-4 transition-all duration-bg flex flex-col items-center">

@@ -1,6 +1,6 @@
 import { AuthCheck } from '../AuthCheck/AuthCheck';
 import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator';
-import { ModalHousing } from '../Modals/CreateTagModal/ModalHousing/ModalHousing';
+import { ModalHousing } from '../Modals/ModalHousing/ModalHousing';
 import { Navbar } from '../Navbar/Navbar';
 import { ToastsComponent } from '../ToastsComponent/ToastsComponent';
 

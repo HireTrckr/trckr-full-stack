@@ -1,4 +1,4 @@
-import { TailwindColorName } from '../utils/generateRandomColor';
+import { TailwindColorName } from './tailwindColor';
 import { timestamps } from './timestamps';
 
 export type Tag = TagNotSavedInDB & {

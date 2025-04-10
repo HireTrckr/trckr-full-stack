@@ -10,6 +10,7 @@ import { ToastCategory } from '../types/toast';
 
 import { timestampToDate } from '../utils/timestampUtils';
 import { useToastStore } from './toastStore';
+import { JobStatus } from '../types/jobStatus';
 
 type JobStore = {
   jobs: Job[];
@@ -21,6 +22,7 @@ type JobStore = {
   deleteJob: (job: Job) => Promise<boolean>;
   updateJob: (job: Job) => Promise<boolean>;
   getJobsWithTags: (tagId: Tag['id'][]) => Job[];
+  getJobsWithStatus: (statusId: JobStatus['id']) => Job[];
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 };
 
@@ -73,6 +75,10 @@ export const useJobStore = create<JobStore>((set, get) => ({
     return !get().error;
   },
 
+  getJobsWithStatus(statusId: JobStatus['id']) {
+    return get().jobs.filter((job: Job) => job.statusID === statusId);
+  },
+
   getJobsWithTags(tagIds: string[]) {
     if (tagIds.length === 0) return get().jobs;
 
@@ -84,7 +90,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
   addJob: async (job: JobNotSavedInDB) => {
     if (!auth.currentUser) return false;
-    if (!job.status || !job.company || !job.position) return false; // will add timestamps - then type is satisfied
+    if (!job.statusID || !job.company || !job.position) return false; // will add timestamps - then type is satisfied
 
     set({ isLoading: true, error: null });
     try {

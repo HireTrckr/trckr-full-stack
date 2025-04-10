@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useJobStore } from '../../context/jobStore';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import { Job, JobNotSavedInDB, statusOptions } from '../../types/job';
+import { Job, JobNotSavedInDB } from '../../types/job';
 import { Tag } from '../../types/tag';
 import React, { useEffect } from 'react';
 import { useTagStore } from '../../context/tagStore';
 import { TagEditor } from '../TagEditor/TagEditor';
+import { useStatusStore } from '../../context/statusStore';
+import { JobStatus } from '../../types/jobStatus';
 
 // Define the NewTag interface to match what's in the TagEditor
 interface NewTag extends Tag {
@@ -15,11 +17,12 @@ interface NewTag extends Tag {
 export function JobForm() {
   const { addJob } = useJobStore();
   const { createTag } = useTagStore();
+  const { statusMap, getStatusFromID } = useStatusStore();
 
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
     position: '',
-    status: 'not applied' as Job['status'],
+    statusID: 'not applied' as JobStatus['id'],
     location: '',
     URL: '',
     tagIds: [],
@@ -85,7 +88,7 @@ export function JobForm() {
     setJob({
       company: '',
       position: '',
-      status: 'not applied' as Job['status'],
+      statusID: 'not applied' as JobStatus['id'],
       location: '',
       URL: '',
       tagIds: [] as Job['tagIds'],
@@ -134,7 +137,7 @@ export function JobForm() {
             onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
             ref={statusDropDownButtonRef}
           >
-            {job.status}
+            {getStatusFromID(job.statusID).statusName}
             <TiArrowSortedDown
               className={`${
                 statusDropDownOpen ? 'rotate-0' : 'rotate-90'
@@ -146,29 +149,34 @@ export function JobForm() {
               className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
               ref={statusDropDownRef}
             >
-              {statusOptions.map((status: Job['status']) => (
-                <button
-                  key={status}
-                  className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
-                    job.status === status
-                      ? 'bg-background-primary text-text-primary'
-                      : 'text-text-secondary'
-                  }`}
-                  role="menuitem"
-                  onClick={() => {
-                    setJob({ ...job, status });
-                    setStatusDropDownOpen(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setJob({ ...job, status });
+              {Object.values(statusMap)
+                .sort((a, b) => {
+                  // sort alphabetically
+                  return a.statusName.localeCompare(b.statusName);
+                })
+                .map((status: JobStatus) => (
+                  <button
+                    key={status.id}
+                    className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
+                      job.statusID === status.id
+                        ? 'bg-background-primary text-text-primary'
+                        : 'text-text-secondary'
+                    }`}
+                    role="menuitem"
+                    onClick={() => {
+                      setJob({ ...job, statusID: status.id });
                       setStatusDropDownOpen(false);
-                    }
-                  }}
-                >
-                  {status}
-                </button>
-              ))}
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setJob({ ...job, statusID: status.id });
+                        setStatusDropDownOpen(false);
+                      }
+                    }}
+                  >
+                    {status.statusName}
+                  </button>
+                ))}
             </div>
           )}
         </div>

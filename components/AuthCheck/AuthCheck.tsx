@@ -9,6 +9,7 @@ import {
 } from '../../context/settingStore';
 import { useTagStore } from '../../context/tagStore';
 import { DEFAULT_SETTINGS } from '../../types/settings';
+import { useStatusStore } from '../../context/statusStore';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const fetchTags = useTagStore((state) => state.fetchTags);
   const fetchJobs = useJobStore((state) => state.fetchJobs);
   const fetchSettings = useSettingsStore((state) => state.fetchSettings);
+  const fetchStatus = useStatusStore((state) => state.fetchStatuses);
 
   const loadUserDataIntoStores = async () => {
     if (!user) return;
@@ -30,6 +32,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     await fetchTags();
     await fetchJobs();
     await fetchSettings();
+    await fetchStatus();
   };
 
   useEffect(() => {

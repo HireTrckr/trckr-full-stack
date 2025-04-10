@@ -17,7 +17,6 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
   const tags = useTagStore((state) => state.tagMap);
   const createTag = useTagStore((state) => state.createTag);
   const addTagsToJob = useTagStore((state) => state.addTagToJob);
-  const isLoading = useTagStore((state) => state.isLoading);
 
   const getTagCreatorProps = (): ModalProps => {
     return {

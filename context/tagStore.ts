@@ -10,6 +10,8 @@ import { Job } from '../types/job';
 import { useJobStore } from './jobStore';
 import { Tag } from '../types/tag';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
+import { ToastCategory } from '../types/toast';
+import { useToastStore } from './toastStore';
 
 type TagStore = {
   tagMap: TagMap;
@@ -40,6 +42,8 @@ type TagStorePlusPrivate = TagStore & {
 };
 
 export const TAGS_PER_RECORD = 5;
+
+const { createToast } = useToastStore.getState();
 
 export const useTagStore = create<TagStore>((set, get) => {
   const self = get as () => TagStorePlusPrivate;
@@ -112,7 +116,6 @@ export const useTagStore = create<TagStore>((set, get) => {
 
     deleteTag: async (tagId: string) => {
       if (!auth.currentUser) return false;
-      if (!tagId) return false;
 
       set({ isLoading: true, error: null });
       try {
@@ -168,59 +171,53 @@ export const useTagStore = create<TagStore>((set, get) => {
 
       set({ isLoading: true, error: null });
       try {
-        // create tag object
         const newID = tag.name.toLowerCase().replace(/\s/g, '-');
+
         if (get().tagMap[newID]) {
-          set(
-            (state) =>
-              ({
-                tagMap: {
-                  ...state.tagMap,
-                  [newID]: {
-                    ...state.tagMap[newID],
-                    count: self()._calculateTagCount(newID) + 1,
-                  },
-                },
-              }) as TagStorePlusPrivate
-          );
-
-          await updateDoc(
-            doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-            {
-              [`tagMap.${newID}`]: get().tagMap[newID],
-            }
-          );
-        } else {
-          const newTag: Tag = {
-            name: tag.name,
-            color: tag.color || getRandomTailwindColor().tailwindColorName,
-            count: 0,
-            id: tag.name.toLowerCase().replace(/\s/g, '-'),
-            timestamps: {
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          };
-
-          await updateDoc(
-            doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-            {
-              [`tagMap.${newTag.id}`]: newTag,
-            }
-          );
+          throw new Error('Tag already exists');
         }
+
+        const newTag: Tag = {
+          id: newID,
+          name: tag.name,
+          color: tag.color || getRandomTailwindColor().tailwindColorName,
+          count: 0,
+          timestamps: {
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            deletedAt: null,
+          },
+        };
+
+        await updateDoc(
+          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
+          {
+            [`tagMap.${newTag.id}`]: newTag,
+          }
+        );
+
+        set((state) => ({
+          tagMap: { ...state.tagMap, [newID]: newTag },
+          isLoading: false,
+        }));
+
+        createToast(
+          `Tag "${newTag.name}" created successfully`,
+          true,
+          'Status Created',
+          ToastCategory.INFO,
+          5000,
+          undefined,
+          () => {
+            get().deleteTag(newID);
+          }
+        );
         return newID;
       } catch (error) {
         console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
         set({ error: `Failed to create tag: ${error}` });
-      } finally {
-        set({ isLoading: false });
-
-        // fetch new tags
-        await get().fetchTags();
+        return false;
       }
-
-      return !get().error;
     },
 
     addTagToJob: async (jobId: Job['id'], tagId: Tag['id']) => {

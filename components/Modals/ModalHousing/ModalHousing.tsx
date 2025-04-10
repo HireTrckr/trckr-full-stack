@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { CreateTagModal } from '../CreateTagModal';
-import { useModalStore } from '../../../../context/modalStore';
-import { EditTagModal } from '../../../EditTagModal/EditTagModal';
-import { EditJobModal } from '../../../EditJobModal/EditJobModal';
-import { ModalTypes } from '../../../../types/modalTypes';
+import { CreateTagModal } from '../CreateTagModal/CreateTagModal';
+import { useModalStore } from '../../../context/modalStore';
+import { EditTagModal } from '../../EditTagModal/EditTagModal';
+import { EditJobModal } from '../../EditJobModal/EditJobModal';
+import { ModalTypes } from '../../../types/modalTypes';
+import { CreateStatusModal } from '../CreateStatusModal/CreateStatusModal';
+import { EditStatusModal } from '../EditStatusModal/EditStatusModal';
 
 interface ModalHousingProps {
   children: React.ReactNode;
@@ -45,6 +47,22 @@ export function ModalHousing({ children }: ModalHousingProps) {
             onSave={modalProps.onSave}
           />
         );
+      case ModalTypes.statusCreator:
+        return (
+          <CreateStatusModal
+            onCancel={modalProps.onCancel}
+            onSave={modalProps.onSave}
+          />
+        );
+      case ModalTypes.statusEditor:
+        return (
+          <EditStatusModal
+            status={modalProps.status}
+            onClose={modalProps.onClose}
+            onDelete={modalProps.onDelete}
+            onSave={modalProps.onSave}
+          />
+        );
     }
   };
 
@@ -55,6 +73,8 @@ export function ModalHousing({ children }: ModalHousingProps) {
         ModalTypes.tagCreator,
         ModalTypes.tagEditor,
         ModalTypes.jobEditor,
+        ModalTypes.statusCreator,
+        ModalTypes.statusEditor,
       ].includes(modalType as ModalTypes)
     ) {
       closeModal();

@@ -3,10 +3,17 @@ import { EditTagModalProps } from '../components/EditTagModal/EditTagModal';
 import { EditJobModalProps } from '../components/EditJobModal/EditJobModal';
 import { CreateTagModalProps } from '../components/Modals/CreateTagModal/CreateTagModal';
 import { ModalTypes } from '../types/modalTypes';
+import { CreateStatusModalProps } from '../components/Modals/CreateStatusModal/CreateStatusModal';
+import { EditStatusModalProps } from '../components/Modals/EditStatusModal/EditStatusModal';
 
 export type ModalProps = {
   type: string;
-  props: EditTagModalProps | EditJobModalProps | CreateTagModalProps;
+  props:
+    | EditTagModalProps
+    | EditJobModalProps
+    | CreateTagModalProps
+    | CreateStatusModalProps
+    | EditStatusModalProps;
 };
 
 type ModalStore = {
@@ -16,6 +23,8 @@ type ModalStore = {
   openTagCreatorModal: (props: ModalProps) => void;
   openTagEditorModal: (props: ModalProps) => void;
   openJobEditorModal: (props: ModalProps) => void;
+  openStatusCreatorModal: (props: ModalProps) => void;
+  openStatusEditorModal: (props: ModalProps) => void;
 
   /**
    * Closes the currently open modal - regardless of type.
@@ -43,6 +52,21 @@ export const useModalStore = create<ModalStore>((set, get) => ({
       get().closeModal();
     }
   },
+  openStatusCreatorModal: (props: ModalProps) => {
+    if (props.type === ModalTypes.statusCreator) {
+      set({
+        isOpen: true,
+        modalType: ModalTypes.statusCreator,
+        modalProps: props.props,
+      });
+    } else {
+      console.warn(
+        'Modal type mismatch: expected statusCreator, but got',
+        get().modalProps['type']
+      );
+      get().closeModal();
+    }
+  },
   openTagEditorModal: (props: ModalProps) => {
     if (props.type === ModalTypes.tagEditor) {
       set({
@@ -53,6 +77,21 @@ export const useModalStore = create<ModalStore>((set, get) => ({
     } else {
       console.warn(
         'Modal type mismatch: expected tagEditor, but got',
+        get().modalProps['type']
+      );
+      get().closeModal();
+    }
+  },
+  openStatusEditorModal: (props: ModalProps) => {
+    if (props.type === ModalTypes.statusEditor) {
+      set({
+        isOpen: true,
+        modalType: ModalTypes.statusEditor,
+        modalProps: props.props,
+      });
+    } else {
+      console.warn(
+        'Modal type mismatch: expected statusEditor, but got',
         get().modalProps['type']
       );
       get().closeModal();

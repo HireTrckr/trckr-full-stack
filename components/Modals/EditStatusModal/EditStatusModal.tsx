@@ -1,38 +1,39 @@
-import React, { JSX, useState, useEffect } from 'react';
-import { ToolTip } from '../ToolTip/ToolTip';
+import React, { JSX, useEffect, useState } from 'react';
+import { JobStatus } from '../../../types/jobStatus';
+import { ColorPicker } from '../../ColorPicker/ColorPicker';
+import { getTailwindColorObjectFromName } from '../../../utils/getTailwindColorObject';
+import { ToolTip } from '../../ToolTip/ToolTip';
 import { TiWarningOutline } from 'react-icons/ti';
-import { Tag } from '../../types/tag';
-import { ColorPicker } from '../ColorPicker/ColorPicker';
-import { getTailwindColorObjectFromName } from '../../utils/getTailwindColorObject';
 
-export interface EditTagModalProps {
-  tag: Tag;
-  onSave: (updatedTag: Tag) => void;
+export interface EditStatusModalProps {
+  status: JobStatus;
+  onSave: (updatedStatus: JobStatus) => void;
   onClose: () => void;
-  onDelete: (tag: Tag) => void;
+  onDelete: (status: JobStatus) => void;
 }
 
-export function EditTagModal({
-  tag,
+export function EditStatusModal({
+  status,
   onSave,
   onClose,
   onDelete,
-}: EditTagModalProps): JSX.Element {
-  const [formData, setFormData] = useState<Tag>(tag);
+}: EditStatusModalProps): JSX.Element {
+  const [formData, setFormData] = useState<JobStatus>(status);
 
-  // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
 
+  const lastUpdated: Date = new Date(status.timestamps.updatedAt);
+
   useEffect(() => {
-    if (!tag.timestamps.updatedAt) return;
+    if (!status.timestamps.updatedAt) return;
 
     const updateTimeRemaining = () => {
-      const timeSinceUpdate = Date.now() - tag.timestamps.updatedAt.getTime();
-      const remaingSeconds = Math.max(
+      const timeSinceUpdate = Date.now() - lastUpdated.getTime();
+      const remainingSeconds = Math.max(
         0,
         30 - Math.floor(timeSinceUpdate / 1000)
       );
-      setTimeRemaining(remaingSeconds);
+      setTimeRemaining(remainingSeconds);
     };
 
     updateTimeRemaining();
@@ -42,7 +43,7 @@ export function EditTagModal({
 
     // unmount
     return () => clearInterval(interval);
-  }, [tag.timestamps?.updatedAt]);
+  }, [status.timestamps?.updatedAt]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -54,30 +55,29 @@ export function EditTagModal({
   };
 
   const handleSave = () => {
-    const updatedTag: Tag = {
-      ...tag,
+    const updatedStatus: JobStatus = {
+      ...status,
       ...formData,
     };
-    onSave(updatedTag);
+    onSave(updatedStatus);
     onClose();
   };
 
   const handleDelete = () => {
-    onDelete(tag);
+    onDelete(status);
     onClose();
   };
-
   return (
     <div
       className="flex flex-col items-center w-[25dvw] max-w-[25dvw]"
-      id="edit-tag-modal--form"
+      id="edit-status-modal--form"
     >
       <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text w-full">
-        Edit Tag
+        Edit Status
       </h2>
 
       <span className="text-xs text-text-secondary">
-        TagID: <i>{formData.id}</i>
+        StatusID: <i>{formData.id}</i>
       </span>
 
       <div className="mb-4 w-full">
@@ -87,9 +87,9 @@ export function EditTagModal({
         <input
           type="text"
           id="name"
-          name="name"
+          name="statusName"
           placeholder="Enter tag name"
-          value={formData.name}
+          value={formData.statusName}
           onChange={handleChange}
           className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
         />
@@ -107,10 +107,10 @@ export function EditTagModal({
         />
       </div>
 
-      {tag.timestamps?.updatedAt && (
+      {status.timestamps?.updatedAt && (
         <div className="mb-2 flex justify-center items-center">
           <span className="text-xs text-text-secondary transition-all duration-text">
-            Last Updated at: {tag.timestamps.updatedAt.toLocaleString()}
+            Last Updated at: {lastUpdated.toLocaleString()}
           </span>
         </div>
       )}
@@ -119,7 +119,9 @@ export function EditTagModal({
         <button
           onClick={handleSave}
           className="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={!formData.name || !formData.color || timeRemaining > 0}
+          disabled={
+            !formData.statusName || !formData.color || timeRemaining > 0
+          }
         >
           Save
         </button>
