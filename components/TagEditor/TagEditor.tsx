@@ -264,61 +264,66 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         />
       </div>
 
-      <div className="relative">
-        {isInputFocused && (
-          <div
-            ref={dropdownRef}
-            className="absolute right-0 top-full w-3/4 !mt-0 z-10 overflow-auto border border-accent-primary rounded-lg shadow-light text-text-primary bg-background-secondary"
-          >
-            {suggestions.map((tag) => (
-              <button
-                key={tag.id}
-                className={
-                  'block px-4 py-2 text-sm rounded-lg w-full text-left capitalize transition-all duration-text hover:bg-background-primary bg-background-secondary'
-                }
-                onClick={() => handleSuggestionClick(tag.id)}
+      {suggestions.length !== 0 ||
+        (inputValue && (
+          <div className="relative">
+            {isInputFocused && (
+              <div
+                ref={dropdownRef}
+                className="absolute right-0 top-full w-3/4 !mt-0 z-10 overflow-auto border border-accent-primary rounded-lg shadow-light text-text-primary bg-background-secondary"
               >
-                <div className="flex items-center">
-                  <span>{tag.name}</span>
-                  <span className="ml-2 text-xs">{`(${tag.count} uses)`}</span>
-                </div>
-              </button>
-            ))}
-            {inputValue &&
-              newTags
-                .filter(
-                  (tag) =>
-                    !selectedTagIds.includes(tag.id) &&
-                    tag.name.toLowerCase().includes(inputValue.toLowerCase())
-                )
-                .map((tag) => (
-                  <div
+                {suggestions.map((tag) => (
+                  <button
                     key={tag.id}
-                    className="px-4 py-2 cursor-pointer bg-background-secondary"
+                    className={
+                      'block px-4 py-2 text-sm rounded-lg w-full text-left capitalize transition-all duration-text hover:bg-background-primary bg-background-secondary'
+                    }
                     onClick={() => handleSuggestionClick(tag.id)}
                   >
-                    <div className="flex items-center text-sm text-text-secondary">
+                    <div className="flex items-center">
                       <span>{tag.name}</span>
-                      <span className="ml-2">(new)</span>
+                      <span className="ml-2 text-xs">{`(${tag.count} uses)`}</span>
+                    </div>
+                  </button>
+                ))}
+                {inputValue &&
+                  newTags
+                    .filter(
+                      (tag) =>
+                        !selectedTagIds.includes(tag.id) &&
+                        tag.name
+                          .toLowerCase()
+                          .includes(inputValue.toLowerCase())
+                    )
+                    .map((tag) => (
+                      <div
+                        key={tag.id}
+                        className="px-4 py-2 cursor-pointer bg-background-secondary"
+                        onClick={() => handleSuggestionClick(tag.id)}
+                      >
+                        <div className="flex items-center text-sm text-text-secondary">
+                          <span>{tag.name}</span>
+                          <span className="ml-2">(new)</span>
+                        </div>
+                      </div>
+                    ))}
+                {suggestions.length === 0 && inputValue && (
+                  <div
+                    className="px-4 py-2 cursor-pointer bg-background-primary"
+                    onClick={() => addTagIfNotExists(inputValue.trim())}
+                  >
+                    <div className="flex items-center">
+                      <span className="mr-2 text-green-500">+</span>
+                      <span className="text-text-primary text-sm">
+                        Create new tag: "{inputValue}"
+                      </span>
                     </div>
                   </div>
-                ))}
-            {suggestions.length === 0 && inputValue && (
-              <div
-                className="px-4 py-2 cursor-pointer bg-background-primary"
-                onClick={() => addTagIfNotExists(inputValue.trim())}
-              >
-                <div className="flex items-center">
-                  <span className="mr-2 text-green-500">+</span>
-                  <span className="text-text-primary text-sm">
-                    Create new tag: "{inputValue}"
-                  </span>
-                </div>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
+        ))}
 
       <div className="mt-1 text-sm text-gray-500">
         {selectedTagIds.length}/{TAGS_PER_RECORD} tags used
