@@ -131,11 +131,6 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
 
       const customStatuses = await getUserCustomStatusMap();
 
-      console.log('[statusStore.ts] Fetched statuses:', {
-        defaultStatuses,
-        customStatuses,
-      });
-
       // Merge default statuses with custom ones (custom ones override defaults if same ID)
       set({
         statusMap: { ...defaultStatuses, ...customStatuses },
