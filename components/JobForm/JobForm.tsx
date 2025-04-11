@@ -8,6 +8,7 @@ import { useTagStore } from '../../context/tagStore';
 import { TagEditor } from '../TagEditor/TagEditor';
 import { useStatusStore } from '../../context/statusStore';
 import { JobStatus } from '../../types/jobStatus';
+import { StatusPickerComponent } from '../StatusPickerComponent/StatusPickerComponent';
 
 // Define the NewTag interface to match what's in the TagEditor
 interface NewTag extends Tag {
@@ -17,7 +18,7 @@ interface NewTag extends Tag {
 export function JobForm() {
   const { addJob } = useJobStore();
   const { createTag } = useTagStore();
-  const { statusMap, getStatusFromID } = useStatusStore();
+  const { getStatusFromID } = useStatusStore();
 
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
@@ -31,32 +32,7 @@ export function JobForm() {
   // Track new tags created during form session
   const [newTags, setNewTags] = useState<NewTag[]>([]);
 
-  const [statusDropDownOpen, setStatusDropDownOpen] = useState(false);
   const [attributeDropDownOpen, setAttributeDropDownOpen] = useState(false);
-
-  const statusDropDownRef = React.useRef<HTMLDivElement>(null);
-  const statusDropDownButtonRef = React.useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        statusDropDownButtonRef.current &&
-        statusDropDownButtonRef.current.contains(event.target as Node)
-      ) {
-        // do nothing as button logic will handle it
-      } else if (
-        statusDropDownRef.current &&
-        !statusDropDownRef.current.contains(event.target as Node)
-      ) {
-        setStatusDropDownOpen(false);
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   // Handler for tag changes
   const handleTagsChange = (tagIds: Tag['id'][], localNewTags?: NewTag[]) => {
@@ -104,7 +80,7 @@ export function JobForm() {
         </h2>
       </div>
       <form onSubmit={handleSubmit} className="w-full space-y-4">
-        <div className="space-y-3 relative">
+        <div className="space-y-3 relative overflow-y-visible">
           <input
             type="text"
             placeholder="Company*"
@@ -132,53 +108,12 @@ export function JobForm() {
             onChange={(e) => setJob({ ...job, position: e.target.value })}
           />
 
-          <button
-            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left"
-            onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
-            ref={statusDropDownButtonRef}
-          >
-            {getStatusFromID(job.statusID).statusName}
-            <TiArrowSortedDown
-              className={`${
-                statusDropDownOpen ? 'rotate-0' : 'rotate-90'
-              } transition-all text-text-primary duration-text`}
-            />
-          </button>
-          {statusDropDownOpen && (
-            <div
-              className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
-              ref={statusDropDownRef}
-            >
-              {Object.values(statusMap)
-                .sort((a, b) => {
-                  // sort alphabetically
-                  return a.statusName.localeCompare(b.statusName);
-                })
-                .map((status: JobStatus) => (
-                  <button
-                    key={status.id}
-                    className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
-                      job.statusID === status.id
-                        ? 'bg-background-primary text-text-primary'
-                        : 'text-text-secondary'
-                    }`}
-                    role="menuitem"
-                    onClick={() => {
-                      setJob({ ...job, statusID: status.id });
-                      setStatusDropDownOpen(false);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        setJob({ ...job, statusID: status.id });
-                        setStatusDropDownOpen(false);
-                      }
-                    }}
-                  >
-                    {status.statusName}
-                  </button>
-                ))}
-            </div>
-          )}
+          <StatusPickerComponent
+            initialStatusID={job.statusID}
+            onSelect={(status: JobStatus) => {
+              setJob({ ...job, statusID: status.id });
+            }}
+          />
         </div>
 
         <div className="w-full flex items-center justify-center">

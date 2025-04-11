@@ -1,9 +1,11 @@
 import React, { JSX, useState, useEffect } from 'react';
-import { Job, statusOptions } from '../../types/job';
+import { Job } from '../../types/job';
 import { ToolTip } from '../ToolTip/ToolTip';
 import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
 import { TiArrowSortedDown, TiWarningOutline } from 'react-icons/ti';
 import { TagEditor } from '../TagEditor/TagEditor';
+import { StatusPickerComponent } from '../StatusPickerComponent/StatusPickerComponent';
+import { JobStatus } from '../../types/jobStatus';
 
 export interface EditJobModalProps {
   job: Job;
@@ -22,9 +24,6 @@ export function EditJobModal({
 
   // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
-
-  const [statusDropDownOpen, setStatusDropDownOpen] = useState<boolean>(false);
-  const statusDropDownRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!job.timestamps.updatedAt) return;
@@ -131,47 +130,12 @@ export function EditJobModal({
           <label htmlFor="status" className="block text-text-primary text-xs">
             Status
           </label>
-          <button
-            className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left focus:bg-background-secondary"
-            onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
-          >
-            {formData.status}
-            <TiArrowSortedDown
-              className={`${
-                statusDropDownOpen ? 'rotate-0' : 'rotate-90'
-              } transition-all text-text-primary duration-text`}
-            />
-          </button>
-          {statusDropDownOpen && (
-            <div
-              className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50"
-              ref={statusDropDownRef}
-            >
-              {statusOptions.map((status: Job['status']) => (
-                <button
-                  key={status}
-                  className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
-                    formData.status === status
-                      ? 'bg-background-primary text-text-primary'
-                      : 'text-text-secondary'
-                  }`}
-                  role="menuitem"
-                  onClick={() => {
-                    setFormData({ ...formData, status });
-                    setStatusDropDownOpen(false);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      setFormData({ ...formData, status });
-                      setStatusDropDownOpen(false);
-                    }
-                  }}
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
-          )}
+          <StatusPickerComponent
+            initialStatusID={formData.statusID}
+            onSelect={(status: JobStatus) =>
+              setFormData({ ...job, statusID: status.id })
+            }
+          />
         </div>
 
         <div className="mb-4 w-full">
