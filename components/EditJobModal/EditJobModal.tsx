@@ -207,8 +207,7 @@ export function EditJobModal({
           {formData.timestamps?.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Last Updated at:{' '}
-                {formData.timestamps.updatedAt.toLocaleString()}
+                Last Updated at: {job.timestamps.updatedAt.toLocaleString()}
               </span>
             </div>
           )}

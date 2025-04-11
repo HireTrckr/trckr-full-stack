@@ -110,7 +110,7 @@ export function EditStatusModal({
       {status.timestamps?.updatedAt && (
         <div className="mb-2 flex justify-center items-center">
           <span className="text-xs text-text-secondary transition-all duration-text">
-            Last Updated at: {lastUpdated.toLocaleString()}
+            Last Updated at: {status.timestamps.updatedAt.toLocaleString()}
           </span>
         </div>
       )}

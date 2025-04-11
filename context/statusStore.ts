@@ -19,6 +19,7 @@ import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { useJobStore } from './jobStore';
+import { timestampToDate } from '../utils/timestampUtils';
 
 type StatusStore = {
   /** Current map of all statuses (both default and custom) */
@@ -111,10 +112,11 @@ const getDefaultStatusMap = async (): Promise<StatusMap> => {
 
 const getUserCustomStatusMap = async (): Promise<StatusMap> => {
   if (!auth.currentUser) return {} as StatusMap;
-  return await getStatusMap(
+  const map = await getStatusMap(
     doc(db, `users/${auth.currentUser.uid}/metadata/statuses`),
     'User statuses not found'
   );
+  return map;
 };
 
 export const useStatusStore = create<StatusStore>((set, get) => ({
@@ -130,6 +132,28 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       const defaultStatuses = await getDefaultStatusMap();
 
       const customStatuses = await getUserCustomStatusMap();
+
+      Object.values(customStatuses).map((status: JobStatus) => {
+        if (status.timestamps) {
+          status.timestamps.createdAt = timestampToDate(
+            status.timestamps.createdAt
+          );
+          status.timestamps.updatedAt = timestampToDate(
+            status.timestamps.updatedAt
+          );
+        }
+      });
+
+      Object.values(defaultStatuses).map((status: JobStatus) => {
+        if (status.timestamps) {
+          status.timestamps.createdAt = timestampToDate(
+            status.timestamps.createdAt
+          );
+          status.timestamps.updatedAt = timestampToDate(
+            status.timestamps.updatedAt
+          );
+        }
+      });
 
       // Merge default statuses with custom ones (custom ones override defaults if same ID)
       set({

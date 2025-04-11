@@ -168,8 +168,9 @@ export const useTagStore = create<TagStore>((set, get) => {
                 color: tagData.color,
                 count: Math.max(tagData.count, 0), // sometimes there is negative glitches
                 timestamps: {
-                  createdAt: tagData.timestamps?.createdAt.toDate(),
+                  createdAt: timestampToDate(tagData.timestamps?.createdAt),
                   updatedAt: timestampToDate(tagData.timestamps?.updatedAt),
+                  deletedAt: timestampToDate(tagData.timestamps?.deletedAt),
                 },
               };
             }
