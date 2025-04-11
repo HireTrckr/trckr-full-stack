@@ -163,7 +163,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       const newTag: NewTag = {
         id: normalizedTagId,
         name: tagName,
-        color: getRandomTailwindColor(),
+        color: getRandomTailwindColor().tailwindColorName,
         count: 1,
         timestamps: {
           createdAt: new Date(),
