@@ -148,7 +148,7 @@ export function JobForm() {
               className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
               value={job?.URL}
               onChange={(e) => setJob({ ...job, URL: e.target.value })}
-            ></input>
+            />
 
             <TagEditor
               tagIds={job.tagIds || []}

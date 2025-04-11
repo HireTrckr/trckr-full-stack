@@ -33,6 +33,7 @@ export function StatusPickerComponent({
         className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left"
         onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
         ref={statusDropDownButtonRef}
+        type="button"
       >
         {selectedStatus.statusName}
         <TiArrowSortedDown
