@@ -16,11 +16,3 @@ export type JobNotSavedInDB = {
   URL?: string;
   tagIds?: Tag['id'][]; // tag_ids
 };
-
-export const statusOptions = [
-  'not applied',
-  'applied',
-  'interview',
-  'offer',
-  'rejected',
-] as const;
