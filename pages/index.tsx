@@ -7,9 +7,7 @@ import Head from 'next/head';
 *settings*
 system theme override
 settings component
-settings backend
 
-allow custom status'
 allow custom fields
 
 skeleton page
@@ -18,14 +16,11 @@ pagination (if needed)
 properly implement toast notifications (plus undo)
 properly implement loading notifications
 
-when job is deleted and then undone it should reappear
-
 *modal*
 confirmation popup for delete
 make better link preview in modal
 
 *tags
-complete tag system
 make searchbar update tag when edited
 tag editor - settings
 tags
