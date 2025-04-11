@@ -1,5 +1,5 @@
 import React, { JSX, useEffect, useRef } from 'react';
-import { Job, statusOptions } from '../../types/job';
+import { Job } from '../../types/job';
 import { useState, memo } from 'react';
 import { UrlPreviewCard } from '../URLPreviewCard/URLPreviewCard';
 import { useTagStore } from '../../context/tagStore';
