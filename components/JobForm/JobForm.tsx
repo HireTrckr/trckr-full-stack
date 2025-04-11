@@ -80,7 +80,7 @@ export function JobForm() {
         </h2>
       </div>
       <form onSubmit={handleSubmit} className="w-full space-y-4">
-        <div className="space-y-3 relative overflow-y-visible">
+        <div className="space-y-3 relative">
           <input
             type="text"
             placeholder="Company*"
