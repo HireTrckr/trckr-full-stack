@@ -4,7 +4,7 @@ import { useTheme } from '../../../context/themeContext';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { useSettingsStore } from '../../../context/settingStore';
 import { TailwindColor } from '../../../types/tailwindColor';
-import { SkeletonPreferencesPanelComponent } from '../../SkeletonPreferencesPanelComponent/SkeletonPreferencesPanelComponent';
+import { SkeletonPreferencesPanelComponent } from './SkeletonPreferencesPanelComponent/SkeletonPreferencesPanelComponent';
 import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
 import { Settings } from '../../../types/settings';
 

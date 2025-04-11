@@ -1,8 +1,8 @@
-import { AuthCheck } from '../AuthCheck/AuthCheck';
-import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator';
-import { ModalHousing } from '../Modals/ModalHousing/ModalHousing';
-import { Navbar } from '../Navbar/Navbar';
-import { ToastsComponent } from '../ToastsComponent/ToastsComponent';
+import { AuthCheck } from './AuthCheck/AuthCheck';
+import { LoadingIndicator } from './LoadingIndicator/LoadingIndicator';
+import { ModalHousing } from './ModalHousing/ModalHousing';
+import { Navbar } from '../NavbarComponents/Navbar/Navbar';
+import { ToastsComponent } from './ToastsComponent/ToastsComponent';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (

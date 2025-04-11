@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { EditTagModalProps } from '../components/EditTagModal/EditTagModal';
-import { EditJobModalProps } from '../components/EditJobModal/EditJobModal';
+import { EditTagModalProps } from '../components/Modals/EditTagModal/EditTagModal';
+import { EditJobModalProps } from '../components/Modals/EditJobModal/EditJobModal';
 import { CreateTagModalProps } from '../components/Modals/CreateTagModal/CreateTagModal';
 import { ModalTypes } from '../types/modalTypes';
 import { CreateStatusModalProps } from '../components/Modals/CreateStatusModal/CreateStatusModal';
