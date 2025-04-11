@@ -5,8 +5,6 @@ import Head from 'next/head';
 
 /*TODO:
 *settings*
-system theme override
-
 allow different languages
 
 allow custom fields

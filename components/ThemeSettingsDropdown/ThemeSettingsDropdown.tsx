@@ -9,22 +9,7 @@ export function ThemeSettingsDropdown(): JSX.Element {
           UI Theme
         </span>
       </div>
-      <div className="flex justify-evenly items-center">
-        <div className="flex justify-between items-center gap-1">
-          <label
-            htmlFor="useSystemThemeCheckbox"
-            className="text-xs text-text-primary text-center h-full transition-colors duration-text"
-          >
-            Use System Theme?
-          </label>
-          <input
-            type="checkbox"
-            disabled
-            id="useSystemThemeCheckbox"
-            checked={true}
-            className="rounded border-background-secondary"
-          />
-        </div>
+      <div className="flex justify-center items-center w-full">
         <ThemeToggle />
       </div>
     </div>

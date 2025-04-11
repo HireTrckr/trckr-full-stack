@@ -10,13 +10,6 @@ export function UserThumbnail() {
   const [user] = useAuthState(auth);
   const [isClient, setIsClient] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [useSystemTheme, setUseSystemTheme] = useState(() => {
-    if (window && typeof window !== 'undefined') {
-      const systemOverride = localStorage.getItem('useSystemTheme'); // true or false
-      return systemOverride ? JSON.parse(systemOverride) : true;
-    }
-    return true;
-  });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
