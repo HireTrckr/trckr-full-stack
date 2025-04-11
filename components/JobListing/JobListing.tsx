@@ -97,7 +97,7 @@ export const JobListing = memo(
     };
 
     const getStatusColor = (status: JobStatus): string => {
-      return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center min-w-[85px] disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
+      return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
     };
 
     useEffect(() => {

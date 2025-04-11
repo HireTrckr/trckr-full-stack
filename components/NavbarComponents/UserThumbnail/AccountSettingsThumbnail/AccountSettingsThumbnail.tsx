@@ -25,7 +25,7 @@ export function AccountSettingsThumbnail() {
             src={user?.photoURL || ''}
             alt={user?.displayName || ''}
             referrerPolicy="no-referrer"
-            className="w-[15px] h-[15px] rounded-full"
+            className="aspect-square max-h-[1rem] rounded-full"
           />
         </Link>
         <button

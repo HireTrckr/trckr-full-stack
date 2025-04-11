@@ -13,15 +13,14 @@ const navBarOptions: NavBarOption[] = [
 ];
 
 export function Navbar(): JSX.Element {
-  const createToast = useToastStore((state) => state.createToast);
   return (
-    <nav className="sticky top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr_auto] w-full items-center p-1 shadow-light z-50">
-      <Link href="/" className="justify-self-start">
-        <div className="flex items-center space-x-2 p-1">
+    <nav className="sticky top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr_auto] w-full items-center p-1 shadow-light z-50 min-h-[3rem] max-h-[3rem] max-h-[3rem]">
+      <Link href="/" className="justify-self-start max-h-full h-full">
+        <div className="flex items-center space-x-2 p-1 h-full">
           <img
             src="/HireTrckr.png"
             alt="Trckr Logo"
-            className="w-[15px] h-[15px] rounded-[50%]"
+            className="aspect-square max-h-[1rem] rounded-[50%]"
           />
           <h1 className="text-lg font-semibold text-text-primary transition-colors duration-text">
             Trckr

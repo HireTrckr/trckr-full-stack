@@ -30,7 +30,6 @@ export function PreferencesPanelComponent(): JSX.Element {
       JSON.stringify(formDataWithoutTimestamps) ===
       JSON.stringify(settingsWithoutTimestamps)
     ) {
-      console.log('no changes');
       return;
     }
     if (!(await updateSettings(formData))) {

@@ -5,7 +5,6 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { TailwindColor } from '../types/tailwindColor';
 
 import colors from 'tailwindcss/colors';
-import { DefaultColors } from 'tailwindcss/types/generated/colors';
 
 type SettingsStore = {
   settings: Settings;
@@ -35,7 +34,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   error: null,
 
   fetchSettings: async () => {
-    console.debug('fetching settings');
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
@@ -74,7 +72,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       console.error('[tagStore.ts] Error fetching settings:', error);
       set({ error: `Failed to fetch settings: ${error}` });
     } finally {
-      console.debug('got setting successfully');
       set({ isLoading: false });
     }
 
@@ -117,7 +114,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   },
 
   updateSetting: async (key, value) => {
-    console.log('updating setting', key, value);
     if (!auth.currentUser) return false;
 
     if (!get().settings) return false;
@@ -152,7 +148,6 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
-    console.log('updated setting');
     return !get().error;
   },
 }));

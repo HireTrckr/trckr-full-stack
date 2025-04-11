@@ -36,7 +36,6 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
           }
           // add tags to each job
           tagJobs.forEach((jobId: Job['id']) => {
-            console.log('adding tag to job', jobId);
             addTagsToJob(jobId, id);
           });
 

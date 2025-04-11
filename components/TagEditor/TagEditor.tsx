@@ -252,7 +252,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsInputFocused(true)}
-          className="flex-grow min-w-[120px] bg-transparent outline-none border-none p-1 placeholder-text-secondary/50 text-text-primary"
+          className="flex-grow min-w-full bg-transparent outline-none border-none p-1 placeholder-text-secondary/50 text-text-primary"
           placeholder={
             selectedTagIds.length >= TAGS_PER_RECORD
               ? `Maximum ${TAGS_PER_RECORD} tags reached`

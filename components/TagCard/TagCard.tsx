@@ -18,7 +18,7 @@ export function TagCard({
 
   return (
     <div
-      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1 min-w-[60px]`}
+      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1`}
       onMouseEnter={() => {
         if (editable) setShowDeleteButton(true);
       }}
@@ -38,7 +38,7 @@ export function TagCard({
       </div>
 
       {showDeleteButton && (
-        <div className="flex-shrink-0 max-h-[16px] flex items-center justify-end">
+        <div className="flex-shrink-0 flex items-center justify-end">
           <button
             type="button"
             className="text-white focus:outline-none rounded-full text-center hover:scale-110"

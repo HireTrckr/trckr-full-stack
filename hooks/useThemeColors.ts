@@ -21,9 +21,6 @@ export const useThemeColors = (): ThemeColors => {
       accentColor: getComputedStyle(document.documentElement).getPropertyValue(
         '--accent-color'
       ),
-      accentHover: getComputedStyle(document.documentElement).getPropertyValue(
-        '--accent-hover'
-      ),
     };
   }
 
