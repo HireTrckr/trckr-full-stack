@@ -6,29 +6,14 @@ import Head from 'next/head';
 /*TODO:
 *settings*
 allow different languages
-
 allow custom fields
-
 skeleton page
-pagination (if needed)
-
-properly implement toast notifications (plus undo)
+properly implement toast notifications
 properly implement loading notifications
-
 *modal*
 confirmation popup for delete
 make better link preview in modal
-
-*tags
-tags
-rate limiting for requests, creations, deletions, edits
-add loading spinner to joblisting delete button
-
 this website uses cookies popup
-
-add salary tag
-
-fix tags lol again
 */
 
 export default function Home() {
