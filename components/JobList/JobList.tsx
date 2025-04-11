@@ -41,7 +41,6 @@ export const JobList: React.FC = () => {
 
   // triggered when job is updated from within the EditJobModal
   const handleJobUpdate = async (updatedJob: Job) => {
-    // check updatedJob has actually changed from the selectedJob
     updateJob(updatedJob);
     handleClose();
   };
