@@ -13,34 +13,115 @@ import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { ToastCategory } from '../types/toast';
 import { useToastStore } from './toastStore';
 
+/**
+ * @interface TagStore
+ * @description Manages the application's tag state and operations
+ */
 type TagStore = {
+  /** Current map of all tags */
   tagMap: TagMap;
+  /** Loading state indicator */
   isLoading: boolean;
+  /** Current error state */
   error: string | null;
 
-  // actions
+  /**
+   * Fetches all tags for the current user
+   * @returns Promise<boolean> - Success status of the operation
+   */
   fetchTags: () => Promise<boolean>;
 
   /**
-   * Takes in a tag name to create and assigns necesary server atributes
-   * @param tagName - name of tag to create
-   * @returns the id of the tag if successful tag creation, false otherwise
-   * */
+   * Creates a new tag
+   * @param tag - Partial tag object containing required fields
+   * @returns Promise<string | false> - New tag ID if successful, false otherwise
+   */
   createTag: (tag: Partial<TagNotSavedInDB>) => Promise<string | false>;
-  deleteTag: (tagId: Tag['id']) => Promise<boolean>;
+
+  /**
+   * @function deleteTag
+   * @description Deletes a tag and removes it from all associated jobs
+   * @param tagId - The ID of the tag to delete
+   * @returns Promise<boolean> - Success status of the operation
+   * @throws Error if tag deletion fails or user is not authenticated
+   */
+  deleteTag: (tagId: string) => Promise<boolean>;
+
+  /**
+   * @function getRecentTags
+   * @description Retrieves the most recently updated tags
+   * @param limit - Maximum number of tags to return
+   * @returns Array of tags sorted by update timestamp
+   */
   getRecentTags: (limit: number) => Tag[];
+
+  /**
+   * @function addTagToJob
+   * @description Associates a tag with a specific job
+   * @param jobId - The ID of the job
+   * @param tagId - The ID of the tag to add
+   * @returns Promise<boolean> - Success status of the operation
+   * @throws Error if job has reached tag limit or tag already exists on job
+   */
   addTagToJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
+
+  /**
+   * @function removeTagFromJob
+   * @description Removes a tag association from a specific job
+   * @param jobId - The ID of the job
+   * @param tagId - The ID of the tag to remove
+   * @returns Promise<boolean> - Success status of the operation
+   * @throws Error if job or tag not found
+   */
   removeTagFromJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
-  clearTags: () => boolean; // doesn't delete from server, only clears locally saved tags
+
+  /**
+   * @function clearTags
+   * @description Clears all tags from local state (does not affect server data)
+   * @returns boolean - Success status of the operation
+   */
+  clearTags: () => boolean;
+
+  /**
+   * @function getTagsFromJob
+   * @description Retrieves all tags associated with a specific job
+   * @param job - The job object to get tags from
+   * @returns Array of Tag objects associated with the job
+   */
   getTagsFromJob: (job: Job) => Tag[];
+
+  /**
+   * @function updateTag
+   * @description Updates an existing tag's properties
+   * @param tag - The updated tag object
+   * @returns Promise<boolean> - Success status of the operation
+   * @throws Error if tag doesn't exist or update fails
+   */
   updateTag: (tag: Tag) => Promise<boolean>;
 };
 
+/**
+ * @interface TagStorePlusPrivate
+ * @description Extended interface that includes private methods and properties
+ * @extends TagStore
+ */
 type TagStorePlusPrivate = TagStore & {
+  /** Timestamp of last successful tag fetch */
   _lastFetched: Date | null;
+
+  /**
+   * Calculates the number of jobs using a specific tag
+   * @param tagId - The ID of the tag to count
+   * @returns The number of jobs using the tag
+   * @private
+   */
   _calculateTagCount: (tagId: Tag['id']) => number;
 };
 
+/**
+ * @constant TAGS_PER_RECORD
+ * @description Maximum number of tags allowed per job record
+ */
 export const TAGS_PER_RECORD = 5;
 
 const { createToast } = useToastStore.getState();
