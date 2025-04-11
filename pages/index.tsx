@@ -6,7 +6,8 @@ import Head from 'next/head';
 /*TODO:
 *settings*
 system theme override
-settings component
+
+allow different languages
 
 allow custom fields
 
@@ -21,8 +22,6 @@ confirmation popup for delete
 make better link preview in modal
 
 *tags
-make searchbar update tag when edited
-tag editor - settings
 tags
 rate limiting for requests, creations, deletions, edits
 add loading spinner to joblisting delete button
