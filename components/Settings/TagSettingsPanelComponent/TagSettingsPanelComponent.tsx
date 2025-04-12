@@ -4,6 +4,7 @@ import { ModalProps, useModalStore } from '../../../context/modalStore';
 import { Tag, TagNotSavedInDB } from '../../../types/tag';
 import { Job } from '../../../types/job';
 import { ModalTypes } from '../../../types/modalTypes';
+import { SkeletonTagSettingsPanelComponent } from './SkeletonTagSettingsPanelComponent/SkeletonTagSettingsPanelComponent';
 
 interface TagSettingsPanelComponentProps {}
 
@@ -17,6 +18,7 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
   const tags = useTagStore((state) => state.tagMap);
   const createTag = useTagStore((state) => state.createTag);
   const addTagsToJob = useTagStore((state) => state.addTagToJob);
+  const isLoading = useTagStore((state) => state.isLoading);
 
   const getTagCreatorProps = (): ModalProps => {
     return {
@@ -78,6 +80,8 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
     // Open modal to edit a tag
     openTagEditor(getTagEditorProps(tag));
   };
+
+  if (isLoading) return <SkeletonTagSettingsPanelComponent />;
 
   return (
     <>
