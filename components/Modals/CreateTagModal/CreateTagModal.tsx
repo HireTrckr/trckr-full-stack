@@ -11,13 +11,12 @@ export interface CreateTagModalProps {
   onCancel: () => void;
 }
 
-const DEFAULT_TAG: TagNotSavedInDB = {
-  name: '',
-  color: getRandomTailwindColor().tailwindColorName,
-  count: 0,
-};
-
 export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
+  const DEFAULT_TAG: TagNotSavedInDB = {
+    name: '',
+    color: getRandomTailwindColor().tailwindColorName,
+    count: 0,
+  };
   const [formData, setFormData] = useState<TagNotSavedInDB>(DEFAULT_TAG);
   const [selectedJobs, setSelectedJobs] = useState<Job[]>([]);
 
