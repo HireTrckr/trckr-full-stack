@@ -6,11 +6,13 @@ import { ModalTypes } from '../../../types/modalTypes';
 import { JobNotSavedInDB } from '../../../types/job';
 import { useToastStore } from '../../../context/toastStore';
 import { ToastCategory } from '../../../types/toast';
+import { SkeletonCustomJobStatusPanelComponent } from './SkeletonCustomJobStatusPanelComponent/SkeletonCustomJobStatusPanelComponent';
 
 export function CustomJobStatusPanelComponent(): JSX.Element {
   const resetStatus = useStatusStore((state) => state.resetStatuses);
   const statuses = useStatusStore((state) => state.statusMap);
   const createStatus = useStatusStore((state) => state.createStatus);
+  const isLoading = useStatusStore((state) => state.isLoading);
 
   const openStatusCreator = useModalStore(
     (state) => state.openStatusCreatorModal
@@ -86,6 +88,8 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
     if (!status.deletable) return;
     openStatusEditor(getStatusEditorProps(status));
   };
+
+  if (isLoading) return <SkeletonCustomJobStatusPanelComponent />;
 
   return (
     <>
