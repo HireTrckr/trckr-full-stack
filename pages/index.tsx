@@ -10,9 +10,6 @@ allow custom fields
 skeleton page
 properly implement toast notifications
 properly implement loading notifications
-*modal*
-confirmation popup for delete
-make better link preview in modal
 this website uses cookies popup
 */
 

@@ -73,9 +73,9 @@ export function EditJobModal({
 
   return (
     <div
-      className={`flex items-center ${formData.URL ? 'w-[50dvw]' : 'w-[25dvw]'}`}
+      className={`flex items-stretch justify-between ${formData.URL ? 'w-[50dvw]' : 'w-[25dvw]'}`}
     >
-      <div className="w-full">
+      <div className={`${formData.URL ? 'w-[50%]' : 'w-full'}`}>
         <div
           className="flex-1 flex-grow flex flex-col w-full items-center"
           id='"edit-job-modal--form">'
@@ -254,9 +254,14 @@ export function EditJobModal({
         </form>
       </div>
       {formData.URL && (
-        <div className="flex flex-1 flex-grow items-center justify-center">
-          <div className="w-[75%] h-[75%] max-w-[100%] max-h-[100%]">
-            <UrlPreviewCard job={job} size="large" />
+        <div className="flex flex-col flex-1 flex-grow items-center min-h-full">
+          <span className="text-text-secondary text-md hover:underline">
+            This is an extenal website!
+          </span>
+          <div className="flex-1 flex items-center justify-center w-full">
+            <div className="w-[50%] aspect-square max-w-[100%] max-h-[100%]">
+              <UrlPreviewCard job={formData} size="large" />
+            </div>
           </div>
         </div>
       )}

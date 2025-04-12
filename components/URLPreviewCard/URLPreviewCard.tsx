@@ -7,6 +7,14 @@ interface URLPreviewCardProps {
   size: 'small' | 'large';
 }
 
+const formatUrl = (url: string): string => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return url.startsWith('http://') || url.startsWith('https://')
+    ? url
+    : `https://${url}`;
+};
+
 export function UrlPreviewCard({
   job,
   size = 'small',
@@ -17,9 +25,9 @@ export function UrlPreviewCard({
 
   const link: Job['URL'] = job?.URL;
 
-  if (!link) {
-    return <></>;
-  }
+  const formattedURL = formatUrl(link ?? '');
+
+  console.log(job);
 
   useEffect(() => {
     if (!link) return;
@@ -27,7 +35,12 @@ export function UrlPreviewCard({
     setIsLoaded(false);
 
     try {
-      const url = new URL(link);
+      if (!URL.canParse(formattedURL)) {
+        setError(true);
+        setIsLoaded(true);
+        return;
+      }
+      const url = new URL(formattedURL);
       if (!url.protocol.startsWith('http')) {
         setError(true);
         setIsLoaded(true);
@@ -48,11 +61,42 @@ export function UrlPreviewCard({
     setIsLoaded(true);
   }, [link]);
 
+  if (!link) {
+    return <></>;
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <a
+          href={formattedURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`rounded-full h-full aspect-square text-text-primary ${
+            size == 'large'
+              ? 'border-4 border-accent-primary p-1 hover:border-accent-hover hover:underline hover:border-2 hover:scale-105'
+              : ''
+          }`}
+        >
+          <div className="h-full w-full flex flex-col items-center justify-center gap-2">
+            <img
+              src="/images/website.png"
+              alt="website"
+              className="rounded-md"
+            />
+            {size == 'large' && (
+              <span className="text-xs text-text-primary ">Website</span>
+            )}
+          </div>
+        </a>
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       {isLoaded && !error && metadata && (
         <a
-          href={link}
+          href={formattedURL}
           target="_blank"
           rel="noopener noreferrer"
           className={`rounded-full h-full aspect-square text-text-primary ${
@@ -77,7 +121,7 @@ export function UrlPreviewCard({
       )}
       {!isLoaded && (
         <a
-          href={link}
+          href={formattedURL}
           target="_blank"
           rel="noopener noreferrer"
           className="text-text-primary p-1 hover:scale-105"
