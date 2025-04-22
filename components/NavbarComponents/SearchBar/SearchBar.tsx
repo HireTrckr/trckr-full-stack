@@ -167,7 +167,7 @@ export function SearchBar() {
 
   return (
     <div
-      className="transition-colors duration-text text-text-primary w-md px-2 flex-1"
+      className="transition-colors duration-bg ease-in-out text-text-primary w-md px-2 flex-1"
       ref={searchBarRef}
     >
       <input
@@ -180,7 +180,7 @@ export function SearchBar() {
                      border border-background-secondary
                      focus:outline-none focus:ring-1 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
-                     transition-all duration-text"
+                     transition-colors duration-bg ease-in-out"
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       <div className="absolute bg-background-primary rounded-lg shadow-lg mt-2 max-w-full">
