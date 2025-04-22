@@ -46,7 +46,10 @@ export function ColorPicker({
   };
 
   return (
-    <div className={`relative w-full ${className ? ` ${className}` : ''}`}>
+    <div
+      className={`relative w-full ${className ? ` ${className}` : ''}`}
+      ref={colorDropDownRef}
+    >
       <button
         className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-bg capitalize text-left focus:bg-background-secondary"
         onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
@@ -66,10 +69,7 @@ export function ColorPicker({
         />
       </button>
       {statusDropDownOpen && (
-        <div
-          className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 h-[20dvh] overflow-y-scroll"
-          ref={colorDropDownRef}
-        >
+        <div className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 h-[20dvh] overflow-y-scroll">
           {TAILWIND_COLORS.filter(
             (color: TailwindColor) => color.status != 'disabled'
           ).map((color: TailwindColor) => (
