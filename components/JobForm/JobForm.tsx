@@ -1,24 +1,16 @@
 import { useState } from 'react';
 import { useJobStore } from '../../context/jobStore';
-import { TiArrowSortedDown } from 'react-icons/ti';
 import { Job, JobNotSavedInDB } from '../../types/job';
 import { Tag } from '../../types/tag';
-import React, { useEffect } from 'react';
 import { useTagStore } from '../../context/tagStore';
 import { TagEditor } from '../TagEditor/TagEditor';
-import { useStatusStore } from '../../context/statusStore';
 import { JobStatus } from '../../types/jobStatus';
 import { StatusPickerComponent } from '../StatusPickerComponent/StatusPickerComponent';
-
-// Define the NewTag interface to match what's in the TagEditor
-interface NewTag extends Tag {
-  isNew: boolean;
-}
+import { NewTag } from '../TagEditor/TagEditor';
 
 export function JobForm() {
   const { addJob } = useJobStore();
   const { createTag } = useTagStore();
-  const { getStatusFromID } = useStatusStore();
 
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
@@ -46,21 +38,21 @@ export function JobForm() {
     e.preventDefault();
     if (!job.company || !job.position) return;
 
-    // save any new tags to Firestore
     for (const newTag of newTags) {
-      if (await createTag({ name: newTag.name, count: 1 } as Partial<Tag>)) {
+      if (
+        await createTag({
+          name: newTag.name,
+          count: 1,
+        } as Partial<Tag>)
+      ) {
         setJob((prevJob) => ({
           ...prevJob,
           tagIds: [...(prevJob.tagIds || []), newTag.id],
         }));
       }
-      // tag creation failute - do nothing?
     }
 
-    if (!(await addJob(job))) {
-      // job failure
-    }
-
+    await addJob(job);
     setJob({
       company: '',
       position: '',
@@ -119,6 +111,7 @@ export function JobForm() {
         <div className="w-full flex items-center justify-center">
           <button
             onClick={() => setAttributeDropDownOpen(!attributeDropDownOpen)}
+            type="button"
           >
             <span className="text-center text-text-secondary transition-all duration-text capitalize text-sm">
               view {attributeDropDownOpen ? 'less' : 'more'}

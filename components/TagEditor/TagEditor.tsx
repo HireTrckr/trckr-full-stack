@@ -6,7 +6,7 @@ import { TagCard } from '../TagCard/TagCard';
 import { getRandomTailwindColor } from '../../utils/generateRandomColor';
 
 // Define interface for new tags that haven't been saved to Firestore yet
-interface NewTag extends Tag {
+export interface NewTag extends Tag {
   isNew: boolean;
 }
 
