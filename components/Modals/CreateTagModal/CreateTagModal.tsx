@@ -6,6 +6,13 @@ import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { Job } from '../../../types/job';
 import { useJobStore } from '../../../context/jobStore';
 
+const getGridRowsClassName = (jobCount: number) => {
+  if (jobCount >= 3) return 'grid-rows-3';
+  if (jobCount === 2) return 'grid-rows-2';
+  if (jobCount === 1) return 'grid-rows-1';
+  return ''; // or some default class
+};
+
 export interface CreateTagModalProps {
   onSave: (newTag: Partial<TagNotSavedInDB>, tagJobs: Job['id'][]) => void;
   onCancel: () => void;
@@ -95,7 +102,9 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
           Jobs: {formData.count}
         </label>
         <div className="w-full overflow-x-scroll">
-          <div className="grid grid-rows-3 grid-flow-col auto-cols-[66%] min-w-full">
+          <div
+            className={`grid ${getGridRowsClassName(jobs.length)} grid-flow-col auto-cols-[66%] min-w-full`}
+          >
             {jobs.map((job) => (
               <div
                 key={job.id}
