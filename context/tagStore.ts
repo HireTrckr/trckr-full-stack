@@ -180,6 +180,13 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ tagMap, _lastFetched: new Date() } as TagStorePlusPrivate);
       } catch (error) {
         console.error('[tagStore.ts] Error fetching tags:', error);
+        createToast(
+          (error as Error).message,
+          true,
+          'Error fetching tags',
+          ToastCategory.ERROR,
+          10000
+        );
         set({ error: `Failed to fetch tags: ${error}` });
       } finally {
         set({ isLoading: false });
@@ -232,8 +239,27 @@ export const useTagStore = create<TagStore>((set, get) => {
         const newTagMap = { ...get().tagMap };
         delete newTagMap[tagId];
         set({ tagMap: newTagMap });
+        createToast(
+          `Tag deleted successfully`,
+          true,
+          'Tag Deleted',
+          ToastCategory.INFO,
+          3000,
+          () => {},
+          (toast) => {
+            // undo function
+            get().createTag(get().tagMap[tagId]);
+          }
+        );
       } catch (error) {
         console.error(`[tagStore.ts] Error deleting tag: ${tagId}`, error);
+        createToast(
+          (error as Error).message,
+          true,
+          `Error deleting tag ${get().tagMap[tagId].name}`,
+          ToastCategory.ERROR,
+          10000
+        );
         set({ error: `Failed to delete tag: ${error}` });
       } finally {
         set({ isLoading: false });
@@ -289,7 +315,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           'Status Created',
           ToastCategory.INFO,
           5000,
-          undefined,
+          () => {},
           () => {
             get().deleteTag(newID);
           }
@@ -297,6 +323,13 @@ export const useTagStore = create<TagStore>((set, get) => {
         return newID;
       } catch (error) {
         console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
+        createToast(
+          (error as Error).message,
+          true,
+          `Error creating tag ${tag.name}`,
+          ToastCategory.ERROR,
+          10000
+        );
         set({ error: `Failed to create tag: ${error}` });
         return false;
       }
@@ -377,8 +410,27 @@ export const useTagStore = create<TagStore>((set, get) => {
             },
           },
         }));
+        createToast(
+          `Tag "${tag.name}" added to job successfully`,
+          true,
+          'Tag Added',
+          ToastCategory.INFO,
+          3000,
+          () => {},
+          (toast) => {
+            // undo function
+            get().removeTagFromJob(jobId, tagId);
+          }
+        );
       } catch (error) {
         console.error(`[tagStore.ts] Error adding tag to job: ${jobId}`, error);
+        createToast(
+          (error as Error).message,
+          true,
+          `Error adding tag to job`,
+          ToastCategory.ERROR,
+          10000
+        );
         set({
           error: `Failed to add tag [${tagId}] to job [${jobId}]: ${error}`,
         });
@@ -439,10 +491,29 @@ export const useTagStore = create<TagStore>((set, get) => {
           tagIds: (job.tagIds || []).filter((tag) => tag !== tagId),
         };
         await jobStore.updateJob(updatedJob);
+        createToast(
+          `Tag "${tag.name}" removed from job successfully`,
+          true,
+          'Tag Removed',
+          ToastCategory.INFO,
+          3000,
+          () => {},
+          (toast) => {
+            // undo function
+            get().addTagToJob(jobId, tagId);
+          }
+        );
       } catch (error) {
         console.error(
           `[tagStore.ts] Error removing tag from job: ${jobId}`,
           error
+        );
+        createToast(
+          (error as Error).message,
+          true,
+          `Error removing tag from job`,
+          ToastCategory.ERROR,
+          10000
         );
         set({
           error: `Failed to remove tag [${tagId}] from job [${jobId}]: ${error}`,
@@ -503,10 +574,24 @@ export const useTagStore = create<TagStore>((set, get) => {
             [updatedTag.id]: updatedTag,
           },
         }));
+        createToast(
+          `Tag "${updatedTag.name}" updated successfully`,
+          true,
+          'Tag Updated',
+          ToastCategory.INFO,
+          3000
+        );
       } catch (error) {
         console.error(
           `[tagStore.ts] Error updating tag: ${updatedTag.id}`,
           error
+        );
+        createToast(
+          (error as Error).message,
+          true,
+          `Error updating tag`,
+          ToastCategory.ERROR,
+          10000
         );
         set({ error: `Failed to update job: ${error}` });
       } finally {
