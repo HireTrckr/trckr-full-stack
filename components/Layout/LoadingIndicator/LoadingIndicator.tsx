@@ -6,10 +6,10 @@ import {
   LoadingIndicatorItemProps,
   LoadingIndicatorItem,
 } from './LoadingIndicatorItem/LoadingIndicatorItem';
+import { useSettingsStore } from '../../../context/settingStore';
+import { useStatusStore } from '../../../context/statusStore';
 
 export function LoadingIndicator() {
-  const [mounted, setMounted] = useState(false);
-
   const [notifications, setNotifications] = useState<
     LoadingIndicatorItemProps[]
   >([]);
@@ -18,14 +18,13 @@ export function LoadingIndicator() {
   const isJobsError = useJobStore((state) => state.error);
   const isTagsLoading = useTagStore((state) => state.isLoading);
   const isTagsError = useTagStore((state) => state.error);
+  const isSettingsLoading = useSettingsStore((state) => state.isLoading);
+  const isSettingsError = useSettingsStore((state) => state.error);
+  const isStatusLoading = useStatusStore((state) => state.isLoading);
+  const isStatusError = useStatusStore((state) => state.error);
 
   useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  useEffect(() => {
-    if (isJobsError || isTagsError) {
+    if (isJobsError || isTagsError || isSettingsError || isStatusError) {
       setNotifications((prevNotifications) => [
         ...prevNotifications,
         {
@@ -34,22 +33,31 @@ export function LoadingIndicator() {
             ? isJobsError
             : isTagsError
               ? isTagsError
-              : 'Unknown error',
+              : isSettingsError
+                ? isSettingsError
+                : isStatusError
+                  ? isStatusError
+                  : 'Unknown Error',
         },
       ]);
     }
-  }, [isJobsError, isTagsError]);
+  }, [isJobsError, isTagsError, isStatusError, isSettingsError]);
 
-  if (!mounted) return null;
+  //if (!mounted) return null;
 
-  if (notifications.length == 0) return null;
+  //if (notifications.length == 0) return null;
 
-  return createPortal(
-    <div className="fixed inset top-0 left-0 flex items-end justify-end z-0">
-      <div className="flex gap-2">
-        {isJobsLoading || isTagsLoading ? (
+  return (
+    <div className="fixed z-[100]" id="loading-indicator-overlay">
+      <div className="mr-4">
+        {isJobsLoading ||
+        isTagsLoading ||
+        isSettingsLoading ||
+        isStatusLoading ? (
           <LoadingIndicatorItem isError={false} />
-        ) : null}
+        ) : (
+          <span>lol</span>
+        )}
         {notifications.map((notification) => (
           <LoadingIndicatorItem
             isError={notification.isError}
@@ -57,7 +65,6 @@ export function LoadingIndicator() {
           />
         ))}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
