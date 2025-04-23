@@ -8,7 +8,6 @@ import Head from 'next/head';
 allow different languages
 allow custom fields
 skeleton page
-properly implement toast notifications
 properly implement loading notifications
 this website uses cookies popup
 */
