@@ -209,7 +209,9 @@ export const useTagStore = create<TagStore>((set, get) => {
       set({ isLoading: true, error: null });
       try {
         // check if any jobs use tag
-        const jobsWithTag = get().tagMap[tagId]
+        const tag = get().tagMap[tagId];
+
+        const jobsWithTag = tag
           ? useJobStore.getState().getJobsWithTags([tagId])
           : [];
 
@@ -248,7 +250,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           () => {},
           (toast) => {
             // undo function
-            get().createTag(get().tagMap[tagId]);
+            get().createTag(tag);
           }
         );
       } catch (error) {
@@ -263,10 +265,6 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ error: `Failed to delete tag: ${error}` });
       } finally {
         set({ isLoading: false });
-
-        // fetch new tags and jobs
-        await get().fetchTags();
-        await useJobStore.getState().fetchJobs();
       }
 
       // return whether there is not an error t/f
