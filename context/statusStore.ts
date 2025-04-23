@@ -163,6 +163,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error fetching statuses:', error);
+      createToast(
+        (error as Error).message,
+        true,
+        'Error fetching statuses',
+        ToastCategory.ERROR
+      );
       set({ error: `Failed to fetch statuses: ${error}`, isLoading: false });
       return false;
     }
@@ -219,6 +225,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return newID;
     } catch (error) {
       console.error('[statusStore.ts] Error creating status:', error);
+      createToast(
+        (error as Error).message,
+        true,
+        'Error creating status',
+        ToastCategory.ERROR
+      );
       set({ error: `Failed to create status: ${error}`, isLoading: false });
       return false;
     }
@@ -278,6 +290,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error deleting status:', error);
+      createToast(
+        (error as Error).message,
+        true,
+        'Error deleting status',
+        ToastCategory.ERROR
+      );
       set({ error: `Failed to delete status: ${error}`, isLoading: false });
       return false;
     }
@@ -338,6 +356,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error updating status:', error);
+      createToast(
+        (error as Error).message,
+        true,
+        'Error updating status',
+        ToastCategory.ERROR
+      );
       set({ error: `Failed to update status: ${error}`, isLoading: false });
       return false;
     }
@@ -381,6 +405,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error resetting statuses:', error);
+      createToast(
+        (error as Error).message,
+        true,
+        'Error resetting statuses',
+        ToastCategory.ERROR
+      );
       set({ error: `Failed to reset statuses: ${error}`, isLoading: false });
       return false;
     }
