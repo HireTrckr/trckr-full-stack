@@ -9,7 +9,6 @@ allow different languages
 allow custom fields
 skeleton page
 properly implement loading notifications
-this website uses cookies popup
 */
 
 export default function Home() {
