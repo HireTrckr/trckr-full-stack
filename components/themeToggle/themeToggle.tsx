@@ -19,7 +19,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
         onClick={toggleTheme}
         className={`
         relative w-14 h-7 rounded-full
-        bg-background-secondary dark:bg-gray-700
+        bg-background-secondary
         transition-colors duration-bg ease-in-out
       `}
         aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
