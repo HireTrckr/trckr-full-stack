@@ -21,9 +21,6 @@ module.exports = {
   darkMode: 'class', // or 'media' if you want to respect system preferences
   theme: {
     extend: {
-      colors: {
-        ...colors,
-      },
       transitionDuration: {
         text: '100ms',
         bg: '300ms',
