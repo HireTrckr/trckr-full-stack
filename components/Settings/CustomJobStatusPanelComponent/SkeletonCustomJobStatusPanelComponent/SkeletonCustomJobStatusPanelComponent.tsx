@@ -5,7 +5,7 @@ export function SkeletonCustomJobStatusPanelComponent(): JSX.Element {
   return (
     <>
       <div className="w-full min-h-[2rem] flex items-center flex justify-between">
-        <div className="min-h-[1rem] w-32 bg-gray-700 rounded animate-pulse"></div>
+        <div className="min-h-[1rem] w-32 bg-background-secondary rounded animate-pulse"></div>
         <button className="rounded-full aspect-square h-[2rem] cursor-progress">
           +
         </button>
