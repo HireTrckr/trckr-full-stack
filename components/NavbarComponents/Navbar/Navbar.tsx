@@ -14,7 +14,7 @@ const navBarOptions: NavBarOption[] = [
 
 export function Navbar(): JSX.Element {
   return (
-    <nav className="sticky top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-bg ease-in-out grid grid-cols-[1fr_auto_1fr_auto] w-full items-center p-1 shadow-light z-50 min-h-[3rem] max-h-[3rem] max-h-[3rem]">
+    <nav className="sticky top-0 bg-background-primary border-b border-background-secondary text-text-primary transition-colors duration-text ease-in-out grid grid-cols-[1fr_auto_1fr_auto] w-full items-center p-1 shadow-light z-50 min-h-[3rem] max-h-[3rem] max-h-[3rem]">
       <Link href="/" className="justify-self-start max-h-full h-full">
         <div className="flex items-center space-x-2 p-1 h-full">
           <img
