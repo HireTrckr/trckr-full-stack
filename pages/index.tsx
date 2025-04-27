@@ -6,8 +6,8 @@ import Head from 'next/head';
 /*TODO:
 *settings*
 allow different languages
-allow custom fields
-skeleton page
+allow custom fields - skeleton page
+skeleton page for job list
 properly implement loading notifications
 */
 
