@@ -1,0 +1,104 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "submit": "Soumettre",
+    "back": "Retour",
+    "next": "Suivant",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "noResults": "Aucun résultat trouvé",
+    "required": "Obligatoire"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "confirmPassword": "Confirmer le mot de passe"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "applications": "Candidatures",
+    "settings": "Paramètres",
+    "profile": "Profil"
+  },
+  "applications": {
+    "title": "Candidatures",
+    "new": "Nouvelle candidature",
+    "status": {
+      "applied": "Postulé",
+      "interview": "Entretien",
+      "offer": "Offre",
+      "rejected": "Refusé",
+      "accepted": "Accepté"
+    },
+    "form": {
+      "companyName": "Nom de l'entreprise",
+      "position": "Poste",
+      "location": "Lieu",
+      "salary": "Salaire",
+      "applicationDate": "Date de candidature",
+      "notes": "Notes",
+      "addNote": "Ajouter une note"
+    }
+  },
+  "settings": {
+    "preferences": {
+      "title": "Préférences",
+      "language": "Langue",
+      "theme": {
+        "title": "Thème",
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "email": "Notifications par email",
+        "push": "Notifications push"
+      }
+    },
+    "account": {
+      "title": "Paramètres du compte",
+      "personalInfo": "Informations personnelles",
+      "changePassword": "Changer le mot de passe",
+      "deleteAccount": "Supprimer le compte"
+    }
+  },
+  "profile": {
+    "title": "Profil",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Numéro de téléphone",
+    "location": "Lieu",
+    "bio": "Biographie"
+  },
+  "errors": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "minimumPassword": "Le mot de passe doit contenir au moins 8 caractères",
+    "invalidInput": "Entrée invalide",
+    "networkError": "Erreur réseau. Veuillez réessayer"
+  },
+  "success": {
+    "saved": "Enregistré avec succès",
+    "created": "Créé avec succès",
+    "updated": "Mis à jour avec succès",
+    "deleted": "Supprimé avec succès"
+  },
+  "confirmations": {
+    "deleteApplication": "Êtes-vous sûr de vouloir supprimer cette candidature ?",
+    "deleteAccount": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+  }
+}
