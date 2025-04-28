@@ -58,7 +58,7 @@ export function ColorPicker({
           <div
             className={`rounded-full aspect-square h-[1rem] bg-${selectedColor.tailwindColorName}-300`}
           />
-          <span className="text-text-primary transition-all duration-text capitalize">
+          <span className="text-text-primary transition-all duration-text capitalize text-sm">
             {selectedColor.tailwindColorName}
           </span>
         </div>

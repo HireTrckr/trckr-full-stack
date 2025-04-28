@@ -65,7 +65,7 @@ export function CreateStatusModal({
           placeholder="Enter status name"
           value={formData.statusName}
           onChange={handleChange}
-          className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
+          className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
         />
       </div>
 

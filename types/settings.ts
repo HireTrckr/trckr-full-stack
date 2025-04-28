@@ -2,6 +2,8 @@ import { getDefaultTailwindColorObject } from '../utils/getTailwindColorObject';
 import { TailwindColor } from './tailwindColor';
 import { timestamps } from './timestamps';
 
+export type SupportedLanguage = 'en' | 'fr' | 'zh-hk' | 'zh-cn';
+
 export type Settings = {
   theme: {
     mode: 'light' | 'dark' | 'auto';
@@ -9,8 +11,7 @@ export type Settings = {
   };
 
   preferences: {
-    language: string;
-    timezone: string;
+    language: SupportedLanguage;
   };
 
   timestamps: timestamps;
@@ -24,7 +25,6 @@ export const DEFAULT_SETTINGS: Settings = {
 
   preferences: {
     language: 'en',
-    timezone: 'GMT',
   },
 
   timestamps: {

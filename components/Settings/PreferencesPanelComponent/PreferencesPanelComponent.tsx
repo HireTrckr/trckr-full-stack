@@ -1,21 +1,23 @@
-import React, { JSX, useState } from 'react';
+import React, { JSX, use, useEffect, useState } from 'react';
 import { ThemeSettings } from '../../ThemeSettings/ThemeSettings';
-import { useTheme } from '../../../context/themeContext';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { useSettingsStore } from '../../../context/settingStore';
 import { TailwindColor } from '../../../types/tailwindColor';
 import { SkeletonPreferencesPanelComponent } from './SkeletonPreferencesPanelComponent/SkeletonPreferencesPanelComponent';
 import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
-import { Settings } from '../../../types/settings';
+import { Settings, SupportedLanguage } from '../../../types/settings';
+import { LanguageSelectorComponent } from '../../LanguageSelectorComponent/LanguageSelectorComponent';
 
 export function PreferencesPanelComponent(): JSX.Element {
-  const { theme } = useTheme();
-
   const settings = useSettingsStore((state) => state.settings);
   const isLoading = useSettingsStore((state) => state.isLoading);
   const updateSettings = useSettingsStore((state) => state.updateSettings);
 
   const [formData, setFormData] = useState<Settings>(settings);
+
+  useEffect(() => {
+    setFormData(settings);
+  }, [settings]);
 
   const resetFormData = () => {
     // Reset form data to the initial settings, ensure re-render of color picker
@@ -48,6 +50,16 @@ export function PreferencesPanelComponent(): JSX.Element {
     }));
   };
 
+  const handleLanguageSelect = (language: SupportedLanguage) => {
+    setFormData((prev) => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        language,
+      },
+    }));
+  };
+
   if (isLoading) return <SkeletonPreferencesPanelComponent />;
 
   return (
@@ -57,34 +69,24 @@ export function PreferencesPanelComponent(): JSX.Element {
           Preferences
         </span>
       </div>
-      <div className="flex-1 w-full flex flex-col gap-2">
+      <div className="flex-1 w-full flex flex-col justify-evenly">
         <div className="w-full">
-          <span className="text-xs text-text-secondary">
-            Dark Mode: {theme === 'dark' ? 'ON' : 'OFF'}
-          </span>
           <ThemeSettings />
         </div>
 
         <div className="w-full">
-          <span className="text-xs text-text-secondary">Primary Color</span>
-          <div
-            className="w-full flex justify-evenly items-center gap-4"
-            id="settings-color-picker-container"
-          >
-            <span className="text-text-primary text-sm transition-all duration-text min-w-[25%]">
-              Theme Color
-            </span>
-            <ColorPicker
-              className="flex-1"
-              color={formData.theme.primaryColor}
-              onColorSelect={(color) => handleColorSelect(color)}
-            />
-          </div>
+          <LanguageSelectorComponent
+            defaultLanguage={formData.preferences.language}
+            onSelect={(language) => handleLanguageSelect(language)}
+          />
         </div>
 
-        <div className="w-full flex flex-col">
-          <span className="text-xs text-text-secondary">Language</span>
-          <span>EN | FR | ZH-HK | ZH-CN</span>
+        <div className="w-full">
+          <span className="text-xs text-text-secondary">Primary Color</span>
+          <ColorPicker
+            color={formData.theme.primaryColor}
+            onColorSelect={(color) => handleColorSelect(color)}
+          />
         </div>
       </div>
 
