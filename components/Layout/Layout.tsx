@@ -18,9 +18,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <ToastsComponent />
             <main className="w-full p-6">{children}</main>
             <LoadingIndicator />
-            <CookieConsentBannerComponent />
           </ModalHousing>
         </AuthCheck>
+        <CookieConsentBannerComponent />
       </div>
     </div>
   );
