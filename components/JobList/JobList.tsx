@@ -2,25 +2,20 @@ import { useEffect, useState } from 'react';
 import { useJobStore } from '../../context/jobStore';
 import { useTagStore } from '../../context/tagStore';
 import { Job } from '../../types/job';
-import { auth } from '../../lib/firebase';
 import { JobListing } from '../JobListing/JobListing';
 
 import { ModalProps, useModalStore } from '../../context/modalStore';
 import { ModalTypes } from '../../types/modalTypes';
+import { SkeletonJobListComponent } from '../SkeletonJobListComponent/SkeletonJobListComponent';
 
 export const JobList: React.FC = () => {
-  const jobs = useJobStore((state) => state.jobs);
-  const clearTags = useTagStore((state) => state.clearTags);
-  const fetchTags = useTagStore((state) => state.fetchTags);
-  const clearJobs = useJobStore((state) => state.clearJobs);
-  const fetchJobs = useJobStore((state) => state.fetchJobs);
-  const updateJob = useJobStore((state) => state.updateJob);
-  const deleteJob = useJobStore((state) => state.deleteJob);
+  const { jobs, updateJob, deleteJob } = useJobStore.getState();
 
   const openJobEditorModal = useModalStore((state) => state.openJobEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const isJobsLoading = useJobStore((state) => state.isLoading);
+  const isTagsLoading = useTagStore((state) => state.isLoading);
 
   const [jobWithOpenDropdown, setJobWithOpenDropdown] = useState<Job | null>(
     null
@@ -66,38 +61,11 @@ export const JobList: React.FC = () => {
     closeModal();
   };
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      clearJobs();
-      clearTags();
-
-      if (user) {
-        setIsLoading(true);
-        try {
-          await fetchJobs();
-        } catch (error) {
-          console.error('Error fetching jobs:', error);
-        }
-        try {
-          await fetchTags();
-        } catch (error) {
-          console.error('Error fetching tags:', error);
-        }
-
-        setIsLoading(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [fetchJobs, clearJobs, fetchTags, clearTags]);
-
-  if (isLoading) {
-    return <p className="text-text-secondary">Loading...</p>;
-  }
+  if (isJobsLoading || isTagsLoading) return <SkeletonJobListComponent />;
 
   return (
     <div className="w-full transition-colors duration-bg">
-      <div className="flex justify-center items-center mb-6">
+      <div className="flex justify-center items-center mb-3">
         <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
           My Job Applications {jobs.length ? `(${jobs.length})` : ''}
         </span>
@@ -110,7 +78,7 @@ export const JobList: React.FC = () => {
           </p>
         </div>
       ) : (
-        <ul className="relativ px-3">
+        <ul className="relative px-3">
           {jobs.map((job) => {
             const isActive =
               jobWithOpenDropdown === job ||

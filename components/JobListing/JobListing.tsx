@@ -137,8 +137,8 @@ export const JobListing = memo(
         }`}
       >
         {/* left side */}
-        <div className="flex gap-2">
-          <div className="rounded-lg">
+        <div className="flex gap-2 items-center min-h-full">
+          <div className="rounded-lg max-h-10 max-w-10">
             {job.URL ? (
               <UrlPreviewCard job={job} size="small" />
             ) : (
@@ -154,13 +154,13 @@ export const JobListing = memo(
           </div>
 
           <div className="flex flex-col justify-evenly">
-            <div className="flex items-center gap-5">
-              <div>
-                <span className="text-text-primary">{job.position}</span>
-                <span className="text-text-secondary">
-                  {job.company ? `, ${job.company}` : ''}
-                </span>
-              </div>
+            <div className="flex items-center">
+              <span className="text-text-primary text-base">
+                {job.position}
+              </span>
+              <span className="text-text-secondary text-base">
+                {job.company ? `, ${job.company}` : ''}
+              </span>
             </div>
             {job.location && (
               <span className="text-text-secondary text-xs">

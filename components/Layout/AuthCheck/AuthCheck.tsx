@@ -29,10 +29,10 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     if (!user) return;
 
     // load user data into stores
-    await fetchTags();
-    await fetchJobs();
-    await fetchSettings();
-    await fetchStatus();
+    fetchTags();
+    fetchJobs();
+    fetchSettings();
+    fetchStatus();
   };
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
       <div className="w-full p-6">
         <div className="bg-background-primary rounded-lg p-6 transition-all duration-bg ease-in-out flex flex-col items-center gap-2 hover:scale-[1.02]">
           <span className="text-md font-semibold text-text-primary flex items-center transition-colors duration-text capitalize">
-            Loading...
+            Loading User Data...
           </span>
           <svg
             aria-hidden="true"
