@@ -7,7 +7,6 @@ import Head from 'next/head';
 *settings*
 allow different languages
 allow custom fields - skeleton page
-skeleton page for job list
 properly implement loading notifications
 */
 
