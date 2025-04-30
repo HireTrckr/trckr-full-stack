@@ -1,12 +1,13 @@
 // components/LanguageSelector/LanguageSelector.tsx
 import React, { useEffect, useState } from 'react';
 import { SupportedLanguage } from '../../types/settings';
+import { useTranslation } from 'react-i18next';
 
 const languages: { value: SupportedLanguage; label: string }[] = [
   { value: 'en', label: 'English' },
   { value: 'fr', label: 'Français' },
-  { value: 'zh-hk', label: '繁體中文' },
-  { value: 'zh-cn', label: '简体中文' },
+  { value: 'zh-HK', label: '繁體中文' },
+  { value: 'zh-CN', label: '简体中文' },
 ];
 
 interface LanguageSelectorProps {
@@ -42,8 +43,8 @@ export function LanguageSelectorComponent({
           onClick={() => handleLanguageChange(value)}
           className={`px-3 py-1 rounded-md text-sm transition-all duration-text ${
             currentLanguage === value
-              ? 'bg-accent text-text-accent border border-accent-primary'
-              : 'hover:bg-background-secondary text-text-primary'
+              ? 'bg-accent text-text-primary border border-accent-primary'
+              : 'hover:bg-background-secondary text-text-secondary'
           }`}
         >
           {label}
