@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { TAILWIND_COLORS, TailwindColor } from '../../types/tailwindColor';
 import { TiArrowSortedDown } from 'react-icons/ti';
+import { useTranslation } from 'react-i18next';
 
 interface ColorPickerProps {
   color: TailwindColor;
@@ -14,6 +15,8 @@ export function ColorPicker({
   className,
 }: ColorPickerProps) {
   const [statusDropDownOpen, setStatusDropDownOpen] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState<TailwindColor>(color);
 
@@ -51,15 +54,15 @@ export function ColorPicker({
       ref={colorDropDownRef}
     >
       <button
-        className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-bg capitalize text-left focus:bg-background-secondary"
+        className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-bg text-left focus:bg-background-secondary"
         onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
       >
         <div className="flex gap-2 items-center">
           <div
             className={`rounded-full aspect-square h-[1rem] bg-${selectedColor.tailwindColorName}-300`}
           />
-          <span className="text-text-primary transition-all duration-text capitalize text-sm">
-            {selectedColor.tailwindColorName}
+          <span className="text-text-primary transition-all duration-text text-sm">
+            {t(`colors.${selectedColor.tailwindColorName}`)}
           </span>
         </div>
         <TiArrowSortedDown
@@ -93,7 +96,7 @@ export function ColorPicker({
               <div
                 className={`rounded-full aspect-square h-[1rem] bg-${color.tailwindColorName}-300`}
               />
-              {color.tailwindColorName}
+              {t(`colors.${color.tailwindColorName}`)}
             </button>
           ))}
         </div>
