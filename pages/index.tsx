@@ -6,7 +6,7 @@ import Head from 'next/head';
 /*TODO:
 *settings*
 allow different languages for toast notifications
-allow custom fields - skeleton page
+allow custom fields - skeleton page - empty component
 properly implement loading notifications
 */
 
