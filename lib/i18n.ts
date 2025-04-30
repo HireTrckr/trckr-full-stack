@@ -14,8 +14,8 @@ i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     fr: { translation: fr },
-    'zh-hk': { translation: zhHK },
-    'zh-cn': { translation: zhCN },
+    'zh-HK': { translation: zhHK },
+    'zh-CN': { translation: zhCN },
   },
   fallbackLng: 'en',
   interpolation: {
