@@ -1,104 +1,117 @@
 {
   "common": {
-    "loading": "Chargement...",
-    "error": "Une erreur est survenue",
     "save": "Enregistrer",
     "cancel": "Annuler",
+    "reset": "Réinitialiser",
     "delete": "Supprimer",
-    "edit": "Modifier",
-    "create": "Créer",
-    "submit": "Soumettre",
-    "back": "Retour",
-    "next": "Suivant",
-    "search": "Rechercher",
-    "filter": "Filtrer",
-    "noResults": "Aucun résultat trouvé",
-    "required": "Obligatoire"
+    "jobs_one": "Emploi",
+    "jobs_other": "Emplois",
+    "view-more": "Voir Plus",
+    "view-less": "Voir Moins",
+    "auth": {
+      "sign-in": "Se Connecter",
+      "sign-out": "Se Déconnecter"
+    }
   },
-  "auth": {
-    "signIn": "Se connecter",
-    "signUp": "S'inscrire",
-    "signOut": "Se déconnecter",
-    "email": "Email",
-    "password": "Mot de passe",
-    "forgotPassword": "Mot de passe oublié ?",
-    "resetPassword": "Réinitialiser le mot de passe",
-    "confirmPassword": "Confirmer le mot de passe"
-  },
-  "navigation": {
-    "home": "Accueil",
-    "dashboard": "Tableau de bord",
-    "applications": "Candidatures",
+  "navbar": {
+    "track": "Suivre",
+    "add-new": "Ajouter",
     "settings": "Paramètres",
-    "profile": "Profil"
-  },
-  "applications": {
-    "title": "Candidatures",
-    "new": "Nouvelle candidature",
-    "status": {
-      "applied": "Postulé",
-      "interview": "Entretien",
-      "offer": "Offre",
-      "rejected": "Refusé",
-      "accepted": "Accepté"
-    },
-    "form": {
-      "companyName": "Nom de l'entreprise",
-      "position": "Poste",
-      "location": "Lieu",
-      "salary": "Salaire",
-      "applicationDate": "Date de candidature",
-      "notes": "Notes",
-      "addNote": "Ajouter une note"
+    "searchbar": {
+      "placeholder": "Rechercher vos candidatures et étiquettes..."
     }
   },
   "settings": {
+    "title": "Paramètres",
     "preferences": {
       "title": "Préférences",
       "language": "Langue",
       "theme": {
-        "title": "Thème",
-        "light": "Clair",
-        "dark": "Sombre",
-        "system": "Système"
-      },
-      "notifications": {
-        "title": "Notifications",
-        "email": "Notifications par email",
-        "push": "Notifications push"
+        "dark-mode": "Mode Sombre",
+        "primary-color": "Couleur Principale"
       }
     },
-    "account": {
-      "title": "Paramètres du compte",
-      "personalInfo": "Informations personnelles",
-      "changePassword": "Changer le mot de passe",
-      "deleteAccount": "Supprimer le compte"
+    "tags": {
+      "title": "Étiquettes",
+      "jobs_one": "{{count}} Emploi",
+      "jobs_other": "{{count}} Emplois"
+    },
+    "status": {
+      "title": "Statut"
+    },
+    "fields": {
+      "title": "Champs"
     }
   },
-  "profile": {
-    "title": "Profil",
-    "firstName": "Prénom",
-    "lastName": "Nom",
-    "phone": "Numéro de téléphone",
-    "location": "Lieu",
-    "bio": "Biographie"
+  "modals": {
+    "shared": {
+      "last-updated": "Dernière mise à jour le {{date}}, {{time}}",
+      "edit-wait-timer_one": "Veuillez attendre {{count}} seconde avant de modifier à nouveau.",
+      "edit-wait-timer_other": "Veuillez attendre {{count}} secondes avant de modifier à nouveau.",
+      "rate-limit-message-tt": "La limitation de débit est activée pour éviter le spam !"
+    },
+    "tag": {
+      "shared": {
+        "name": "Nom de l'Étiquette",
+        "name-placeholder": "Entrez le nom de l'étiquette",
+        "color": "Couleur de l'Étiquette"
+      },
+      "edit": {
+        "title": "Modifier l'Étiquette",
+        "tag-id": "ID de l'Étiquette"
+      },
+      "create": {
+        "title": "Créer une Étiquette"
+      }
+    },
+    "status": {
+      "shared": {
+        "name": "Nom du Statut",
+        "name-placeholder": "Entrez le nom du statut",
+        "color": "Couleur du Statut"
+      },
+      "edit": {
+        "title": "Modifier le Statut",
+        "status-id": "ID du Statut"
+      },
+      "create": {
+        "title": "Créer un Statut"
+      }
+    },
+    "job": {
+      "shared": {
+        "company": "Entreprise",
+        "company-placeholder": "Entrez le nom de l'entreprise",
+        "position": "Poste",
+        "position-placeholder": "Entrez le nom du poste",
+        "status": "Statut",
+        "tags": "Étiquettes",
+        "location": "Lieu",
+        "location-placeholder": "Entrez le lieu",
+        "URL": "URL",
+        "URL-placeholder": "Entrez l'URL"
+      },
+      "edit": {
+        "title": "Modifier l'Emploi",
+        "job-id": "ID de l'Emploi",
+        "external-link-warning": "Ceci est un site web externe !"
+      }
+    }
   },
-  "errors": {
-    "required": "Ce champ est obligatoire",
-    "invalidEmail": "Veuillez entrer une adresse email valide",
-    "passwordMismatch": "Les mots de passe ne correspondent pas",
-    "minimumPassword": "Le mot de passe doit contenir au moins 8 caractères",
-    "invalidInput": "Entrée invalide",
-    "networkError": "Erreur réseau. Veuillez réessayer"
-  },
-  "success": {
-    "saved": "Enregistré avec succès",
-    "created": "Créé avec succès",
-    "updated": "Mis à jour avec succès",
-    "deleted": "Supprimé avec succès"
-  },
-  "confirmations": {
-    "deleteApplication": "Êtes-vous sûr de vouloir supprimer cette candidature ?",
-    "deleteAccount": "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible."
+  "colors": {
+    "title": "Couleurs",
+    "red": "Rouge",
+    "orange": "Orange",
+    "yellow": "Jaune",
+    "lime": "Citron Vert",
+    "green": "Vert",
+    "teal": "Bleu-vert",
+    "cyan": "Cyan",
+    "blue": "Bleu",
+    "indigo": "Indigo",
+    "violet": "Violet",
+    "purple": "Pourpre",
+    "fuchsia": "Fuchsia",
+    "pink": "Rose"
   }
 }
