@@ -48,7 +48,9 @@
     "tags": {
       "title": "Tags",
       "jobs_one": "{{count}} Job",
-      "jobs_other": "{{count}} Jobs"
+      "jobs_other": "{{count}} Jobs",
+      "no-tags-title": "No tags found!",
+      "no-tags-msg": "Add a new tag to get started."
     },
     "status": {
       "title": "Status"
@@ -126,7 +128,8 @@
   "job-list": {
     "title_zero": "My Job Applications",
     "title_other": "My Job Applications ({{count}})",
-    "no-jobs-found": "No jobs found! Add a new job application to get started."
+    "no-jobs-title": "No jobs found!",
+    "no-jobs-msg": "Add a new job application to get started."
   },
   "job-form": {
     "title": "Track a New Job Application",

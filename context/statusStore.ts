@@ -104,16 +104,10 @@ const getStatusMap = async (
 };
 
 const getDefaultStatusMap = async (): Promise<StatusMap> => {
-  const defaultStatuses = await getStatusMap(
+  return await getStatusMap(
     doc(db, 'config/defaultStatusMap'),
     'Default statuses not found'
   );
-
-  Object.values(defaultStatuses).map((status: JobStatus) => {
-    status.statusName = `default-status.${status.statusName.toLowerCase().replace(' ', '-')}`;
-  });
-
-  return defaultStatuses;
 };
 
 const getUserCustomStatusMap = async (): Promise<StatusMap> => {
