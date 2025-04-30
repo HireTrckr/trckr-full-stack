@@ -19,7 +19,7 @@
     "not-applied": "未申請",
     "applied": "已申請",
     "interviewing": "面試中",
-    "offer-sent": "報價已發送",
+    "offer-sent": "已收到offer",
     "rejected": "已拒絕",
     "accepted": "已接受"
   },
@@ -37,7 +37,8 @@
   "job-list": {
     "title_zero": "我的工作申請",
     "title_other": "我的工作申請 ({{count}})",
-    "no-jobs-found": "找不到工作！添加一個新的工作申請來開始。"
+    "no-jobs-title": "找不到工作！",
+    "no-jobs-msg": "添加一個新的工作申請來開始。"
   },
   "job-form": {
     "title": "追蹤新工作申請",
@@ -68,7 +69,9 @@
     "tags": {
       "title": "標籤",
       "jobs_one": "{{count}} 個工作",
-      "jobs_other": "{{count}} 個工作"
+      "jobs_other": "{{count}} 個工作",
+      "no-tags-title": "找不到標籤！",
+      "no-tags-msg": "添加一個新標籤來開始。"
     },
     "status": {
       "title": "狀態"

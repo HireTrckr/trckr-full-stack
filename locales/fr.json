@@ -37,7 +37,8 @@
   "job-list": {
     "title_zero": "Mes Candidatures",
     "title_other": "Mes Candidatures ({{count}})",
-    "no-jobs-found": "Aucun emploi trouvé ! Ajoutez une nouvelle candidature pour commencer."
+    "no-jobs-title": "Aucun emploi trouvé !",
+    "no-jobs-msg": "Ajoutez une nouvelle candidature pour commencer."
   },
   "job-form": {
     "title": "Suivre une Nouvelle Candidature",
@@ -68,7 +69,9 @@
     "tags": {
       "title": "Étiquettes",
       "jobs_one": "{{count}} Emploi",
-      "jobs_other": "{{count}} Emplois"
+      "jobs_other": "{{count}} Emplois",
+      "no-tags-title": "Aucune étiquette trouvée !",
+      "no-tags-msg": "Ajoutez une nouvelle étiquette pour commencer."
     },
     "status": {
       "title": "Statut"
