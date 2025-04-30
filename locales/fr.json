@@ -9,6 +9,7 @@
     "view-more": "Voir Plus",
     "view-less": "Voir Moins",
     "auth": {
+      "sign-in-to-continue": "Veuillez vous connecter pour continuer",
       "sign-in": "Se Connecter",
       "sign-out": "Se Déconnecter"
     }
@@ -19,6 +20,10 @@
     "settings": "Paramètres",
     "searchbar": {
       "placeholder": "Rechercher vos candidatures et étiquettes..."
+    },
+    "dropdown": {
+      "theme-toggle-title": "Thème",
+      "account-settings-title": "Compte"
     }
   },
   "settings": {

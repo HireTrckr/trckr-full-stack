@@ -9,6 +9,7 @@
     "view-more": "查看更多",
     "view-less": "收起",
     "auth": {
+      "sign-in-to-continue": "请登录以继续",
       "sign-in": "登录",
       "sign-out": "退出登录"
     }
@@ -19,6 +20,10 @@
     "settings": "设置",
     "searchbar": {
       "placeholder": "搜索您的申请和标签..."
+    },
+    "dropdown": {
+      "theme-toggle-title": "主题",
+      "account-settings-title": "账户"
     }
   },
   "settings": {

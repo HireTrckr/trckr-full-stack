@@ -9,6 +9,7 @@
     "view-more": "查看更多",
     "view-less": "收起",
     "auth": {
+      "sign-in-to-continue": "請登入以繼續",
       "sign-in": "登入",
       "sign-out": "登出"
     }
@@ -19,6 +20,10 @@
     "settings": "設定",
     "searchbar": {
       "placeholder": "搜尋你的申請和標籤..."
+    },
+    "dropdown": {
+      "theme-toggle-title": "主題",
+      "account-settings-title": "帳戶"
     }
   },
   "settings": {
