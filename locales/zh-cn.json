@@ -15,6 +15,14 @@
       "sign-out": "退出登录"
     }
   },
+  "default-status": {
+    "not-applied": "未申请",
+    "applied": "已申请",
+    "interviewing": "面试中",
+    "offer-sent": "报价已发送",
+    "rejected": "已拒绝",
+    "accepted": "已接受"
+  },
   "tag-editor": {
     "tags-used_one": "已使用 {{count}}/{{limit}} 个标签",
     "tags-used_other": "已使用 {{count}}/{{limit}} 个标签",

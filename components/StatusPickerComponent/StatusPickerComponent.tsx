@@ -3,6 +3,7 @@ import { TiArrowSortedDown } from 'react-icons/ti';
 import { JobStatus } from '../../types/jobStatus';
 import { useStatusStore } from '../../context/statusStore';
 import { Job } from '../../types/job';
+import { useTranslation } from 'react-i18next';
 
 interface StatusPickerComponentProps {
   initialStatusID: Job['statusID'];
@@ -21,6 +22,8 @@ export function StatusPickerComponent({
   const statusDropDownButtonRef = React.useRef<HTMLButtonElement>(null);
   const statusDropDownRef = React.useRef<HTMLDivElement>(null);
 
+  const { t } = useTranslation();
+
   const handleSelect = (status: JobStatus) => {
     setSelectedStatus(status);
     onSelect(status);
@@ -30,12 +33,14 @@ export function StatusPickerComponent({
   return (
     <>
       <button
-        className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text capitalize text-left"
+        className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text text-left"
         onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
         ref={statusDropDownButtonRef}
         type="button"
       >
-        {selectedStatus.statusName}
+        {selectedStatus.deletable
+          ? selectedStatus.statusName
+          : t(selectedStatus.statusName)}
         <TiArrowSortedDown
           className={`${
             statusDropDownOpen ? 'rotate-0' : 'rotate-90'
@@ -57,7 +62,7 @@ export function StatusPickerComponent({
             .map((status: JobStatus) => (
               <button
                 key={status.id}
-                className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1 ${
+                className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left transition-all duration-bg ease-in-out z-1 ${
                   selectedStatus.id === status.id
                     ? 'bg-background-primary text-text-primary'
                     : 'text-text-secondary'
@@ -70,7 +75,7 @@ export function StatusPickerComponent({
                   }
                 }}
               >
-                {status.statusName}
+                {status.deletable ? status.statusName : t(status.statusName)}
               </button>
             ))}
         </div>

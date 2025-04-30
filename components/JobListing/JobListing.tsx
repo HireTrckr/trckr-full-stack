@@ -10,6 +10,10 @@ import { JobStatus } from '../../types/jobStatus';
 import { useStatusStore } from '../../context/statusStore';
 import { useTranslation } from 'react-i18next';
 
+const getStatusColor = (status: JobStatus): string => {
+  return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
+};
+
 export const JobListing = memo(
   function JobListing({
     job,
@@ -97,10 +101,6 @@ export const JobListing = memo(
       onUpdate?.(updatedJob);
       setIsDropDownOpen(false);
       onDropdownClose();
-    };
-
-    const getStatusColor = (status: JobStatus): string => {
-      return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
     };
 
     useEffect(() => {
@@ -199,7 +199,7 @@ export const JobListing = memo(
                 className={getStatusColor(status)}
                 disabled={timeRemaining > 0}
               >
-                {status?.statusName}
+                {status.deletable ? status.statusName : t(status.statusName)}
               </button>
               {isDropDownOpen && (
                 <div
@@ -212,7 +212,7 @@ export const JobListing = memo(
                   {Object.values(statusMap).map((status: JobStatus) => (
                     <button
                       key={status.id}
-                      className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left capitalize transition-all duration-bg ease-in-out z-1
+                      className={`block px-4 py-2 text-sm hover:bg-background-primary rounded-lg w-full text-left transition-all duration-bg ease-in-out z-1
                         ${
                           job.statusID === status.id
                             ? 'bg-background-primary text-text-primary'
@@ -221,7 +221,9 @@ export const JobListing = memo(
                       onClick={() => updateStatus(status)}
                       role="menuitem"
                     >
-                      {status.statusName}
+                      {status.deletable
+                        ? status.statusName
+                        : t(status.statusName)}
                     </button>
                   ))}
                 </div>

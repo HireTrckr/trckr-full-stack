@@ -15,6 +15,14 @@
       "sign-out": "Sign Out"
     }
   },
+  "default-status": {
+    "not-applied": "Not Applied",
+    "applied": "Applied",
+    "interviewing": "Interviewing",
+    "offer-sent": "Offer Sent",
+    "rejected": "Rejected",
+    "accepted": "Accepted"
+  },
   "navbar": {
     "track": "Track",
     "add-new": "Add New",

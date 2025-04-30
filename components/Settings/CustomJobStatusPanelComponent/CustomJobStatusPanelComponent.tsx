@@ -122,7 +122,7 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
               />
               <div className="flex-1 overflow-x-auto">
                 <span className="text-text-primary max-h-full">
-                  {option.statusName}
+                  {option.deletable ? option.statusName : t(option.statusName)}
                 </span>
               </div>
             </div>

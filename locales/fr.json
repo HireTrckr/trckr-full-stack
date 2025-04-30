@@ -15,6 +15,14 @@
       "sign-out": "Se Déconnecter"
     }
   },
+  "default-status": {
+    "not-applied": "Non Postulé",
+    "applied": "Postulé",
+    "interviewing": "En Entretien",
+    "offer-sent": "Offre Envoyée",
+    "rejected": "Refusé",
+    "accepted": "Accepté"
+  },
   "tag-editor": {
     "tags-used_one": "{{count}}/{{limit}} Étiquette Utilisée",
     "tags-used_other": "{{count}}/{{limit}} Étiquettes Utilisées",

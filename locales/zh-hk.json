@@ -15,6 +15,14 @@
       "sign-out": "登出"
     }
   },
+  "default-status": {
+    "not-applied": "未申請",
+    "applied": "已申請",
+    "interviewing": "面試中",
+    "offer-sent": "報價已發送",
+    "rejected": "已拒絕",
+    "accepted": "已接受"
+  },
   "tag-editor": {
     "tags-used_one": "已使用 {{count}}/{{limit}} 個標籤",
     "tags-used_other": "已使用 {{count}}/{{limit}} 個標籤",
