@@ -7,12 +7,16 @@ import { JobNotSavedInDB } from '../../../types/job';
 import { useToastStore } from '../../../context/toastStore';
 import { ToastCategory } from '../../../types/toast';
 import { SkeletonCustomJobStatusPanelComponent } from './SkeletonCustomJobStatusPanelComponent/SkeletonCustomJobStatusPanelComponent';
+import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
+import { useTranslation } from 'react-i18next';
 
 export function CustomJobStatusPanelComponent(): JSX.Element {
   const resetStatus = useStatusStore((state) => state.resetStatuses);
   const statuses = useStatusStore((state) => state.statusMap);
   const createStatus = useStatusStore((state) => state.createStatus);
   const isLoading = useStatusStore((state) => state.isLoading);
+
+  const { t } = useTranslation();
 
   const openStatusCreator = useModalStore(
     (state) => state.openStatusCreatorModal
@@ -94,7 +98,9 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
   return (
     <>
       <div className="flex items-center justify-between w-full">
-        <span className="text-xs text-text-secondary">Status</span>
+        <span className="text-xs text-text-secondary">
+          {t('settings.status.title')}
+        </span>
         <button
           className="hover:bg-background-secondary rounded-full aspect-square h-[2rem]"
           onClick={() => handleStatusCreate()}
@@ -122,13 +128,9 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
             </div>
           ))}
       </div>
-      <div className="flex items-center justify-center w-full">
+      <div className="flex items-center justify-center w-full text-xs">
         {/* TODO: Add popup for confirming*/}
-        <button onClick={handleReset}>
-          <span className="text-xs text-text-secondary hover:underline capitalize">
-            reset
-          </span>
-        </button>
+        <ButtonsComponent onReset={handleReset} />
       </div>
     </>
   );

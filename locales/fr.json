@@ -3,6 +3,7 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "reset": "Réinitialiser",
+    "edit": "Modifier",
     "delete": "Supprimer",
     "jobs_one": "Emploi",
     "jobs_other": "Emplois",
@@ -13,6 +14,26 @@
       "sign-in": "Se Connecter",
       "sign-out": "Se Déconnecter"
     }
+  },
+  "tag-editor": {
+    "tags-used_one": "{{count}}/{{limit}} Étiquette Utilisée",
+    "tags-used_other": "{{count}}/{{limit}} Étiquettes Utilisées",
+    "new": "(nouveau)",
+    "create-new-tag": "Créer une nouvelle étiquette : \"{{tag}}\"",
+    "tag-uses_one": "({{count}} utilisation)",
+    "tag-uses_other": "({{count}} utilisations)",
+    "placeholder_max_one": "Maximum ({{count}} étiquette) atteint",
+    "placeholder_max_other": "Maximum ({{count}} étiquettes) atteint",
+    "placeholder_empty": "Ajouter des étiquettes (virgule ou entrée pour séparer)"
+  },
+  "job-list": {
+    "title_zero": "Mes Candidatures",
+    "title_other": "Mes Candidatures ({{count}})",
+    "no-jobs-found": "Aucun emploi trouvé ! Ajoutez une nouvelle candidature pour commencer."
+  },
+  "job-form": {
+    "title": "Suivre une Nouvelle Candidature",
+    "submit-button": "Enregistrer la Candidature"
   },
   "navbar": {
     "track": "Suivre",

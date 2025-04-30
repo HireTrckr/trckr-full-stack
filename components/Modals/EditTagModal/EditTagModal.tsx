@@ -4,6 +4,7 @@ import { TiWarningOutline } from 'react-icons/ti';
 import { Tag } from '../../../types/tag';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { getTailwindColorObjectFromName } from '../../../utils/getTailwindColorObject';
+import { useTranslation } from 'react-i18next';
 
 export interface EditTagModalProps {
   tag: Tag;
@@ -22,6 +23,8 @@ export function EditTagModal({
 
   // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!tag.timestamps.updatedAt) return;
@@ -73,22 +76,22 @@ export function EditTagModal({
       id="edit-tag-modal--form"
     >
       <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text w-full">
-        Edit Tag
+        {t('modals.tag.edit.title')}
       </h2>
 
       <span className="text-xs text-text-secondary">
-        TagID: <i>{formData.id}</i>
+        {t('modals.tag.edit.tag-id')}: <i>{formData.id}</i>
       </span>
 
       <div className="mb-4 w-full">
         <label htmlFor="name" className="block text-text-primary text-xs">
-          Name
+          {t('modals.tag.shared.name')}
         </label>
         <input
           type="text"
           id="name"
           name="name"
-          placeholder="Enter tag name"
+          placeholder={t('modals.tag.shared.name-placeholder')}
           value={formData.name}
           onChange={handleChange}
           className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
@@ -96,6 +99,9 @@ export function EditTagModal({
       </div>
 
       <div className="mb-4 w-full">
+        <label htmlFor="color" className="block text-text-primary text-xs">
+          {t('modals.tag.shared.color')}
+        </label>
         <ColorPicker
           color={getTailwindColorObjectFromName(formData.color)}
           onColorSelect={(color) => {
@@ -110,7 +116,10 @@ export function EditTagModal({
       {tag.timestamps?.updatedAt && (
         <div className="mb-2 flex justify-center items-center">
           <span className="text-xs text-text-secondary transition-all duration-text">
-            Last Updated at: {tag.timestamps.updatedAt.toLocaleString()}
+            {t('modals.shared.last-updated', {
+              date: tag.timestamps.updatedAt.toLocaleDateString(),
+              time: tag.timestamps.updatedAt.toLocaleTimeString(),
+            })}
           </span>
         </div>
       )}
@@ -121,31 +130,30 @@ export function EditTagModal({
           className="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!formData.name || !formData.color || timeRemaining > 0}
         >
-          Save
+          {t('common.save')}
         </button>
         <button
           onClick={onClose}
           className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
         <button
           onClick={handleDelete}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={timeRemaining > 0}
         >
-          Delete
+          {t('common.delete')}
         </button>
       </div>
 
       {timeRemaining > 0 && (
         <div className="mt-1 flex flex justify-center items-center gap-1">
           <span className="text-xs text-text-secondary transition-all duration-text">
-            Please wait {timeRemaining} second
-            {timeRemaining != 1 ? 's' : ''} to edit again.
+            {t('modals.shared.edit-wait-timer', { count: timeRemaining })}
           </span>
           <ToolTip
-            text="Rate limiting is enabled to prevent spam!"
+            text={t('modals.shared.rate-limit-message-tt')}
             position="bottom"
           >
             <TiWarningOutline className="text-xs text-text-secondary transition-all duration-text" />

@@ -7,12 +7,15 @@ import { JobListing } from '../JobListing/JobListing';
 import { ModalProps, useModalStore } from '../../context/modalStore';
 import { ModalTypes } from '../../types/modalTypes';
 import { SkeletonJobListComponent } from '../SkeletonJobListComponent/SkeletonJobListComponent';
+import { useTranslation } from 'react-i18next';
 
 export const JobList: React.FC = () => {
   const { jobs, updateJob, deleteJob } = useJobStore.getState();
 
   const openJobEditorModal = useModalStore((state) => state.openJobEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
+
+  const { t } = useTranslation();
 
   const isJobsLoading = useJobStore((state) => state.isLoading);
   const isTagsLoading = useTagStore((state) => state.isLoading);
@@ -67,15 +70,13 @@ export const JobList: React.FC = () => {
     <div className="w-full transition-colors duration-bg">
       <div className="flex justify-center items-center mb-3">
         <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
-          My Job Applications {jobs.length ? `(${jobs.length})` : ''}
+          {t('job-list.title', { count: jobs.length })}
         </span>
       </div>
 
       {jobs.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-text-secondary">
-            No jobs found! Add a new job application to get started.
-          </p>
+          <p className="text-text-secondary">{t('job-list.no-jobs-found')}</p>
         </div>
       ) : (
         <ul className="relative px-3">

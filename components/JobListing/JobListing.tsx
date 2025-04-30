@@ -8,6 +8,7 @@ import { TiTrash } from 'react-icons/ti';
 import { Tag } from '../../types/tag';
 import { JobStatus } from '../../types/jobStatus';
 import { useStatusStore } from '../../context/statusStore';
+import { useTranslation } from 'react-i18next';
 
 export const JobListing = memo(
   function JobListing({
@@ -43,6 +44,8 @@ export const JobListing = memo(
     let tags: Tag[] = getTagsFromJob(job);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const { t } = useTranslation();
 
     const handleDelete = async (_job: Job) => {
       setDeleting(true);
@@ -228,7 +231,7 @@ export const JobListing = memo(
               className="bg-accent-primary hover:brightness-[80%] text-text-accent px-4 py-2 rounded-lg transition-all duration-bg ease-in-out"
               onClick={() => onEdit(job.id)} // Pass job ID to the handler
             >
-              Edit
+              {t('common.edit')}
             </button>
             <button
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-bg ease-in-out min-h-full"

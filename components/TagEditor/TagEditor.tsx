@@ -4,6 +4,7 @@ import { Tag } from '../../types/tag';
 import { TAGS_PER_RECORD, useTagStore } from '../../context/tagStore';
 import { TagCard } from '../TagCard/TagCard';
 import { getRandomTailwindColor } from '../../utils/generateRandomColor';
+import { useTranslation } from 'react-i18next';
 
 // Define interface for new tags that haven't been saved to Firestore yet
 export interface NewTag extends Tag {
@@ -18,6 +19,8 @@ interface TagEditorProps {
 export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
   const [inputValue, setInputValue] = useState('');
   const [suggestions, setSuggestions] = useState<Tag[]>([]);
+
+  const { t } = useTranslation();
   // Initialize tags from props, but only on mount
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>(
     () => tagIds || []
@@ -93,8 +96,12 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       )
       .slice(0, 5);
 
+    // todo fix create tag dropdown not appearing
+    console.log('matchingTags', matchingTags);
+
     if (isMounted) {
       setSuggestions(matchingTags);
+      console.log(suggestions);
     }
 
     return () => {
@@ -255,78 +262,75 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
           className="flex-grow min-w-full bg-transparent outline-none border-none p-1 placeholder-text-secondary/50 text-text-primary"
           placeholder={
             selectedTagIds.length >= TAGS_PER_RECORD
-              ? `Maximum ${TAGS_PER_RECORD} tags reached`
+              ? t('tag-editor.placeholder_max', { count: TAGS_PER_RECORD })
               : selectedTagIds.length === 0
-                ? 'Add tags (comma or enter to separate)'
+                ? t('tag-editor.placeholder_empty')
                 : ''
           }
           disabled={selectedTagIds.length >= TAGS_PER_RECORD || isLoading}
         />
       </div>
 
-      {suggestions.length !== 0 ||
-        (inputValue && (
-          <div className="relative">
-            {isInputFocused && (
-              <div
-                ref={dropdownRef}
-                className="absolute right-0 top-full w-3/4 !mt-0 z-10 overflow-auto border border-accent-primary rounded-lg shadow-light text-text-primary bg-background-secondary"
+      {inputValue && isInputFocused && (
+        <div className="relative">
+          <div
+            ref={dropdownRef}
+            className="absolute right-0 top-full w-3/4 !mt-0 z-10 overflow-auto border border-accent-primary rounded-lg shadow-light text-text-primary bg-background-secondary"
+          >
+            {suggestions.map((tag) => (
+              <button
+                key={tag.id}
+                className="block px-4 py-2 text-sm rounded-lg w-full text-left transition-all duration-text hover:bg-background-primary bg-background-secondary"
+                onClick={() => handleSuggestionClick(tag.id)}
               >
-                {suggestions.map((tag) => (
-                  <button
-                    key={tag.id}
-                    className={
-                      'block px-4 py-2 text-sm rounded-lg w-full text-left capitalize transition-all duration-text hover:bg-background-primary bg-background-secondary'
-                    }
-                    onClick={() => handleSuggestionClick(tag.id)}
-                  >
-                    <div className="flex items-center">
-                      <span>{tag.name}</span>
-                      <span className="ml-2 text-xs">{`(${tag.count} uses)`}</span>
-                    </div>
-                  </button>
-                ))}
-                {inputValue &&
-                  newTags
-                    .filter(
-                      (tag) =>
-                        !selectedTagIds.includes(tag.id) &&
-                        tag.name
-                          .toLowerCase()
-                          .includes(inputValue.toLowerCase())
-                    )
-                    .map((tag) => (
-                      <div
-                        key={tag.id}
-                        className="px-4 py-2 cursor-pointer bg-background-secondary"
-                        onClick={() => handleSuggestionClick(tag.id)}
-                      >
-                        <div className="flex items-center text-sm text-text-secondary">
-                          <span>{tag.name}</span>
-                          <span className="ml-2">(new)</span>
-                        </div>
-                      </div>
-                    ))}
-                {suggestions.length === 0 && inputValue && (
-                  <div
-                    className="px-4 py-2 cursor-pointer bg-background-primary"
-                    onClick={() => addTagIfNotExists(inputValue.trim())}
-                  >
-                    <div className="flex items-center">
-                      <span className="mr-2 text-green-500">+</span>
-                      <span className="text-text-primary text-sm">
-                        Create new tag: "{inputValue}"
-                      </span>
-                    </div>
+                <div className="flex items-center">
+                  <span>{tag.name}</span>
+                  <span className="ml-2 text-xs">
+                    {t('tag-editor.tag-uses', { count: tag.count })}
+                  </span>
+                </div>
+              </button>
+            ))}
+            {newTags
+              .filter(
+                (tag) =>
+                  !selectedTagIds.includes(tag.id) &&
+                  tag.name.toLowerCase().includes(inputValue.toLowerCase())
+              )
+              .map((tag) => (
+                <div
+                  key={tag.id}
+                  className="px-4 py-2 cursor-pointer bg-background-secondary"
+                  onClick={() => handleSuggestionClick(tag.id)}
+                >
+                  <div className="flex items-center text-sm text-text-secondary">
+                    <span>{tag.name}</span>
+                    <span className="ml-2">{t('tag-editor.new')}</span>
                   </div>
-                )}
+                </div>
+              ))}
+            {suggestions.length === 0 && (
+              <div
+                className="px-4 py-2 cursor-pointer bg-background-primary"
+                onClick={() => addTagIfNotExists(inputValue.trim())}
+              >
+                <div className="flex items-center">
+                  <span className="mr-2 text-green-500">+</span>
+                  <span className="text-text-primary text-sm">
+                    {t('tag-editor.create-new-tag', { tag: inputValue })}
+                  </span>
+                </div>
               </div>
             )}
           </div>
-        ))}
+        </div>
+      )}
 
       <div className="mt-1 text-sm text-gray-500">
-        {selectedTagIds.length}/{TAGS_PER_RECORD} tags used
+        {t('tag-editor.tags-used', {
+          count: selectedTagIds.length,
+          limit: TAGS_PER_RECORD,
+        })}
       </div>
     </div>
   );

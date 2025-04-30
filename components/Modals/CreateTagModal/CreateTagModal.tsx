@@ -5,6 +5,7 @@ import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { Job } from '../../../types/job';
 import { useJobStore } from '../../../context/jobStore';
+import { useTranslation } from 'react-i18next';
 
 const getGridRowsClassName = (jobCount: number) => {
   if (jobCount >= 3) return 'grid-rows-3';
@@ -24,6 +25,8 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
     color: getRandomTailwindColor().tailwindColorName,
     count: 0,
   };
+
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<TagNotSavedInDB>(DEFAULT_TAG);
   const [selectedJobs, setSelectedJobs] = useState<Job[]>([]);
 
@@ -58,7 +61,7 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
       id="create-tag-modal--form"
     >
       <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text w-full">
-        Create Tag
+        {t('modals.tag.create.title')}
       </h2>
 
       <div
@@ -66,13 +69,13 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
         id="create-tag-modal-form--tag-name-editor-container"
       >
         <label htmlFor="name" className="block text-text-primary text-xs">
-          Name
+          {t('modals.tag.shared.name')}
         </label>
         <input
           type="text"
           id="name"
           name="name"
-          placeholder="Enter tag name"
+          placeholder={t('modals.tag.shared.name-placeholder')}
           value={formData.name}
           onChange={handleChange}
           className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
@@ -83,6 +86,9 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
         className="mb-4 w-full"
         id="create-tag-modal-form--tag-color-picker-conatiner"
       >
+        <label htmlFor="color" className="block text-text-primary text-xs">
+          {t('modals.tag.shared.color')}
+        </label>
         <ColorPicker
           color={getTailwindColorObjectFromName(formData.color)}
           onColorSelect={(color) => {
@@ -99,7 +105,7 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
         id="create-tag-modal-form--tag-job-picker-container"
       >
         <label htmlFor="jobs" className="text-text-primary text-xs">
-          Jobs: {formData.count}
+          {t('common.jobs_other')}: {formData.count}
         </label>
         <div className="w-full overflow-x-scroll">
           <div
@@ -153,13 +159,13 @@ export function CreateTagModal({ onSave, onCancel }: CreateTagModalProps) {
           disabled={!formData.name || formData.count <= 0}
           className="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Save
+          {t('common.save')}
         </button>
         <button
           onClick={handleCancel}
           className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
       </div>
     </div>

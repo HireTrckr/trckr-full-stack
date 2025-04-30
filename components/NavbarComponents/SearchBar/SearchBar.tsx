@@ -3,17 +3,15 @@ import { SearchableItem, SearchResult } from '../../../types/SearchBarItemType';
 import { SearchBarItem } from './SearchBarItem/SearchBarItem';
 import { useJobStore } from '../../../context/jobStore';
 import { useTagStore } from '../../../context/tagStore';
-
-import { createPortal } from 'react-dom';
-import { EditJobModal } from '../../Modals/EditJobModal/EditJobModal';
-
 import { Job } from '../../../types/job';
 import { Tag, TagMap } from '../../../types/tag';
-import { EditTagModal } from '../../Modals/EditTagModal/EditTagModal';
+import { useTranslation } from 'react-i18next';
+import { ModalProps, useModalStore } from '../../../context/modalStore';
+import { ModalTypes } from '../../../types/modalTypes';
 
 interface SearchBarProps {}
 
-export function SearchBar() {
+export function SearchBar({}: SearchBarProps) {
   const jobs = useJobStore((state) => state.jobs);
   const updateJob = useJobStore((state) => state.updateJob);
   const deleteJob = useJobStore((state) => state.deleteJob);
@@ -21,14 +19,64 @@ export function SearchBar() {
   const updateTag = useTagStore((state) => state.updateTag);
   const deleteTag = useTagStore((state) => state.deleteTag);
 
+  const openJobEditor = useModalStore((state) => state.openJobEditorModal);
+  const openTagEditor = useModalStore((state) => state.openTagEditorModal);
+  const closeModal = useModalStore((state) => state.closeModal);
+
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
     null
   );
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const searchBarRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useTranslation();
+
+  const getTagEditorProps = (tag: Tag): ModalProps => {
+    return {
+      props: {
+        tag,
+        onSave: async (updatedTag: Tag) => {
+          // Handle saving the updated tag
+          await useTagStore.getState().updateTag(updatedTag);
+          closeModal();
+        },
+        onDelete: async (tag: Tag) => {
+          // Handle deleting the tag
+          await useTagStore.getState().deleteTag(tag.id);
+          closeModal();
+        },
+        onClose: () => {
+          // Handle closing the modal
+          closeModal();
+        },
+      },
+      type: ModalTypes.tagEditor,
+    };
+  };
+
+  const openTagEditorModal = (tag: Tag) => {
+    // Open modal to edit a tag
+    openTagEditor(getTagEditorProps(tag));
+  };
+
+  const getJobEditorProps = (job: Job): ModalProps => {
+    return {
+      props: {
+        job,
+        onSave: handleJobUpdate,
+        onDelete: handleJobDelete,
+        onClose: handleModalClose,
+      },
+      type: ModalTypes.jobEditor,
+    };
+  };
+
+  const openJobEditorModal = (job: Job) => {
+    // Open modal to edit a job
+    openJobEditor(getJobEditorProps(job));
+  };
 
   const getSearchMatches = useCallback(
     (term: string) => {
@@ -77,32 +125,7 @@ export function SearchBar() {
   function handleModalClose(): void {
     setSelectedResult(null);
     clearSearchBar();
-    setIsModalOpen(false);
-  }
-
-  async function handleTagUpdate(updatedTag: Tag) {
-    if (!updatedTag) return;
-
-    if (
-      selectedResult &&
-      updatedTag &&
-      JSON.stringify(selectedResult) === JSON.stringify(updatedTag)
-    ) {
-      return;
-    }
-
-    await updateTag(updatedTag);
-
-    // replace the tag in the searchResults to force re-render
-    setSearchResults((prevResults) =>
-      prevResults.map((result) => {
-        if (result.type === 'tag' && result.item.id === updatedTag.id) {
-          return { ...result, item: updatedTag };
-        }
-        return result;
-      })
-    );
-    handleModalClose();
+    closeModal();
   }
 
   async function handleJobUpdate(updatedJob: Job) {
@@ -121,13 +144,6 @@ export function SearchBar() {
     handleModalClose();
   }
 
-  async function handleTagDelete(deletedTag: Tag) {
-    if (!deletedTag) return;
-
-    await deleteTag(deletedTag.id);
-    handleModalClose();
-  }
-
   async function handleJobDelete(deletedJob: Job) {
     if (!deletedJob) return;
 
@@ -136,8 +152,11 @@ export function SearchBar() {
   }
 
   function handleSuggestionSelection(suggestion: SearchResult) {
-    setSelectedResult(suggestion);
-    setIsModalOpen(true);
+    if (suggestion.type === 'job') {
+      openJobEditorModal(suggestion.item as Job);
+    } else if (suggestion.type === 'tag') {
+      openTagEditorModal(suggestion.item as Tag);
+    }
   }
 
   function clearSearchBar() {
@@ -172,7 +191,7 @@ export function SearchBar() {
     >
       <input
         type="text"
-        placeholder="Search your applications and tags..."
+        placeholder={t('navbar.searchbar.placeholder')}
         value={searchTerm}
         className="w-full px-2 rounded-lg
                      bg-background-primary 
@@ -194,44 +213,6 @@ export function SearchBar() {
           </div>
         ))}
       </div>
-
-      {isModalOpen &&
-        selectedResult &&
-        createPortal(
-          <>
-            <div
-              id="modal-overlay"
-              className="fixed inset-0 bg-black/10 z-[999] backdrop-blur-sm"
-              onClick={handleModalClose}
-              aria-hidden="true"
-            />
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="modal-title"
-              className="fixed inset-0 z-[1000] flex items-center justify-center"
-            >
-              <div className="bg-background-primary rounded-lg">
-                {selectedResult.type === 'job' ? (
-                  <EditJobModal
-                    job={selectedResult.item as Job}
-                    onClose={handleModalClose}
-                    onSave={handleJobUpdate}
-                    onDelete={handleJobDelete}
-                  />
-                ) : (
-                  <EditTagModal
-                    tag={selectedResult.item as Tag}
-                    onClose={handleModalClose}
-                    onSave={handleTagUpdate}
-                    onDelete={handleTagDelete}
-                  />
-                )}
-              </div>
-            </div>
-          </>,
-          document.body
-        )}
     </div>
   );
 }

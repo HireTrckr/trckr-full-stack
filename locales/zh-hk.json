@@ -3,6 +3,7 @@
     "save": "儲存",
     "cancel": "取消",
     "reset": "重設",
+    "edit": "編輯",
     "delete": "刪除",
     "jobs_one": "工作",
     "jobs_other": "工作",
@@ -13,6 +14,26 @@
       "sign-in": "登入",
       "sign-out": "登出"
     }
+  },
+  "tag-editor": {
+    "tags-used_one": "已使用 {{count}}/{{limit}} 個標籤",
+    "tags-used_other": "已使用 {{count}}/{{limit}} 個標籤",
+    "new": "(新)",
+    "create-new-tag": "建立新標籤：\"{{tag}}\"",
+    "tag-uses_one": "({{count}} 次使用)",
+    "tag-uses_other": "({{count}} 次使用)",
+    "placeholder_max_one": "已達最大數量 ({{count}} 個標籤)",
+    "placeholder_max_other": "已達最大數量 ({{count}} 個標籤)",
+    "placeholder_empty": "新增標籤（以逗號或 Enter 鍵分隔）"
+  },
+  "job-list": {
+    "title_zero": "我的工作申請",
+    "title_other": "我的工作申請 ({{count}})",
+    "no-jobs-found": "找不到工作！添加一個新的工作申請來開始。"
+  },
+  "job-form": {
+    "title": "追蹤新工作申請",
+    "submit-button": "提交申請"
   },
   "navbar": {
     "track": "追蹤",

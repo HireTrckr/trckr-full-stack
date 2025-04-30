@@ -5,6 +5,7 @@ import { Tag, TagNotSavedInDB } from '../../../types/tag';
 import { Job } from '../../../types/job';
 import { ModalTypes } from '../../../types/modalTypes';
 import { SkeletonTagSettingsPanelComponent } from './SkeletonTagSettingsPanelComponent/SkeletonTagSettingsPanelComponent';
+import { useTranslation } from 'react-i18next';
 
 interface TagSettingsPanelComponentProps {}
 
@@ -14,6 +15,8 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
   );
   const openTagEditor = useModalStore((state) => state.openTagEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
+
+  const { t } = useTranslation();
 
   const tags = useTagStore((state) => state.tagMap);
   const createTag = useTagStore((state) => state.createTag);
@@ -86,7 +89,9 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
   return (
     <>
       <div className="flex items-center justify-between w-full">
-        <span className="text-xs text-text-secondary">Tags</span>
+        <span className="text-xs text-text-secondary">
+          {t('settings.tags.title')}
+        </span>
         <button
           className="hover:bg-background-secondary rounded-full aspect-square h-[2rem]"
           onClick={() => openCreateTagModal()}
@@ -105,7 +110,7 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
               <span className="text-text-primary">{tag.name}</span>
 
               <span className="text-text-secondary">
-                {tag.count} job{tag.count !== 1 && 's'}
+                {t('settings.tags.jobs', { count: tag.count })}
               </span>
             </button>
           ))}

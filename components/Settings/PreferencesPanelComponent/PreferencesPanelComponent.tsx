@@ -7,17 +7,43 @@ import { SkeletonPreferencesPanelComponent } from './SkeletonPreferencesPanelCom
 import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
 import { Settings, SupportedLanguage } from '../../../types/settings';
 import { LanguageSelectorComponent } from '../../LanguageSelectorComponent/LanguageSelectorComponent';
+import { useTranslation } from 'react-i18next';
 
 export function PreferencesPanelComponent(): JSX.Element {
   const settings = useSettingsStore((state) => state.settings);
   const isLoading = useSettingsStore((state) => state.isLoading);
   const updateSettings = useSettingsStore((state) => state.updateSettings);
 
+  const { t, i18n } = useTranslation();
+
   const [formData, setFormData] = useState<Settings>(settings);
 
   useEffect(() => {
     setFormData(settings);
   }, [settings]);
+
+  const getTranslationForLanguage = (
+    key: string,
+    language: SupportedLanguage
+  ) => {
+    // Get the resources for the formData language
+    const resources = i18n.getResourceBundle(language, 'translation');
+
+    // Split the key by dots to traverse the nested object
+    const keys = key.split('.');
+    let value = resources;
+
+    // Traverse the nested object
+    for (const k of keys) {
+      if (value && typeof value === 'object') {
+        value = value[k];
+      } else {
+        return key; // Return the key if translation is not found
+      }
+    }
+
+    return value || key;
+  };
 
   const resetFormData = () => {
     // Reset form data to the initial settings, ensure re-render of color picker
@@ -66,7 +92,7 @@ export function PreferencesPanelComponent(): JSX.Element {
     <>
       <div className="w-full">
         <span className="text-xs flex items-center text-text-secondary min-h-[2rem]">
-          Preferences
+          {t('settings.preferences.title')}
         </span>
       </div>
       <div className="flex-1 w-full flex flex-col justify-evenly">
@@ -82,7 +108,9 @@ export function PreferencesPanelComponent(): JSX.Element {
         </div>
 
         <div className="w-full">
-          <span className="text-xs text-text-secondary">Primary Color</span>
+          <span className="text-xs text-text-secondary">
+            {t('settings.preferences.theme.primary-color')}
+          </span>
           <ColorPicker
             color={formData.theme.primaryColor}
             onColorSelect={(color) => handleColorSelect(color)}
@@ -94,6 +122,14 @@ export function PreferencesPanelComponent(): JSX.Element {
         <ButtonsComponent
           onSave={() => handleSave()}
           onCancel={() => resetFormData()}
+          saveText={getTranslationForLanguage(
+            'common.save',
+            formData.preferences.language
+          )}
+          cancelText={getTranslationForLanguage(
+            'common.cancel',
+            formData.preferences.language
+          )}
         />
       </div>
     </>

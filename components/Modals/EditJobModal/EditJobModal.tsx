@@ -6,6 +6,7 @@ import { TiWarningOutline } from 'react-icons/ti';
 import { TagEditor } from '../../TagEditor/TagEditor';
 import { StatusPickerComponent } from '../../StatusPickerComponent/StatusPickerComponent';
 import { JobStatus } from '../../../types/jobStatus';
+import { useTranslation } from 'react-i18next';
 
 export interface EditJobModalProps {
   job: Job;
@@ -21,6 +22,8 @@ export function EditJobModal({
   onDelete,
 }: EditJobModalProps): JSX.Element {
   const [formData, setFormData] = useState<Job>(job);
+
+  const { t } = useTranslation();
 
   // time until user can send a request again (rate-limiting)
   const [timeRemaining, setTimeRemaining] = useState(0);
@@ -81,10 +84,10 @@ export function EditJobModal({
           id='"edit-job-modal--form">'
         >
           <h2 className="text-xl font-semibold mb-4 text-text-primary text-center transition-all duration-text">
-            Edit Job
+            {t('modals.job.edit.title')}
           </h2>
           <span className="text-xs text-text-secondary">
-            JobID: <i>{formData.id}</i>
+            {t('modals.job.edit.job-id')}: <i>{formData.id}</i>
           </span>
         </div>
         <form className="w-full space-y-4">
@@ -94,15 +97,16 @@ export function EditJobModal({
                 htmlFor="company"
                 className="text-text-primary block text-xs"
               >
-                Company
+                {t('modals.job.shared.company')}*
               </label>
               <input
                 type="text"
                 id="company"
                 name="company"
-                placeholder="Company*"
+                placeholder={t('modals.job.shared.company-placeholder')}
                 value={formData.company}
                 onChange={handleChange}
+                required
                 className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
               />
             </div>
@@ -112,20 +116,22 @@ export function EditJobModal({
                 htmlFor="position"
                 className="text-text-primary block text-xs"
               >
-                Position
+                {t('modals.job.shared.position')}*
               </label>
               <input
                 type="text"
                 id="position"
                 name="position"
-                placeholder="Position*"
+                placeholder={t('modals.job.shared.position-placeholder')}
                 value={formData.position}
                 onChange={handleChange}
                 className="p-2 rounded w-full bg-background-primary text-text-primary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 border: border-background-secondary transition-all duration-200 ease-in-out focus:bg-background-secondary"
               />
             </div>
             <div className="w-full">
-              <label className="text-text-primary block text-xs">Status</label>
+              <label className="text-text-primary block text-xs">
+                {t('modals.job.shared.status')}
+              </label>
               <StatusPickerComponent
                 initialStatusID={formData.statusID}
                 onSelect={(status: JobStatus) =>
@@ -141,7 +147,7 @@ export function EditJobModal({
               type="button"
             >
               <span className="text-center text-text-secondary transition-all duration-text capitalize text-sm">
-                view {attributeDropDownOpen ? 'less' : 'more'}
+                {t(`common.view-${attributeDropDownOpen ? 'less' : 'more'}`)}
               </span>
             </button>
           </div>
@@ -153,7 +159,7 @@ export function EditJobModal({
                   htmlFor="location"
                   className="text-text-primary block text-xs"
                 >
-                  Location
+                  {t('modals.job.shared.location')}
                 </label>
                 <input
                   type="text"
@@ -161,7 +167,7 @@ export function EditJobModal({
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  placeholder="Location"
+                  placeholder={t('modals.job.shared.location-placeholder')}
                   className="w-full px-4 py-2 rounded-lg
                      bg-background-primary 
                      text-text-primary
@@ -177,20 +183,22 @@ export function EditJobModal({
                   htmlFor="URL"
                   className="text-text-primary block text-xs"
                 >
-                  URL
+                  {t('modals.job.shared.URL')}
                 </label>
                 <input
                   type="url"
                   id="URL"
                   name="URL"
-                  placeholder="e.g. https://www.Trckr.com"
+                  placeholder={t('modals.job.shared.URL-placeholder')}
                   value={formData.URL}
                   onChange={handleChange}
                   className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
                 />
               </div>
               <div className="w-full">
-                <label className="text-text-primary block text-xs">Tags</label>
+                <label className="text-text-primary block text-xs">
+                  {t('modals.job.shared.tags')}
+                </label>
                 <TagEditor
                   tagIds={formData.tagIds || []}
                   onTagsChange={(tagIds) => {
@@ -204,10 +212,13 @@ export function EditJobModal({
             </>
           )}
 
-          {formData.timestamps?.updatedAt && (
+          {job.timestamps?.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Last Updated at: {job.timestamps.updatedAt.toLocaleString()}
+                {t('modals.shared.last-updated', {
+                  date: job.timestamps.updatedAt.toLocaleDateString(),
+                  time: job.timestamps.updatedAt.toLocaleTimeString(),
+                })}
               </span>
             </div>
           )}
@@ -220,31 +231,30 @@ export function EditJobModal({
                 !formData.position || !formData.company || timeRemaining > 0
               }
             >
-              Save
+              {t('common.save')}
             </button>
             <button
               onClick={onClose}
               className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               onClick={handleDelete}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={timeRemaining > 0}
             >
-              Delete
+              {t('common.delete')}
             </button>
           </div>
 
           {timeRemaining > 0 && (
             <div className="mt-1 flex flex justify-center items-center gap-1">
               <span className="text-xs text-text-secondary transition-all duration-text">
-                Please wait {timeRemaining} second
-                {timeRemaining != 1 ? 's' : ''} to edit again.
+                {t('modals.shared.edit-wait-timer', { count: timeRemaining })}
               </span>
               <ToolTip
-                text="Rate limiting is enabled to prevent spam!"
+                text={t('modals.shared.rate-limit-message-tt')}
                 position="bottom"
               >
                 <TiWarningOutline className="text-xs text-text-secondary transition-all duration-text" />
@@ -256,7 +266,7 @@ export function EditJobModal({
       {formData.URL && (
         <div className="flex flex-col flex-1 flex-grow items-center min-h-full">
           <span className="text-text-secondary text-md hover:underline">
-            This is an extenal website!
+            {t('modals.job.edit.external-link-warning')}
           </span>
           <div className="flex-1 flex items-center justify-center w-full">
             <div className="w-[50%] aspect-square max-w-[100%] max-h-[100%]">

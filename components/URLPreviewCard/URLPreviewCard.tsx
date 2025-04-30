@@ -27,8 +27,6 @@ export function UrlPreviewCard({
 
   const formattedURL = formatUrl(link ?? '');
 
-  console.log(job);
-
   useEffect(() => {
     if (!link) return;
 

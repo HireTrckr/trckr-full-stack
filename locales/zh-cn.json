@@ -3,6 +3,7 @@
     "save": "保存",
     "cancel": "取消",
     "reset": "重置",
+    "edit": "编辑",
     "delete": "删除",
     "jobs_one": "工作",
     "jobs_other": "工作",
@@ -13,6 +14,26 @@
       "sign-in": "登录",
       "sign-out": "退出登录"
     }
+  },
+  "tag-editor": {
+    "tags-used_one": "已使用 {{count}}/{{limit}} 个标签",
+    "tags-used_other": "已使用 {{count}}/{{limit}} 个标签",
+    "new": "(新)",
+    "create-new-tag": "创建新标签：\"{{tag}}\"",
+    "tag-uses_one": "({{count}} 次使用)",
+    "tag-uses_other": "({{count}} 次使用)",
+    "placeholder_max_one": "已达最大数量 ({{count}} 个标签)",
+    "placeholder_max_other": "已达最大数量 ({{count}} 个标签)",
+    "placeholder_empty": "添加标签（以逗号或回车键分隔）"
+  },
+  "job-list": {
+    "title_zero": "我的工作申请",
+    "title_other": "我的工作申请 ({{count}})",
+    "no-jobs-found": "没有找到工作！添加一个新的工作申请来开始。"
+  },
+  "job-form": {
+    "title": "跟踪新工作申请",
+    "submit-button": "提交申请"
   },
   "navbar": {
     "track": "跟踪",

@@ -2,12 +2,14 @@ import { CustomJobStatusPanelComponent } from './CustomJobStatusPanelComponent/C
 import { CustomJobFieldPanelComponent } from './CustomJobFieldPanelComponent/CustomJobFieldPanelComponent';
 import { TagSettingsPanelComponent } from './TagSettingsPanelComponent/TagSettingsPanelComponent';
 import { PreferencesPanelComponent } from './PreferencesPanelComponent/PreferencesPanelComponent';
+import { useTranslation } from 'react-i18next';
 
 export function Settings() {
+  const { t } = useTranslation();
   return (
     <div className="text-text-primary transition-all duration-bg w-full flex flex-col gap-4 items-center bg-background-primary">
       <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
-        Settings
+        {t('settings.title')}
       </span>
       <div
         className="grid grid-cols-2 w-full gap-4 auto-rows-[16rem]"

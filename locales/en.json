@@ -3,6 +3,7 @@
     "save": "Save",
     "cancel": "Cancel",
     "reset": "Reset",
+    "edit": "Edit",
     "delete": "Delete",
     "jobs_one": "Job",
     "jobs_other": "Jobs",
@@ -102,6 +103,26 @@
         "external-link-warning": "This is an extenal website!"
       }
     }
+  },
+  "tag-editor": {
+    "tags-used_one": "{{count}}/{{limit}} Tag Used",
+    "tags-used_other": "{{count}}/{{limit}} Tags Used",
+    "new": "(new)",
+    "create-new-tag": "Create new tag: \"{{tag}}\"",
+    "tag-uses_one": "({{count}} use)",
+    "tag-uses_other": "({{count}} uses)",
+    "placeholder_max_one": "Maximum ({{count}} tag) reached",
+    "placeholder_max_other": "Maximum ({{count}} tags) reached",
+    "placeholder_empty": "Add tags (comma or enter to separate)"
+  },
+  "job-list": {
+    "title_zero": "My Job Applications",
+    "title_other": "My Job Applications ({{count}})",
+    "no-jobs-found": "No jobs found! Add a new job application to get started."
+  },
+  "job-form": {
+    "title": "Track a New Job Application",
+    "submit-button": "Track Application"
   },
   "colors": {
     "title": "Colors",
