@@ -553,13 +553,13 @@ export const useTagStore = create<TagStore>((set, get) => {
 
     updateTag: async (updatedTag: Tag) => {
       if (!auth.currentUser) return false;
-
       if (!updatedTag.id) return false;
-
       if (!get().tagMap[updatedTag.id]) return false;
 
       set({ isLoading: true, error: null });
       try {
+        updatedTag.timestamps.updatedAt = new Date();
+
         await updateDoc(
           doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
           {
