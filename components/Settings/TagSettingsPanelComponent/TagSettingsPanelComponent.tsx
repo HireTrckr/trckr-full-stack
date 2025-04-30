@@ -6,6 +6,8 @@ import { Job } from '../../../types/job';
 import { ModalTypes } from '../../../types/modalTypes';
 import { SkeletonTagSettingsPanelComponent } from './SkeletonTagSettingsPanelComponent/SkeletonTagSettingsPanelComponent';
 import { useTranslation } from 'react-i18next';
+import { NoDataComponent } from '../../NoDataComponent/NoDataComponent';
+import { FiTag } from 'react-icons/fi';
 
 interface TagSettingsPanelComponentProps {}
 
@@ -99,6 +101,17 @@ export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): J
           +
         </button>
       </div>
+      {Object.values(tags).length === 0 && (
+        <NoDataComponent
+          icon={FiTag}
+          title={t('settings.tags.no-tags-title')}
+          message={t('settings.tags.no-tags-msg')}
+          action={{
+            label: t('modals.tag.create.title'),
+            onClick: openCreateTagModal,
+          }}
+        />
+      )}
       <div className="grid grid-rows-4 grid-flow-col auto-cols-[30%] gap-2 min-w-full overflow-x-scroll">
         {tags &&
           Object.values(tags).map((tag: Tag) => (

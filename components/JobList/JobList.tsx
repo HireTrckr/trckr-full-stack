@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useJobStore } from '../../context/jobStore';
 import { useTagStore } from '../../context/tagStore';
 import { Job } from '../../types/job';
@@ -8,6 +8,10 @@ import { ModalProps, useModalStore } from '../../context/modalStore';
 import { ModalTypes } from '../../types/modalTypes';
 import { SkeletonJobListComponent } from '../SkeletonJobListComponent/SkeletonJobListComponent';
 import { useTranslation } from 'react-i18next';
+
+import { FiBriefcase } from 'react-icons/fi';
+
+import { NoDataComponent } from '../NoDataComponent/NoDataComponent';
 
 export const JobList: React.FC = () => {
   const { jobs, updateJob, deleteJob } = useJobStore.getState();
@@ -70,13 +74,24 @@ export const JobList: React.FC = () => {
     <div className="w-full transition-colors duration-bg">
       <div className="flex justify-center items-center mb-3">
         <span className="text-2xl font-semibold text-text-primary flex items-center transition-colors duration-text">
-          {t('job-list.title', { count: jobs.length })}
+          {t('job-list.title', { count: jobs.length ?? 0 })}
         </span>
       </div>
 
       {jobs.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-text-secondary">{t('job-list.no-jobs-found')}</p>
+          <NoDataComponent
+            icon={FiBriefcase}
+            title={t('job-list.no-jobs-title')}
+            message={t('job-list.no-jobs-msg')}
+            action={{
+              label: t('navbar.add-new'),
+              onClick: () => {
+                // make button Link to /new
+                window.location.href = '/new';
+              },
+            }}
+          />
         </div>
       ) : (
         <ul className="relative px-3">
