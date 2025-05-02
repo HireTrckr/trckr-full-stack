@@ -81,7 +81,7 @@ type StatusStore = {
   getStatusFromID: (statusID: JobStatus['id']) => JobStatus;
 };
 
-const { createToast } = useToastStore.getState();
+const { createTranslatedToast } = useToastStore.getState();
 const { getJobsWithStatus, updateJob } = useJobStore.getState();
 
 const getStatusMap = async (
@@ -91,10 +91,12 @@ const getStatusMap = async (
   const statusDoc = await getDoc(ref);
 
   if (!statusDoc.exists()) {
-    createToast(
-      onErrorMsg ?? 'Statuses not found',
+    createTranslatedToast(
+      'toasts.errors.statusesNotFound',
       true,
-      'Error',
+      'toasts.titles.error',
+      { message: onErrorMsg ?? 'Statuses not found' },
+      {},
       ToastCategory.ERROR
     );
     return {} as StatusMap;
@@ -163,10 +165,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error fetching statuses:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.fetchStatuses',
         true,
-        'Error fetching statuses',
+        'toasts.titles.error',
+        { message: (error as Error).message },
+        {},
         ToastCategory.ERROR
       );
       set({ error: `Failed to fetch statuses: ${error}`, isLoading: false });
@@ -210,10 +214,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         isLoading: false,
       }));
 
-      createToast(
-        `Status "${newStatus.statusName}" created successfully`,
+      createTranslatedToast(
+        'toasts.statusCreated',
         true,
-        'Status Created',
+        'toasts.titles.statusCreated',
+        { name: newStatus.statusName },
+        {},
         ToastCategory.INFO,
         5000,
         undefined,
@@ -225,10 +231,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return newID;
     } catch (error) {
       console.error('[statusStore.ts] Error creating status:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.createStatus',
         true,
-        'Error creating status',
+        'toasts.titles.error',
+        { name: status.statusName, message: (error as Error).message },
+        {},
         ToastCategory.ERROR
       );
       set({ error: `Failed to create status: ${error}`, isLoading: false });
@@ -243,10 +251,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     if (!status) return false;
 
     if (!status.deletable) {
-      createToast(
-        'Cannot delete default status',
+      createTranslatedToast(
+        'toasts.errors.cannotDeleteDefaultStatus',
         true,
-        'Operation Failed',
+        'toasts.titles.operationFailed',
+        { name: status.statusName },
+        {},
         ToastCategory.ERROR
       );
       return false;
@@ -275,10 +285,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         updateJob({ ...job, statusID: 'notAllowed' });
       });
 
-      createToast(
-        `Status "${status.statusName}" deleted successfully`,
+      createTranslatedToast(
+        'toasts.statusDeleted',
         true,
-        'Status Deleted',
+        'toasts.titles.statusDeleted',
+        { name: status.statusName },
+        {},
         ToastCategory.INFO,
         5000,
         undefined,
@@ -290,10 +302,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error deleting status:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.deleteStatus',
         true,
-        'Error deleting status',
+        'toasts.titles.error',
+        { name: status.statusName, message: (error as Error).message },
+        {},
         ToastCategory.ERROR
       );
       set({ error: `Failed to delete status: ${error}`, isLoading: false });
@@ -308,10 +322,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     if (!existingStatus) return false;
 
     if (!existingStatus.deletable) {
-      createToast(
-        'Cannot modify default status',
+      createTranslatedToast(
+        'toasts.errors.cannotModifyDefaultStatus',
         true,
-        'Operation Failed',
+        'toasts.titles.operationFailed',
+        { name: existingStatus.statusName },
+        {},
         ToastCategory.ERROR
       );
       return false;
@@ -341,10 +357,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         isLoading: false,
       }));
 
-      createToast(
-        `Status "${status.statusName}" updated successfully`,
+      createTranslatedToast(
+        'toasts.statusUpdated',
         true,
-        'Status Updated',
+        'toasts.titles.statusUpdated',
+        { name: status.statusName },
+        {},
         ToastCategory.INFO,
         5000,
         undefined,
@@ -356,10 +374,12 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error updating status:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.updateStatus',
         true,
-        'Error updating status',
+        'toasts.titles.error',
+        { name: status.statusName, message: (error as Error).message },
+        {},
         ToastCategory.ERROR
       );
       set({ error: `Failed to update status: ${error}`, isLoading: false });
@@ -395,20 +415,24 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         isLoading: false,
       });
 
-      createToast(
-        'All statuses have been reset to defaults',
+      createTranslatedToast(
+        'toasts.statusesReset',
         true,
-        'Statuses Reset',
+        'toasts.titles.statusesReset',
+        {},
+        {},
         ToastCategory.INFO
       );
 
       return true;
     } catch (error) {
       console.error('[statusStore.ts] Error resetting statuses:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.resetStatuses',
         true,
-        'Error resetting statuses',
+        'toasts.titles.error',
+        { message: (error as Error).message },
+        {},
         ToastCategory.ERROR
       );
       set({ error: `Failed to reset statuses: ${error}`, isLoading: false });

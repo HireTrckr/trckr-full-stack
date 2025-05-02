@@ -124,7 +124,7 @@ type TagStorePlusPrivate = TagStore & {
  */
 export const TAGS_PER_RECORD = 5;
 
-const { createToast } = useToastStore.getState();
+const { createTranslatedToast } = useToastStore.getState();
 
 export const useTagStore = create<TagStore>((set, get) => {
   const self = get as () => TagStorePlusPrivate;
@@ -180,10 +180,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ tagMap, _lastFetched: new Date() } as TagStorePlusPrivate);
       } catch (error) {
         console.error('[tagStore.ts] Error fetching tags:', error);
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.fetchTags',
           true,
-          'Error fetching tags',
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );
@@ -241,10 +243,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         const newTagMap = { ...get().tagMap };
         delete newTagMap[tagId];
         set({ tagMap: newTagMap });
-        createToast(
-          `Tag deleted successfully`,
+        createTranslatedToast(
+          'toasts.tagDeleted',
           true,
-          'Tag Deleted',
+          'toasts.titles.tagDeleted',
+          { name: tag.name },
+          {},
           ToastCategory.INFO,
           3000,
           () => {},
@@ -255,10 +259,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         );
       } catch (error) {
         console.error(`[tagStore.ts] Error deleting tag: ${tagId}`, error);
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.deleteTag',
           true,
-          `Error deleting tag ${get().tagMap[tagId].name}`,
+          'toasts.titles.error',
+          { name: get().tagMap[tagId].name, message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );
@@ -307,10 +313,12 @@ export const useTagStore = create<TagStore>((set, get) => {
           isLoading: false,
         }));
 
-        createToast(
-          `Tag "${newTag.name}" created successfully`,
+        createTranslatedToast(
+          'toasts.tagCreated',
           true,
-          'Status Created',
+          'toasts.titles.tagCreated',
+          { name: newTag.name },
+          {},
           ToastCategory.INFO,
           5000,
           () => {},
@@ -321,10 +329,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         return newID;
       } catch (error) {
         console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.createTag',
           true,
-          `Error creating tag ${tag.name}`,
+          'toasts.titles.error',
+          { name: tag.name, message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );
@@ -408,10 +418,12 @@ export const useTagStore = create<TagStore>((set, get) => {
             },
           },
         }));
-        createToast(
-          `Tag "${tag.name}" added to job successfully`,
+        createTranslatedToast(
+          'toasts.tagAddedToJob',
           true,
-          'Tag Added',
+          'toasts.titles.tagAdded',
+          { name: tag.name },
+          {},
           ToastCategory.INFO,
           3000,
           () => {},
@@ -422,10 +434,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         );
       } catch (error) {
         console.error(`[tagStore.ts] Error adding tag to job: ${jobId}`, error);
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.addTagToJob',
           true,
-          `Error adding tag to job`,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );
@@ -489,10 +503,12 @@ export const useTagStore = create<TagStore>((set, get) => {
           tagIds: (job.tagIds || []).filter((tag) => tag !== tagId),
         };
         await jobStore.updateJob(updatedJob);
-        createToast(
-          `Tag "${tag.name}" removed from job successfully`,
+        createTranslatedToast(
+          'toasts.tagRemovedFromJob',
           true,
-          'Tag Removed',
+          'toasts.titles.tagRemoved',
+          { name: tag.name },
+          {},
           ToastCategory.INFO,
           3000,
           () => {},
@@ -506,10 +522,12 @@ export const useTagStore = create<TagStore>((set, get) => {
           `[tagStore.ts] Error removing tag from job: ${jobId}`,
           error
         );
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.removeTagFromJob',
           true,
-          `Error removing tag from job`,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );
@@ -544,6 +562,15 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ tagMap: {} });
       } catch (error) {
         console.error(`[tagStore.ts] Error clearing tags`, error);
+        createTranslatedToast(
+          'toasts.errors.clearTags',
+          true,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
+          ToastCategory.ERROR,
+          10000
+        );
         set({ error: `Failed to clear tags: ${error}` });
       } finally {
         set({ isLoading: false });
@@ -572,10 +599,12 @@ export const useTagStore = create<TagStore>((set, get) => {
             [updatedTag.id]: updatedTag,
           },
         }));
-        createToast(
-          `Tag "${updatedTag.name}" updated successfully`,
+        createTranslatedToast(
+          'toasts.tagUpdated',
           true,
-          'Tag Updated',
+          'toasts.titles.tagUpdated',
+          { name: updatedTag.name },
+          {},
           ToastCategory.INFO,
           3000
         );
@@ -584,10 +613,12 @@ export const useTagStore = create<TagStore>((set, get) => {
           `[tagStore.ts] Error updating tag: ${updatedTag.id}`,
           error
         );
-        createToast(
-          (error as Error).message,
+        createTranslatedToast(
+          'toasts.errors.updateTag',
           true,
-          `Error updating tag`,
+          'toasts.titles.error',
+          { name: updatedTag.name, message: (error as Error).message },
+          {},
           ToastCategory.ERROR,
           10000
         );

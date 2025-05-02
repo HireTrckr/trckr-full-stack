@@ -8,8 +8,6 @@ import colors from 'tailwindcss/colors';
 import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 
-const { createToast } = useToastStore.getState();
-
 type SettingsStore = {
   settings: Settings;
   isLoading: boolean;
@@ -74,13 +72,17 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       set({ settings });
     } catch (error) {
       console.error('[tagStore.ts] Error fetching settings:', error);
-      createToast(
-        (error as Error).message,
-        true,
-        'Error fetching settings',
-        ToastCategory.ERROR,
-        10000
-      );
+      useToastStore
+        .getState()
+        .createTranslatedToast(
+          'toasts.errors.fetchSettings',
+          true,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
+          ToastCategory.ERROR,
+          10000
+        );
       set({ error: `Failed to fetch settings: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -115,10 +117,12 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
       set({ settings: newSettings });
       applyTailwindThemeColor(newSettings.theme.primaryColor);
-      createToast(
-        'Settings updated successfully',
+      useToastStore.getState().createTranslatedToast(
+        'toasts.settingsUpdated',
         true,
-        'Settings updated',
+        'toasts.titles.settingsUpdated',
+        {},
+        {},
         ToastCategory.INFO,
         3000,
         () => {},
@@ -129,13 +133,17 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       );
     } catch (error) {
       console.error('[settingsStore.ts] Error updating settings:', error);
-      createToast(
-        (error as Error).message,
-        true,
-        'Error updating settings',
-        ToastCategory.ERROR,
-        10000
-      );
+      useToastStore
+        .getState()
+        .createTranslatedToast(
+          'toasts.errors.updateSettings',
+          true,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
+          ToastCategory.ERROR,
+          10000
+        );
       set({ error: `Failed to update settings: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -174,10 +182,12 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
       set({ settings: newSettings });
       applyTailwindThemeColor(newSettings.theme.primaryColor);
-      createToast(
-        'Settings updated successfully',
+      useToastStore.getState().createTranslatedToast(
+        'toasts.settingsUpdated',
         true,
-        'Settings updated',
+        'toasts.titles.settingsUpdated',
+        {},
+        {},
         ToastCategory.INFO,
         3000,
         () => {},
@@ -188,13 +198,17 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       );
     } catch (error) {
       console.error('[settingsStore.ts] Error updating settings:', error);
-      createToast(
-        (error as Error).message,
-        true,
-        `Error updating settings`,
-        ToastCategory.ERROR,
-        10000
-      );
+      useToastStore
+        .getState()
+        .createTranslatedToast(
+          'toasts.errors.updateSettings',
+          true,
+          'toasts.titles.error',
+          { message: (error as Error).message },
+          {},
+          ToastCategory.ERROR,
+          10000
+        );
       set({ error: `Failed to update settings: ${error}` });
     } finally {
       set({ isLoading: false });

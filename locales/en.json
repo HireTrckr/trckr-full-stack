@@ -16,6 +16,62 @@
       "loading": "Loading User Data..."
     }
   },
+  "toasts": {
+    "actions": {
+      "undo": "Undo"
+    },
+    "titles": {
+      "jobAdded": "Job added",
+      "jobDeleted": "Job deleted",
+      "settingsUpdated": "Settings updated",
+      "tagCreated": "Tag created",
+      "tagDeleted": "Tag deleted",
+      "tagUpdated": "Tag updated",
+      "tagAdded": "Tag added",
+      "tagRemoved": "Tag removed",
+      "statusCreated": "Status created",
+      "statusDeleted": "Status deleted",
+      "statusUpdated": "Status updated",
+      "statusesReset": "Statuses reset",
+      "operationFailed": "Operation failed",
+      "error": "Error"
+    },
+    "jobAdded": "Job {{position}} at {{company}} added successfully",
+    "jobDeleted": "Job {{position}} at {{company}} deleted successfully",
+    "settingsUpdated": "Settings updated successfully",
+    "tagCreated": "Tag \"{{name}}\" created successfully",
+    "tagDeleted": "Tag \"{{name}}\" deleted successfully",
+    "tagUpdated": "Tag \"{{name}}\" updated successfully",
+    "tagAddedToJob": "Tag \"{{name}}\" added to job successfully",
+    "tagRemovedFromJob": "Tag \"{{name}}\" removed from job successfully",
+    "statusCreated": "Status \"{{name}}\" created successfully",
+    "statusDeleted": "Status \"{{name}}\" deleted successfully",
+    "statusUpdated": "Status \"{{name}}\" updated successfully",
+    "statusesReset": "All statuses have been reset to defaults",
+    "errors": {
+      "fetchSettings": "Error fetching settings",
+      "updateSettings": "Error updating settings",
+      "addJob": "Error adding job {{position}} at {{company}}",
+      "deleteJob": "Error deleting job {{position}} at {{company}}",
+      "updateJob": "Error updating job {{position}} at {{company}}",
+      "clearJobs": "Error clearing jobs",
+      "fetchTags": "Error fetching tags",
+      "createTag": "Error creating tag {{name}}",
+      "deleteTag": "Error deleting tag {{name}}",
+      "updateTag": "Error updating tag {{name}}",
+      "addTagToJob": "Error adding tag to job",
+      "removeTagFromJob": "Error removing tag from job",
+      "clearTags": "Error clearing tags",
+      "fetchStatuses": "Error fetching statuses",
+      "createStatus": "Error creating status {{name}}",
+      "deleteStatus": "Error deleting status {{name}}",
+      "updateStatus": "Error updating status {{name}}",
+      "resetStatuses": "Error resetting statuses",
+      "cannotDeleteDefaultStatus": "Cannot delete default status \"{{name}}\"",
+      "cannotModifyDefaultStatus": "Cannot modify default status \"{{name}}\"",
+      "statusesNotFound": "{{message}}"
+    }
+  },
   "404": {
     "title": "404 - Page Not Found",
     "description": "The page you are looking for does not exist.",

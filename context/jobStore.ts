@@ -26,7 +26,7 @@ type JobStore = {
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 };
 
-const { createToast } = useToastStore.getState();
+const {  createTranslatedToast } = useToastStore.getState();
 
 export const useJobStore = create<JobStore>((set, get) => ({
   jobs: [],
@@ -116,10 +116,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
       }));
 
       // send toast notification
-      createToast(
-        `Job ${job.position} at ${job.company} added successfully`,
+      createTranslatedToast(
+        'toasts.jobAdded',
         true,
-        'Job added',
+        'toasts.titles.jobAdded',
+        { position: job.position, company: job.company },
+        {},
         ToastCategory.INFO,
         3000,
         () => {},
@@ -130,10 +132,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
       );
     } catch (error) {
       console.error('[jobStore.ts] Error adding job:', error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.addJob',
         true,
-        `Error adding job ${job.position} at ${job.company}`,
+        'toasts.titles.error',
+        { position: job.position, company: job.company, message: (error as Error).message },
+        {},
         ToastCategory.ERROR,
         10000
       );
@@ -170,10 +174,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
         jobs: state.jobs.filter((j) => j.id !== job.id),
       }));
       // send toast notification
-      createToast(
-        `Job ${job.position} at ${job.company} deleted successfully`,
+      createTranslatedToast(
+        'toasts.jobDeleted',
         true,
-        'Job added',
+        'toasts.titles.jobDeleted',
+        { position: job.position, company: job.company },
+        {},
         ToastCategory.INFO,
         3000,
         () => {},
@@ -184,10 +190,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
       );
     } catch (error) {
       console.error(`[jobStore.ts] Error deleting job: ${job.id}`, error);
-      createToast(
-        (error as Error).message,
+      createTranslatedToast(
+        'toasts.errors.deleteJob',
         true,
-        `Error deleting job ${job.position} at ${job.company}`,
+        'toasts.titles.error',
+        { position: job.position, company: job.company, message: (error as Error).message },
+        {},
         ToastCategory.ERROR,
         10000
       );
@@ -221,6 +229,15 @@ export const useJobStore = create<JobStore>((set, get) => ({
       }));
     } catch (error) {
       console.error(`[jobStore.ts] Error updating job: ${job.id}`, error);
+      createTranslatedToast(
+        'toasts.errors.updateJob',
+        true,
+        'toasts.titles.error',
+        { position: job.position, company: job.company, message: (error as Error).message },
+        {},
+        ToastCategory.ERROR,
+        10000
+      );
       set({ error: `Failed to update job: ${error}` });
     } finally {
       set({ isLoading: false });
@@ -235,6 +252,15 @@ export const useJobStore = create<JobStore>((set, get) => ({
       set({ jobs: [] });
     } catch (error) {
       console.error(`[jobStore.ts] Error clearing jobs`, error);
+      createTranslatedToast(
+        'toasts.errors.clearJobs',
+        true,
+        'toasts.titles.error',
+        { message: (error as Error).message },
+        {},
+        ToastCategory.ERROR,
+        10000
+      );
       set({ error: `Failed to clear jobs: ${error}` });
     } finally {
       set({ isLoading: false });

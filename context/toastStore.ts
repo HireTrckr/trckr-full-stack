@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Toast, ToastCategory, MetaToast } from '../types/toast';
+import i18n from '../lib/i18n';
 
 const generateToastId = (
   severity: ToastCategory = ToastCategory.INFO
@@ -39,10 +40,13 @@ type toastStore = {
   toastQueue: ToastQueue;
   currentToast: Toast | null;
   addToast: (toast: Toast) => boolean;
-  createToast: (
-    msg: string,
+
+  createTranslatedToast: (
+    messageKey: string,
     addToStore: boolean,
-    title?: string,
+    titleKey?: string,
+    messageParams?: Record<string, any>,
+    titleParams?: Record<string, any>,
     type?: ToastCategory,
     duration?: number,
     onClick?: () => void,
@@ -55,6 +59,8 @@ type toastStore = {
 
 const defaultToast: MetaToast = {
   title: '',
+  titleKey: '',
+  titleParams: {},
   type: ToastCategory.INFO,
   duration: 5000,
   onClick: () => {},
@@ -98,18 +104,30 @@ export const useToastStore = create<toastStore>((set, get) => ({
     }
   },
 
-  createToast(
-    msg,
+  createTranslatedToast(
+    messageKey,
     addToStore = false,
-    title = defaultToast.title,
+    titleKey = '',
+    messageParams = {},
+    titleParams = {},
     type = ToastCategory.INFO,
     duration = defaultToast.duration,
     onClick,
     undo
   ) {
+    // Translate the message and title using i18n
+    const message = i18n.t(messageKey, messageParams).toString();
+    const title = titleKey
+      ? i18n.t(titleKey, titleParams).toString()
+      : defaultToast.title;
+
     const newToast: Toast = {
-      message: msg,
+      message,
+      messageKey,
+      messageParams,
       title,
+      titleKey,
+      titleParams,
       type,
       duration,
       onClick,

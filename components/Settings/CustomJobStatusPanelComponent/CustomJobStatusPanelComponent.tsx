@@ -26,7 +26,7 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
   );
   const closeModal = useModalStore((state) => state.closeModal);
 
-  const { createToast } = useToastStore();
+  const { createTranslatedToast } = useToastStore();
 
   const handleReset = () => {
     // remove all custom status
@@ -45,15 +45,7 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
         },
 
         onSave: async (status: Partial<JobStatusNotSavedInDB>) => {
-          const id = await createStatus(status);
-          if (!id) {
-            createToast(
-              'Failed to create status',
-              true,
-              'Operation Failed',
-              ToastCategory.ERROR
-            );
-          }
+          createStatus(status);
           closeModal();
         },
       },
