@@ -427,7 +427,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       (get().statusMap['not-applied'] as JobStatus) ||
       ({
         id: 'not-applied',
-        statusName: 'Not Applied',
+        statusName: 'default-status.not-applied',
         color: 'gray',
         deletable: false,
         timestamps: {
