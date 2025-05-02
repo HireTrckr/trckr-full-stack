@@ -10,6 +10,7 @@ import {
 import { useTagStore } from '../../../context/tagStore';
 import { DEFAULT_SETTINGS } from '../../../types/settings';
 import { useStatusStore } from '../../../context/statusStore';
+import { useTranslation } from 'react-i18next';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -20,6 +21,8 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const [user, loading] = useAuthState(auth);
   const [mounted, setMounted] = useState(false);
 
+  const { t } = useTranslation();
+
   const fetchTags = useTagStore((state) => state.fetchTags);
   const fetchJobs = useJobStore((state) => state.fetchJobs);
   const fetchSettings = useSettingsStore((state) => state.fetchSettings);
@@ -29,10 +32,10 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     if (!user) return;
 
     // load user data into stores
-    fetchTags();
-    fetchJobs();
-    fetchSettings();
-    fetchStatus();
+    await fetchTags();
+    await fetchJobs();
+    await fetchSettings();
+    await fetchStatus();
   };
 
   useEffect(() => {
@@ -55,7 +58,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
       <div className="w-full p-6">
         <div className="bg-background-primary rounded-lg p-6 transition-all duration-bg ease-in-out flex flex-col items-center gap-2 hover:scale-[1.02]">
           <span className="text-md font-semibold text-text-primary flex items-center transition-colors duration-text capitalize">
-            Loading User Data...
+            {t('common.auth.loading')}
           </span>
           <svg
             aria-hidden="true"
