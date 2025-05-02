@@ -19,6 +19,7 @@ export function StatusPickerComponent({
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>(
     getStatusFromID(initialStatusID)
   );
+
   const statusDropDownButtonRef = React.useRef<HTMLButtonElement>(null);
   const statusDropDownRef = React.useRef<HTMLDivElement>(null);
 
@@ -38,7 +39,7 @@ export function StatusPickerComponent({
         ref={statusDropDownButtonRef}
         type="button"
       >
-        {selectedStatus.deletable
+        {selectedStatus?.deletable
           ? selectedStatus.statusName
           : t(selectedStatus.statusName)}
         <TiArrowSortedDown

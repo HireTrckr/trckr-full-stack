@@ -16,7 +16,7 @@ export function JobForm() {
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
     position: '',
-    statusID: 'not applied' as JobStatus['id'],
+    statusID: 'not-applied' as JobStatus['id'],
     location: '',
     URL: '',
     tagIds: [],
@@ -59,7 +59,7 @@ export function JobForm() {
     setJob({
       company: '',
       position: '',
-      statusID: 'not applied' as JobStatus['id'],
+      statusID: 'not-applied',
       location: '',
       URL: '',
       tagIds: [] as Job['tagIds'],
