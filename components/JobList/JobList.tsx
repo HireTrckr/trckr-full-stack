@@ -8,13 +8,14 @@ import { ModalProps, useModalStore } from '../../context/modalStore';
 import { ModalTypes } from '../../types/modalTypes';
 import { SkeletonJobListComponent } from '../SkeletonJobListComponent/SkeletonJobListComponent';
 import { useTranslation } from 'react-i18next';
-
+import { useRouter } from 'next/router';
 import { FiBriefcase } from 'react-icons/fi';
 
 import { NoDataComponent } from '../NoDataComponent/NoDataComponent';
 
 export const JobList: React.FC = () => {
   const { jobs, updateJob, deleteJob } = useJobStore.getState();
+  const router = useRouter();
 
   const openJobEditorModal = useModalStore((state) => state.openJobEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
@@ -87,8 +88,8 @@ export const JobList: React.FC = () => {
             action={{
               label: t('navbar.add-new'),
               onClick: () => {
-                // make button Link to /new
-                window.location.href = '/new';
+                // make button Link to /new, without reloading the page
+                router.push('/new');
               },
             }}
           />
