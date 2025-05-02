@@ -5,9 +5,7 @@ export function ToastsComponent() {
   const currentToast = useToastStore((state) => state.currentToast);
   const removeCurrentToast = useToastStore((state) => state.removeCurrentToast);
 
-  if (!currentToast) {
-    return <></>;
-  }
+  if (!currentToast) return <></>;
 
   return (
     <div className="fixed z-[100]" id="toast-overlay">

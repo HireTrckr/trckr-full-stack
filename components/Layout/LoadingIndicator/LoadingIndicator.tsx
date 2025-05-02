@@ -45,7 +45,7 @@ export function LoadingIndicator() {
 
   //if (!mounted) return null;
 
-  //if (notifications.length == 0) return null;
+  if (notifications.length == 0) return <></>;
 
   return (
     <div className="fixed z-[100]" id="loading-indicator-overlay">
