@@ -1,6 +1,7 @@
 // pages/_error.tsx
 import { NextPageContext } from 'next';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 
 interface ErrorProps {
   statusCode?: number;
@@ -20,13 +21,13 @@ function Error({ statusCode }: ErrorProps) {
       <p className="text-text-primary mb-6 transition-colors duration-text">
         {t('error.description')}
       </p>
-      <a
+      <Link
         href="/"
         className="px-4 py-2 bg-accent-primary text-text-accent rounded-md
                   hover:brightness-[80%] transition-colors duration-text"
       >
         {t('404.button')}
-      </a>
+      </Link>
     </div>
   );
 }

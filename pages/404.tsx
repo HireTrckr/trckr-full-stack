@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 
 export default function Custom404() {
   const { t } = useTranslation();
@@ -11,13 +12,13 @@ export default function Custom404() {
       <p className="text-text-primary mb-6 transition-colors duration-text">
         {t('404.description')}
       </p>
-      <a
+      <Link
         href="/"
         className="px-4 py-2 bg-accent-primary text-text-accent rounded-md
                   hover:brightness-[80%] transition-colors duration-text"
       >
         {t('404.button')}
-      </a>
+      </Link>
     </div>
   );
 }
