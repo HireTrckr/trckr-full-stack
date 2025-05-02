@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Toast, ToastCategory } from '../../../../types/toast';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { TailwindColorName } from '../../../../types/tailwindColor';
+import { useTranslation } from 'react-i18next';
 interface ToastMessageComponentProps {
   toast: Toast;
   onExpire: () => void;
@@ -25,6 +26,7 @@ export function ToastMessageComponent({
   onExpire,
   onSkip,
 }: ToastMessageComponentProps) {
+  const { t } = useTranslation();
   const [isLeaving, setIsLeaving] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(
     toast.duration || null
@@ -69,11 +71,13 @@ export function ToastMessageComponent({
     >
       <div className="p-2 flex flex-col pb-0">
         <div className="flex justify-between items-center min-h-[1rem]">
-          {toast.title && (
+          {((toast.titleKey && toast.titleParams) || toast.title) && (
             <span
               className={`text-sm text-center text-${toastColor}-400 flex items-center justify-center h-full`}
             >
-              {toast.title}
+              {toast.titleKey
+                ? t(toast.titleKey, toast.titleParams)
+                : toast.title}
             </span>
           )}
 
@@ -91,7 +95,9 @@ export function ToastMessageComponent({
           className={`text-md text-${toastColor}-600 ${toast.onClick ? `cursor-pointer hover:underline` : ''}`}
           onClick={toast.onClick}
         >
-          {toast.message}
+          {toast.messageKey
+            ? t(toast.messageKey, toast.messageParams)
+            : toast.message}
         </span>
 
         <div className="flex justify-between">
@@ -106,7 +112,7 @@ export function ToastMessageComponent({
               }}
               className={`text-${toastColor}-600 text-xs hover:underline`}
             >
-              Undo
+              {t('toasts.actions.undo')}
             </button>
           )}
         </div>
