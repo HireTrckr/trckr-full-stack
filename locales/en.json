@@ -16,6 +16,10 @@
       "loading": "Loading User Data..."
     }
   },
+  "cookies": {
+    "message": "This website uses cookies to ensure you are kept logged in.",
+    "acknowledge": "Acknowledge"
+  },
   "toasts": {
     "actions": {
       "undo": "Undo"

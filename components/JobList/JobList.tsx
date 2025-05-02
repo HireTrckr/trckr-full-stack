@@ -96,6 +96,8 @@ export const JobList: React.FC = () => {
         </div>
       ) : (
         <ul className="relative px-3">
+          <span>Sort</span>
+          <span>Filter</span>
           {jobs.map((job) => {
             const isActive =
               jobWithOpenDropdown === job ||
