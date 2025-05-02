@@ -32,10 +32,10 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     if (!user) return;
 
     // load user data into stores
-    await fetchTags();
-    await fetchJobs();
-    await fetchSettings();
-    await fetchStatus();
+    fetchTags();
+    fetchJobs();
+    fetchSettings();
+    fetchStatus();
   };
 
   useEffect(() => {
