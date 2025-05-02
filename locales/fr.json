@@ -16,6 +16,62 @@
       "loading": "Chargement des données utilisateur..."
     }
   },
+  "toasts": {
+    "actions": {
+      "undo": "Annuler"
+    },
+    "titles": {
+      "jobAdded": "Emploi ajouté",
+      "jobDeleted": "Emploi supprimé",
+      "settingsUpdated": "Paramètres mis à jour",
+      "tagCreated": "Étiquette créée",
+      "tagDeleted": "Étiquette supprimée",
+      "tagUpdated": "Étiquette mise à jour",
+      "tagAdded": "Étiquette ajoutée",
+      "tagRemoved": "Étiquette retirée",
+      "statusCreated": "Statut créé",
+      "statusDeleted": "Statut supprimé",
+      "statusUpdated": "Statut mis à jour",
+      "statusesReset": "Statuts réinitialisés",
+      "operationFailed": "Opération échouée",
+      "error": "Erreur"
+    },
+    "jobAdded": "Emploi {{position}} chez {{company}} ajouté avec succès",
+    "jobDeleted": "Emploi {{position}} chez {{company}} supprimé avec succès",
+    "settingsUpdated": "Paramètres mis à jour avec succès",
+    "tagCreated": "Étiquette \"{{name}}\" créée avec succès",
+    "tagDeleted": "Étiquette \"{{name}}\" supprimée avec succès",
+    "tagUpdated": "Étiquette \"{{name}}\" mise à jour avec succès",
+    "tagAddedToJob": "Étiquette \"{{name}}\" ajoutée à l'emploi avec succès",
+    "tagRemovedFromJob": "Étiquette \"{{name}}\" retirée de l'emploi avec succès",
+    "statusCreated": "Statut \"{{name}}\" créé avec succès",
+    "statusDeleted": "Statut \"{{name}}\" supprimé avec succès",
+    "statusUpdated": "Statut \"{{name}}\" mis à jour avec succès",
+    "statusesReset": "Tous les statuts ont été réinitialisés aux valeurs par défaut",
+    "errors": {
+      "fetchSettings": "Erreur lors de la récupération des paramètres",
+      "updateSettings": "Erreur lors de la mise à jour des paramètres",
+      "addJob": "Erreur lors de l'ajout de l'emploi {{position}} chez {{company}}",
+      "deleteJob": "Erreur lors de la suppression de l'emploi {{position}} chez {{company}}",
+      "updateJob": "Erreur lors de la mise à jour de l'emploi {{position}} chez {{company}}",
+      "clearJobs": "Erreur lors de l'effacement des emplois",
+      "fetchTags": "Erreur lors de la récupération des étiquettes",
+      "createTag": "Erreur lors de la création de l'étiquette {{name}}",
+      "deleteTag": "Erreur lors de la suppression de l'étiquette {{name}}",
+      "updateTag": "Erreur lors de la mise à jour de l'étiquette {{name}}",
+      "addTagToJob": "Erreur lors de l'ajout de l'étiquette à l'emploi",
+      "removeTagFromJob": "Erreur lors du retrait de l'étiquette de l'emploi",
+      "clearTags": "Erreur lors de l'effacement des étiquettes",
+      "fetchStatuses": "Erreur lors de la récupération des statuts",
+      "createStatus": "Erreur lors de la création du statut {{name}}",
+      "deleteStatus": "Erreur lors de la suppression du statut {{name}}",
+      "updateStatus": "Erreur lors de la mise à jour du statut {{name}}",
+      "resetStatuses": "Erreur lors de la réinitialisation des statuts",
+      "cannotDeleteDefaultStatus": "Impossible de supprimer le statut par défaut \"{{name}}\"",
+      "cannotModifyDefaultStatus": "Impossible de modifier le statut par défaut \"{{name}}\"",
+      "statusesNotFound": "{{message}}"
+    }
+  },
   "404": {
     "title": "404 - Page Non Trouvée",
     "description": "La page que vous recherchez n'existe pas.",

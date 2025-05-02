@@ -16,6 +16,62 @@
       "loading": "正在載入用戶資料..."
     }
   },
+  "toasts": {
+    "actions": {
+      "undo": "撤銷"
+    },
+    "titles": {
+      "jobAdded": "工作已新增",
+      "jobDeleted": "工作已刪除",
+      "settingsUpdated": "設定已更新",
+      "tagCreated": "標籤已建立",
+      "tagDeleted": "標籤已刪除",
+      "tagUpdated": "標籤已更新",
+      "tagAdded": "標籤已新增",
+      "tagRemoved": "標籤已移除",
+      "statusCreated": "狀態已建立",
+      "statusDeleted": "狀態已刪除",
+      "statusUpdated": "狀態已更新",
+      "statusesReset": "狀態已重設",
+      "operationFailed": "操作失敗",
+      "error": "錯誤"
+    },
+    "jobAdded": "工作 {{position}} 於 {{company}} 已成功新增",
+    "jobDeleted": "工作 {{position}} 於 {{company}} 已成功刪除",
+    "settingsUpdated": "設定已成功更新",
+    "tagCreated": "標籤 \"{{name}}\" 已成功建立",
+    "tagDeleted": "標籤 \"{{name}}\" 已成功刪除",
+    "tagUpdated": "標籤 \"{{name}}\" 已成功更新",
+    "tagAddedToJob": "標籤 \"{{name}}\" 已成功添加到工作",
+    "tagRemovedFromJob": "標籤 \"{{name}}\" 已成功從工作中移除",
+    "statusCreated": "狀態 \"{{name}}\" 已成功建立",
+    "statusDeleted": "狀態 \"{{name}}\" 已成功刪除",
+    "statusUpdated": "狀態 \"{{name}}\" 已成功更新",
+    "statusesReset": "所有狀態已重設為預設值",
+    "errors": {
+      "fetchSettings": "獲取設定時出錯",
+      "updateSettings": "更新設定時出錯",
+      "addJob": "新增工作 {{position}} 於 {{company}} 時出錯",
+      "deleteJob": "刪除工作 {{position}} 於 {{company}} 時出錯",
+      "updateJob": "更新工作 {{position}} 於 {{company}} 時出錯",
+      "clearJobs": "清除工作時出錯",
+      "fetchTags": "獲取標籤時出錯",
+      "createTag": "建立標籤 {{name}} 時出錯",
+      "deleteTag": "刪除標籤 {{name}} 時出錯",
+      "updateTag": "更新標籤 {{name}} 時出錯",
+      "addTagToJob": "將標籤添加到工作時出錯",
+      "removeTagFromJob": "從工作中移除標籤時出錯",
+      "clearTags": "清除標籤時出錯",
+      "fetchStatuses": "獲取狀態時出錯",
+      "createStatus": "建立狀態 {{name}} 時出錯",
+      "deleteStatus": "刪除狀態 {{name}} 時出錯",
+      "updateStatus": "更新狀態 {{name}} 時出錯",
+      "resetStatuses": "重設狀態時出錯",
+      "cannotDeleteDefaultStatus": "無法刪除預設狀態 \"{{name}}\"",
+      "cannotModifyDefaultStatus": "無法修改預設狀態 \"{{name}}\"",
+      "statusesNotFound": "{{message}}"
+    }
+  },
   "404": {
     "title": "404 - 找不到頁面",
     "description": "您查找的頁面不存在。",
