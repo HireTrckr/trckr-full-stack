@@ -8,8 +8,6 @@ import Head from 'next/head';
 allow different languages for toast notifications
 allow custom fields - skeleton page - empty component
 properly implement loading notifications
-404 page - translations
-auth checj loading state translations
 */
 
 export default function Home() {
