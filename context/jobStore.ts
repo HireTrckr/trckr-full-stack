@@ -26,7 +26,7 @@ type JobStore = {
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 };
 
-const {  createTranslatedToast } = useToastStore.getState();
+const { createTranslatedToast } = useToastStore.getState();
 
 export const useJobStore = create<JobStore>((set, get) => ({
   jobs: [],
@@ -136,7 +136,11 @@ export const useJobStore = create<JobStore>((set, get) => ({
         'toasts.errors.addJob',
         true,
         'toasts.titles.error',
-        { position: job.position, company: job.company, message: (error as Error).message },
+        {
+          position: job.position,
+          company: job.company,
+          message: (error as Error).message,
+        },
         {},
         ToastCategory.ERROR,
         10000
@@ -194,7 +198,11 @@ export const useJobStore = create<JobStore>((set, get) => ({
         'toasts.errors.deleteJob',
         true,
         'toasts.titles.error',
-        { position: job.position, company: job.company, message: (error as Error).message },
+        {
+          position: job.position,
+          company: job.company,
+          message: (error as Error).message,
+        },
         {},
         ToastCategory.ERROR,
         10000
@@ -233,7 +241,11 @@ export const useJobStore = create<JobStore>((set, get) => ({
         'toasts.errors.updateJob',
         true,
         'toasts.titles.error',
-        { position: job.position, company: job.company, message: (error as Error).message },
+        {
+          position: job.position,
+          company: job.company,
+          message: (error as Error).message,
+        },
         {},
         ToastCategory.ERROR,
         10000
