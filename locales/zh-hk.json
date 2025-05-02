@@ -12,8 +12,19 @@
     "auth": {
       "sign-in-to-continue": "請登入以繼續",
       "sign-in": "登入",
-      "sign-out": "登出"
+      "sign-out": "登出",
+      "loading": "正在載入用戶資料..."
     }
+  },
+  "404": {
+    "title": "404 - 找不到頁面",
+    "description": "您查找的頁面不存在。",
+    "button": "返回首頁"
+  },
+  "error": {
+    "title": "錯誤 {{statusCode}}。",
+    "defaultTitle": "發生未知錯誤！",
+    "description": "請稍後再試。"
   },
   "default-status": {
     "not-applied": "未申請",
@@ -36,6 +47,7 @@
   },
   "job-list": {
     "title_zero": "我的工作申請",
+    "title_one": "我的工作申請 ({{count}})",
     "title_other": "我的工作申請 ({{count}})",
     "no-jobs-title": "找不到工作！",
     "no-jobs-msg": "添加一個新的工作申請來開始。"

@@ -12,8 +12,19 @@
     "auth": {
       "sign-in-to-continue": "Please Sign in to continue",
       "sign-in": "Sign In",
-      "sign-out": "Sign Out"
+      "sign-out": "Sign Out",
+      "loading": "Loading User Data..."
     }
+  },
+  "404": {
+    "title": "404 - Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "button": "Return to Home"
+  },
+  "error": {
+    "title": "Error {{statusCode}}.",
+    "defaultTitle": "An unknown error occurred!",
+    "description": "Please try again later."
   },
   "default-status": {
     "not-applied": "Not Applied",
@@ -127,6 +138,7 @@
   },
   "job-list": {
     "title_zero": "My Job Applications",
+    "title_one": "My Job Applications ({{count}})",
     "title_other": "My Job Applications ({{count}})",
     "no-jobs-title": "No jobs found!",
     "no-jobs-msg": "Add a new job application to get started."

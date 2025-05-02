@@ -12,8 +12,19 @@
     "auth": {
       "sign-in-to-continue": "Veuillez vous connecter pour continuer",
       "sign-in": "Se Connecter",
-      "sign-out": "Se Déconnecter"
+      "sign-out": "Se Déconnecter",
+      "loading": "Chargement des données utilisateur..."
     }
+  },
+  "404": {
+    "title": "404 - Page Non Trouvée",
+    "description": "La page que vous recherchez n'existe pas.",
+    "button": "Retour à l'Accueil"
+  },
+  "error": {
+    "title": "Erreur {{statusCode}}.",
+    "defaultTitle": "Une erreur inconnue s'est produite !",
+    "description": "Veuillez réessayer plus tard."
   },
   "default-status": {
     "not-applied": "Non Postulé",
@@ -36,6 +47,7 @@
   },
   "job-list": {
     "title_zero": "Mes Candidatures",
+    "title_one": "Mes Candidatures ({{count}})",
     "title_other": "Mes Candidatures ({{count}})",
     "no-jobs-title": "Aucun emploi trouvé !",
     "no-jobs-msg": "Ajoutez une nouvelle candidature pour commencer."

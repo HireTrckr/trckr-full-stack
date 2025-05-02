@@ -12,8 +12,19 @@
     "auth": {
       "sign-in-to-continue": "请登录以继续",
       "sign-in": "登录",
-      "sign-out": "退出登录"
+      "sign-out": "退出登录",
+      "loading": "正在加载用户数据..."
     }
+  },
+  "404": {
+    "title": "404 - 页面未找到",
+    "description": "您查找的页面不存在。",
+    "button": "返回首页"
+  },
+  "error": {
+    "title": "错误 {{statusCode}}。",
+    "defaultTitle": "发生未知错误！",
+    "description": "请稍后再试。"
   },
   "default-status": {
     "not-applied": "未申请",
@@ -36,6 +47,7 @@
   },
   "job-list": {
     "title_zero": "我的工作申请",
+    "title_one": "我的工作申请 ({{count}})",
     "title_other": "我的工作申请 ({{count}})",
     "no-jobs-title": "没有找到工作！",
     "no-jobs-msg": "添加一个新的工作申请来开始。"
