@@ -2,7 +2,7 @@ import { getDefaultTailwindColorObject } from '../utils/getTailwindColorObject';
 import { TailwindColor } from './tailwindColor';
 import { timestamps } from './timestamps';
 
-export type SupportedLanguage = 'en' | 'fr' | 'zh-HK' | 'zh-CN';
+export type SupportedLanguage = 'en' | 'fr' | 'es' | 'zh-HK' | 'zh-CN';
 
 export type Settings = {
   theme: {

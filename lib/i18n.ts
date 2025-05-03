@@ -8,6 +8,7 @@ import en from '../locales/en.json';
 import fr from '../locales/fr.json';
 import zhHK from '../locales/zh-hk.json';
 import zhCN from '../locales/zh-cn.json';
+import es from '../locales/es.json';
 
 // Initialize i18next
 i18n.use(initReactI18next).init({
@@ -16,6 +17,7 @@ i18n.use(initReactI18next).init({
     fr: { translation: fr },
     'zh-HK': { translation: zhHK },
     'zh-CN': { translation: zhCN },
+    es: { translation: es },
   },
   fallbackLng: 'en',
   interpolation: {

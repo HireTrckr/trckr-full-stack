@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 const languages: { value: SupportedLanguage; label: string }[] = [
   { value: 'en', label: 'English' },
   { value: 'fr', label: 'Français' },
+  { value: 'es', label: 'Español' },
   { value: 'zh-HK', label: '繁體中文' },
   { value: 'zh-CN', label: '简体中文' },
 ];
