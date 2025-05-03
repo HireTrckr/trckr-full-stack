@@ -14,7 +14,9 @@
       "sign-in": "登入",
       "sign-out": "登出",
       "loading": "正在載入用戶資料..."
-    }
+    },
+    "selectAll": "選擇全部",
+    "deselectAll": "取消全選"
   },
 
   "filter": {

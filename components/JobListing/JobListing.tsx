@@ -22,6 +22,8 @@ export const JobListing = memo(
     onUpdate,
     onEdit,
     onDelete,
+    onSelect,
+    isSelected,
     showControls,
     onDropdownOpen,
     onDropdownClose,
@@ -30,6 +32,8 @@ export const JobListing = memo(
     onUpdate?: (updatedJob: Job) => void;
     onEdit: (jobId: Job['id']) => void;
     onDelete: (job: Job) => void;
+    onSelect: (job: Job, selected: boolean) => void;
+    isSelected: boolean;
     showControls: boolean;
     onDropdownOpen: () => void;
     onDropdownClose: () => void;
@@ -143,6 +147,14 @@ export const JobListing = memo(
       >
         {/* left side */}
         <div className="flex gap-2 items-center min-h-full">
+          {/* Multi-Delete */}
+          <input
+            type="checkbox"
+            className="h-5 w-5 rounded-lg accent-accent-primary cursor-pointer"
+            checked={isSelected || false}
+            onChange={(e) => onSelect(job, e.target.checked)}
+          />
+
           <div className="rounded-lg max-h-10 max-w-10">
             {job.URL ? (
               <UrlPreviewCard job={job} size="small" />

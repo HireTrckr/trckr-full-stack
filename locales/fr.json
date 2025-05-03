@@ -14,7 +14,9 @@
       "sign-in": "Se Connecter",
       "sign-out": "Se Déconnecter",
       "loading": "Chargement des données utilisateur..."
-    }
+    },
+    "selectAll": "Sélectionner tout",
+    "deselectAll": "Désélectionner tout"
   },
 
   "filter": {

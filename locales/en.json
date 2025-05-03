@@ -14,7 +14,9 @@
       "sign-in": "Sign In",
       "sign-out": "Sign Out",
       "loading": "Loading User Data..."
-    }
+    },
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
   },
 
   "filter": {
