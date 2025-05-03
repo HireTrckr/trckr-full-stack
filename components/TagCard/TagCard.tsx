@@ -1,6 +1,7 @@
 import { TiDeleteOutline } from 'react-icons/ti';
 import { Tag } from '../../types/tag';
 import { useState } from 'react';
+import { getTailwindColorObjectFromName } from '../../utils/getTailwindColorObject';
 
 interface TagCardProps {
   tag: Tag;
@@ -15,10 +16,10 @@ export function TagCard({
 }: TagCardProps) {
   if (!tag) return null;
   const [showDeleteButton, setShowDeleteButton] = useState<Boolean>(false);
-
+  const color = getTailwindColorObjectFromName(tag.color);
   return (
     <div
-      className={`${tag.color ? `bg-${tag.color}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1`}
+      className={`${tag.color ? `bg-${color.tailwindColorName}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1`}
       onMouseEnter={() => {
         if (editable) setShowDeleteButton(true);
       }}
@@ -32,6 +33,7 @@ export function TagCard({
         <span
           key={tag.id}
           className={`${tag.color ? 'text-text-primary' : 'text-text-accent'} text-xs`}
+          style={{ color: color.textColor }}
         >
           {tag?.name || tag.id}
         </span>
@@ -41,10 +43,11 @@ export function TagCard({
         <div className="flex-shrink-0 flex items-center justify-end">
           <button
             type="button"
-            className="text-white focus:outline-none rounded-full text-center hover:scale-110"
+            className="focus:outline-none rounded-full text-center hover:scale-110"
             onClick={() => {
               if (editable) onRemoveButtonClick(tag.id);
             }}
+            style={{ color: color.textColor }}
           >
             <TiDeleteOutline />
           </button>
