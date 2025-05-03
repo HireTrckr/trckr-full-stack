@@ -53,7 +53,7 @@ export function Navbar(): JSX.Element {
       <div className="flex items-center gap-2 mx-auto">
         <Link
           href="/list"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize text-nowrap"
         >
           {t('navbar.track')}
         </Link>
@@ -62,7 +62,7 @@ export function Navbar(): JSX.Element {
         </span>
         <Link
           href="/new"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize text-nowrap"
         >
           {t('navbar.add-new')}
         </Link>
@@ -71,7 +71,7 @@ export function Navbar(): JSX.Element {
         </span>
         <Link
           href="/settings"
-          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize"
+          className="text-text-primary hover:text-text-secondary transition-colors duration-text capitalize text-nowrap"
         >
           {t('navbar.settings')}
         </Link>
