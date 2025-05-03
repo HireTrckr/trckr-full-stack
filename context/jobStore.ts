@@ -42,7 +42,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       const q = query(
         collection(db, `users/${auth.currentUser.uid}/jobs`),
-        where('status', '!=', 'deleted')
+        where('statusID', '!=', 'deleted')
       );
       const querySnapshot = await getDocs(q);
 
@@ -154,6 +154,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
   },
 
   deleteJob: async (job: Job) => {
+    console.log('Deleting job:', job);
     if (!auth.currentUser) return false;
     if (!job.id) return false;
 
