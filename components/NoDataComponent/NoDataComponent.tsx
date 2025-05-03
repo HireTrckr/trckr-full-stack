@@ -33,7 +33,7 @@ export const NoDataComponent: React.FC<NoDataComponentProps> = ({
       {action && (
         <button
           onClick={action.onClick}
-          className="mt-4 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
+          className="mt-4 px-4 py-2 bg-accent-primary text-white rounded-lg hover:bg-accent-secondary hover:brightness-[80%] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
         >
           {action.label}
         </button>
