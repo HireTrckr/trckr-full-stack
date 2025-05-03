@@ -168,7 +168,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
       }
 
       await updateDoc(jobRef, {
-        status: 'deleted',
+        statusID: 'deleted',
         timestamps: {
           ...job.timestamps,
           updatedAt: new Date(),
