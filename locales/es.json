@@ -1,0 +1,246 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "reset": "Restablecer",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "jobs_one": "Empleo",
+    "jobs_other": "Empleos",
+    "view-more": "Ver Más",
+    "view-less": "Ver Menos",
+    "auth": {
+      "sign-in-to-continue": "Por favor, inicia sesión para continuar",
+      "sign-in": "Iniciar Sesión",
+      "sign-out": "Cerrar Sesión",
+      "loading": "Cargando datos de usuario..."
+    },
+    "selectAll": "Seleccionar Todo",
+    "deselectAll": "Deseleccionar Todo"
+  },
+
+  "filter": {
+    "search-placeholder": "Buscar empleos...",
+    "filters": "Filtros",
+    "status": "Estado",
+    "tags": "Etiquetas",
+    "sort-by": "Ordenar por",
+    "company": "Empresa",
+    "position": "Puesto",
+    "date": "Fecha de Solicitud",
+    "clear-all": "Borrar todo",
+    "search": "Buscar",
+    "tag": "Etiqueta",
+    "clear-filters": "Borrar filtros",
+    "no-results": "Ningún empleo coincide con tus filtros",
+    "reset-filters": "Restablecer filtros"
+  },
+
+  "cookies": {
+    "message": "Este sitio web utiliza cookies para mantener tu sesión iniciada.",
+    "acknowledge": "Aceptar"
+  },
+  "toasts": {
+    "actions": {
+      "undo": "Deshacer"
+    },
+    "titles": {
+      "jobAdded": "Empleo añadido",
+      "jobDeleted": "Empleo eliminado",
+      "settingsUpdated": "Configuración actualizada",
+      "tagCreated": "Etiqueta creada",
+      "tagDeleted": "Etiqueta eliminada",
+      "tagUpdated": "Etiqueta actualizada",
+      "tagAdded": "Etiqueta añadida",
+      "tagRemoved": "Etiqueta eliminada",
+      "statusCreated": "Estado creado",
+      "statusDeleted": "Estado eliminado",
+      "statusUpdated": "Estado actualizado",
+      "statusesReset": "Estados restablecidos",
+      "operationFailed": "Operación fallida",
+      "error": "Error"
+    },
+    "jobAdded": "Empleo {{position}} en {{company}} añadido con éxito",
+    "jobDeleted": "Empleo {{position}} en {{company}} eliminado con éxito",
+    "settingsUpdated": "Configuración actualizada con éxito",
+    "tagCreated": "Etiqueta \"{{name}}\" creada con éxito",
+    "tagDeleted": "Etiqueta \"{{name}}\" eliminada con éxito",
+    "tagUpdated": "Etiqueta \"{{name}}\" actualizada con éxito",
+    "tagAddedToJob": "Etiqueta \"{{name}}\" añadida al empleo con éxito",
+    "tagRemovedFromJob": "Etiqueta \"{{name}}\" eliminada del empleo con éxito",
+    "statusCreated": "Estado \"{{name}}\" creado con éxito",
+    "statusDeleted": "Estado \"{{name}}\" eliminado con éxito",
+    "statusUpdated": "Estado \"{{name}}\" actualizado con éxito",
+    "statusesReset": "Todos los estados han sido restablecidos a los valores predeterminados",
+    "errors": {
+      "fetchSettings": "Error al obtener la configuración",
+      "updateSettings": "Error al actualizar la configuración",
+      "addJob": "Error al añadir el empleo {{position}} en {{company}}",
+      "deleteJob": "Error al eliminar el empleo {{position}} en {{company}}",
+      "updateJob": "Error al actualizar el empleo {{position}} en {{company}}",
+      "clearJobs": "Error al borrar los empleos",
+      "fetchTags": "Error al obtener etiquetas",
+      "createTag": "Error al crear la etiqueta {{name}}",
+      "deleteTag": "Error al eliminar la etiqueta {{name}}",
+      "updateTag": "Error al actualizar la etiqueta {{name}}",
+      "addTagToJob": "Error al añadir la etiqueta al empleo",
+      "removeTagFromJob": "Error al eliminar la etiqueta del empleo",
+      "clearTags": "Error al borrar las etiquetas",
+      "fetchStatuses": "Error al obtener los estados",
+      "createStatus": "Error al crear el estado {{name}}",
+      "deleteStatus": "Error al eliminar el estado {{name}}",
+      "updateStatus": "Error al actualizar el estado {{name}}",
+      "resetStatuses": "Error al restablecer los estados",
+      "cannotDeleteDefaultStatus": "No se puede eliminar el estado predeterminado \"{{name}}\"",
+      "cannotModifyDefaultStatus": "No se puede modificar el estado predeterminado \"{{name}}\"",
+      "statusesNotFound": "{{message}}"
+    }
+  },
+  "404": {
+    "title": "404 - Página No Encontrada",
+    "description": "La página que estás buscando no existe.",
+    "button": "Volver al Inicio"
+  },
+  "error": {
+    "title": "Error {{statusCode}}.",
+    "defaultTitle": "¡Ha ocurrido un error desconocido!",
+    "description": "Por favor, inténtalo de nuevo más tarde."
+  },
+  "default-status": {
+    "not-applied": "No Aplicado",
+    "applied": "Aplicado",
+    "interviewing": "En Entrevista",
+    "offer-sent": "Oferta Enviada",
+    "rejected": "Rechazado",
+    "accepted": "Aceptado"
+  },
+  "navbar": {
+    "track": "Seguimiento",
+    "add-new": "Añadir Nuevo",
+    "settings": "Configuración",
+    "searchbar": {
+      "placeholder": "Buscar tus solicitudes y etiquetas..."
+    },
+    "dropdown": {
+      "theme-toggle-title": "Tema",
+      "account-settings-title": "Cuenta"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "preferences": {
+      "title": "Preferencias",
+      "language": "Idioma",
+      "theme": {
+        "dark-mode": "Modo Oscuro",
+        "primary-color": "Color Principal"
+      }
+    },
+    "tags": {
+      "title": "Etiquetas",
+      "jobs_one": "{{count}} Empleo",
+      "jobs_other": "{{count}} Empleos",
+      "no-tags-title": "¡No se encontraron etiquetas!",
+      "no-tags-msg": "Añade una nueva etiqueta para comenzar."
+    },
+    "status": {
+      "title": "Estado"
+    },
+    "fields": {
+      "title": "Campos"
+    }
+  },
+  "modals": {
+    "shared": {
+      "last-updated": "Última actualización el {{date}}, {{time}}",
+      "edit-wait-timer_one": "Por favor, espera {{count}} segundo antes de editar de nuevo.",
+      "edit-wait-timer_other": "Por favor, espera {{count}} segundos antes de editar de nuevo.",
+      "rate-limit-message-tt": "¡La limitación de frecuencia está habilitada para evitar spam!"
+    },
+    "tag": {
+      "shared": {
+        "name": "Nombre de Etiqueta",
+        "name-placeholder": "Ingresa nombre de etiqueta",
+        "color": "Color de Etiqueta"
+      },
+      "edit": {
+        "title": "Editar Etiqueta",
+        "tag-id": "ID de Etiqueta"
+      },
+      "create": {
+        "title": "Crear Etiqueta"
+      }
+    },
+    "status": {
+      "shared": {
+        "name": "Nombre de Estado",
+        "name-placeholder": "Ingresa nombre de estado",
+        "color": "Color de Estado"
+      },
+      "edit": {
+        "title": "Editar Estado",
+        "status-id": "ID de Estado"
+      },
+      "create": {
+        "title": "Crear Estado"
+      }
+    },
+    "job": {
+      "shared": {
+        "company": "Empresa",
+        "company-placeholder": "Ingresa nombre de empresa",
+        "position": "Puesto",
+        "position-placeholder": "Ingresa nombre del puesto",
+        "status": "Estado",
+        "tags": "Etiquetas",
+        "location": "Ubicación",
+        "location-placeholder": "Ingresa nombre de ubicación",
+        "URL": "URL",
+        "URL-placeholder": "Ingresa URL"
+      },
+      "edit": {
+        "title": "Editar Empleo",
+        "job-id": "ID de Empleo",
+        "external-link-warning": "¡Este es un sitio web externo!"
+      }
+    }
+  },
+  "tag-editor": {
+    "tags-used_one": "{{count}}/{{limit}} Etiqueta Usada",
+    "tags-used_other": "{{count}}/{{limit}} Etiquetas Usadas",
+    "new": "(nueva)",
+    "create-new-tag": "Crear nueva etiqueta: \"{{tag}}\"",
+    "tag-uses_one": "({{count}} uso)",
+    "tag-uses_other": "({{count}} usos)",
+    "placeholder_max_one": "Máximo ({{count}} etiqueta) alcanzado",
+    "placeholder_max_other": "Máximo ({{count}} etiquetas) alcanzado",
+    "placeholder_empty": "Añadir etiquetas (coma o enter para separar)"
+  },
+  "job-list": {
+    "title_zero": "Mis Solicitudes de Empleo",
+    "title_one": "Mis Solicitudes de Empleo ({{count}})",
+    "title_other": "Mis Solicitudes de Empleo ({{count}})",
+    "no-jobs-title": "¡No se encontraron empleos!",
+    "no-jobs-msg": "Añade una nueva solicitud de empleo para comenzar."
+  },
+  "job-form": {
+    "title": "Seguir una Nueva Solicitud de Empleo",
+    "submit-button": "Seguir Solicitud"
+  },
+  "colors": {
+    "title": "Colores",
+    "red": "Rojo",
+    "orange": "Naranja",
+    "yellow": "Amarillo",
+    "lime": "Lima",
+    "green": "Verde",
+    "teal": "Verde Azulado",
+    "cyan": "Cian",
+    "blue": "Azul",
+    "indigo": "Índigo",
+    "violet": "Violeta",
+    "purple": "Morado",
+    "fuchsia": "Fucsia",
+    "pink": "Rosa"
+  }
+}
