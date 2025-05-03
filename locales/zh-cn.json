@@ -34,6 +34,10 @@
     "reset-filters": "重置筛选条件"
   },
 
+  "cookies": {
+    "message": "本网站使用cookies以确保您保持登录状态。",
+    "acknowledge": "确认"
+  },
   "toasts": {
     "actions": {
       "undo": "撤销"

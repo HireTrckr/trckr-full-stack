@@ -34,6 +34,10 @@
     "reset-filters": "Réinitialiser les filtres"
   },
 
+  "cookies": {
+    "message": "Ce site utilise des cookies pour vous maintenir connecté.",
+    "acknowledge": "J'accepte"
+  },
   "toasts": {
     "actions": {
       "undo": "Annuler"

@@ -34,6 +34,10 @@
     "reset-filters": "重設篩選條件"
   },
 
+  "cookies": {
+    "message": "本網站使用cookies以確保您保持登入狀態。",
+    "acknowledge": "確認"
+  },
   "toasts": {
     "actions": {
       "undo": "撤銷"
