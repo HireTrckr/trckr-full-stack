@@ -41,7 +41,7 @@ export function LanguageSelectorComponent({
         <button
           key={value}
           onClick={() => handleLanguageChange(value)}
-          className={`px-3 py-1 rounded-md text-sm transition-all duration-text ${
+          className={`px-3 py-1 rounded-md text-sm transition-all duration-text text-nowrap ${
             currentLanguage === value
               ? 'bg-accent text-text-primary border border-accent-primary'
               : 'hover:bg-background-secondary text-text-secondary'
