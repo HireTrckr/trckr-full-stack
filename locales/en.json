@@ -16,6 +16,24 @@
       "loading": "Loading User Data..."
     }
   },
+
+  "filter": {
+    "search-placeholder": "Search jobs...",
+    "filters": "Filters",
+    "status": "Status",
+    "tags": "Tags",
+    "sort-by": "Sort by",
+    "company": "Company",
+    "position": "Position",
+    "date": "Date Applied",
+    "clear-all": "Clear all",
+    "search": "Search",
+    "tag": "Tag",
+    "clear-filters": "Clear filters",
+    "no-results": "No jobs match your filters",
+    "reset-filters": "Reset filters"
+  },
+
   "cookies": {
     "message": "This website uses cookies to ensure you are kept logged in.",
     "acknowledge": "Acknowledge"

@@ -5,10 +5,10 @@
     "reset": "重設",
     "edit": "編輯",
     "delete": "刪除",
-    "jobs_one": "工作",
-    "jobs_other": "工作",
+    "jobs_one": "職位",
+    "jobs_other": "職位",
     "view-more": "查看更多",
-    "view-less": "收起",
+    "view-less": "查看較少",
     "auth": {
       "sign-in-to-continue": "請登入以繼續",
       "sign-in": "登入",
@@ -16,6 +16,24 @@
       "loading": "正在載入用戶資料..."
     }
   },
+
+  "filter": {
+    "search-placeholder": "搜尋職位...",
+    "filters": "篩選條件",
+    "status": "狀態",
+    "tags": "標籤",
+    "sort-by": "排序方式",
+    "company": "公司",
+    "position": "職位",
+    "date": "申請日期",
+    "clear-all": "清除全部",
+    "search": "搜尋",
+    "tag": "標籤",
+    "clear-filters": "清除篩選條件",
+    "no-results": "沒有符合篩選條件的職位",
+    "reset-filters": "重設篩選條件"
+  },
+
   "cookies": {
     "message": "本網站使用cookies以確保您保持登入狀態。",
     "acknowledge": "確認"
@@ -25,60 +43,60 @@
       "undo": "撤銷"
     },
     "titles": {
-      "jobAdded": "工作已新增",
-      "jobDeleted": "工作已刪除",
-      "settingsUpdated": "設定已更新",
-      "tagCreated": "標籤已建立",
-      "tagDeleted": "標籤已刪除",
-      "tagUpdated": "標籤已更新",
-      "tagAdded": "標籤已新增",
-      "tagRemoved": "標籤已移除",
-      "statusCreated": "狀態已建立",
-      "statusDeleted": "狀態已刪除",
-      "statusUpdated": "狀態已更新",
-      "statusesReset": "狀態已重設",
+      "jobAdded": "已添加職位",
+      "jobDeleted": "已刪除職位",
+      "settingsUpdated": "已更新設定",
+      "tagCreated": "已創建標籤",
+      "tagDeleted": "已刪除標籤",
+      "tagUpdated": "已更新標籤",
+      "tagAdded": "已添加標籤",
+      "tagRemoved": "已移除標籤",
+      "statusCreated": "已創建狀態",
+      "statusDeleted": "已刪除狀態",
+      "statusUpdated": "已更新狀態",
+      "statusesReset": "已重設狀態",
       "operationFailed": "操作失敗",
       "error": "錯誤"
     },
-    "jobAdded": "工作 {{position}} 於 {{company}} 已成功新增",
-    "jobDeleted": "工作 {{position}} 於 {{company}} 已成功刪除",
-    "settingsUpdated": "設定已成功更新",
-    "tagCreated": "標籤 \"{{name}}\" 已成功建立",
-    "tagDeleted": "標籤 \"{{name}}\" 已成功刪除",
-    "tagUpdated": "標籤 \"{{name}}\" 已成功更新",
-    "tagAddedToJob": "標籤 \"{{name}}\" 已成功添加到工作",
-    "tagRemovedFromJob": "標籤 \"{{name}}\" 已成功從工作中移除",
-    "statusCreated": "狀態 \"{{name}}\" 已成功建立",
-    "statusDeleted": "狀態 \"{{name}}\" 已成功刪除",
-    "statusUpdated": "狀態 \"{{name}}\" 已成功更新",
+    "jobAdded": "已成功添加 {{company}} 的 {{position}} 職位",
+    "jobDeleted": "已成功刪除 {{company}} 的 {{position}} 職位",
+    "settingsUpdated": "已成功更新設定",
+    "tagCreated": "已成功創建「{{name}}」標籤",
+    "tagDeleted": "已成功刪除「{{name}}」標籤",
+    "tagUpdated": "已成功更新「{{name}}」標籤",
+    "tagAddedToJob": "已成功將「{{name}}」標籤添加至職位",
+    "tagRemovedFromJob": "已成功從職位移除「{{name}}」標籤",
+    "statusCreated": "已成功創建「{{name}}」狀態",
+    "statusDeleted": "已成功刪除「{{name}}」狀態",
+    "statusUpdated": "已成功更新「{{name}}」狀態",
     "statusesReset": "所有狀態已重設為預設值",
     "errors": {
       "fetchSettings": "獲取設定時出錯",
       "updateSettings": "更新設定時出錯",
-      "addJob": "新增工作 {{position}} 於 {{company}} 時出錯",
-      "deleteJob": "刪除工作 {{position}} 於 {{company}} 時出錯",
-      "updateJob": "更新工作 {{position}} 於 {{company}} 時出錯",
-      "clearJobs": "清除工作時出錯",
+      "addJob": "添加 {{company}} 的 {{position}} 職位時出錯",
+      "deleteJob": "刪除 {{company}} 的 {{position}} 職位時出錯",
+      "updateJob": "更新 {{company}} 的 {{position}} 職位時出錯",
+      "clearJobs": "清除職位時出錯",
       "fetchTags": "獲取標籤時出錯",
-      "createTag": "建立標籤 {{name}} 時出錯",
-      "deleteTag": "刪除標籤 {{name}} 時出錯",
-      "updateTag": "更新標籤 {{name}} 時出錯",
-      "addTagToJob": "將標籤添加到工作時出錯",
-      "removeTagFromJob": "從工作中移除標籤時出錯",
+      "createTag": "創建「{{name}}」標籤時出錯",
+      "deleteTag": "刪除「{{name}}」標籤時出錯",
+      "updateTag": "更新「{{name}}」標籤時出錯",
+      "addTagToJob": "將標籤添加至職位時出錯",
+      "removeTagFromJob": "從職位移除標籤時出錯",
       "clearTags": "清除標籤時出錯",
       "fetchStatuses": "獲取狀態時出錯",
-      "createStatus": "建立狀態 {{name}} 時出錯",
-      "deleteStatus": "刪除狀態 {{name}} 時出錯",
-      "updateStatus": "更新狀態 {{name}} 時出錯",
+      "createStatus": "創建「{{name}}」狀態時出錯",
+      "deleteStatus": "刪除「{{name}}」狀態時出錯",
+      "updateStatus": "更新「{{name}}」狀態時出錯",
       "resetStatuses": "重設狀態時出錯",
-      "cannotDeleteDefaultStatus": "無法刪除預設狀態 \"{{name}}\"",
-      "cannotModifyDefaultStatus": "無法修改預設狀態 \"{{name}}\"",
+      "cannotDeleteDefaultStatus": "無法刪除預設狀態「{{name}}」",
+      "cannotModifyDefaultStatus": "無法修改預設狀態「{{name}}」",
       "statusesNotFound": "{{message}}"
     }
   },
   "404": {
     "title": "404 - 找不到頁面",
-    "description": "您查找的頁面不存在。",
+    "description": "您要查找的頁面不存在。",
     "button": "返回首頁"
   },
   "error": {
@@ -90,7 +108,7 @@
     "not-applied": "未申請",
     "applied": "已申請",
     "interviewing": "面試中",
-    "offer-sent": "已收到offer",
+    "offer-sent": "已發出聘書",
     "rejected": "已拒絕",
     "accepted": "已接受"
   },
@@ -98,30 +116,30 @@
     "tags-used_one": "已使用 {{count}}/{{limit}} 個標籤",
     "tags-used_other": "已使用 {{count}}/{{limit}} 個標籤",
     "new": "(新)",
-    "create-new-tag": "建立新標籤：\"{{tag}}\"",
-    "tag-uses_one": "({{count}} 次使用)",
-    "tag-uses_other": "({{count}} 次使用)",
-    "placeholder_max_one": "已達最大數量 ({{count}} 個標籤)",
-    "placeholder_max_other": "已達最大數量 ({{count}} 個標籤)",
-    "placeholder_empty": "新增標籤（以逗號或 Enter 鍵分隔）"
+    "create-new-tag": "創建新標籤：「{{tag}}」",
+    "tag-uses_one": "(使用 {{count}} 次)",
+    "tag-uses_other": "(使用 {{count}} 次)",
+    "placeholder_max_one": "已達上限 ({{count}} 個標籤)",
+    "placeholder_max_other": "已達上限 ({{count}} 個標籤)",
+    "placeholder_empty": "添加標籤 (逗號或按回車鍵分隔)"
   },
   "job-list": {
-    "title_zero": "我的工作申請",
-    "title_one": "我的工作申請 ({{count}})",
-    "title_other": "我的工作申請 ({{count}})",
-    "no-jobs-title": "找不到工作！",
-    "no-jobs-msg": "添加一個新的工作申請來開始。"
+    "title_zero": "我的職位申請",
+    "title_one": "我的職位申請 ({{count}})",
+    "title_other": "我的職位申請 ({{count}})",
+    "no-jobs-title": "找不到職位！",
+    "no-jobs-msg": "添加新職位申請開始使用。"
   },
   "job-form": {
-    "title": "追蹤新工作申請",
-    "submit-button": "提交申請"
+    "title": "追蹤新職位申請",
+    "submit-button": "追蹤申請"
   },
   "navbar": {
     "track": "追蹤",
     "add-new": "新增",
     "settings": "設定",
     "searchbar": {
-      "placeholder": "搜尋你的申請和標籤..."
+      "placeholder": "搜尋您的申請和標籤..."
     },
     "dropdown": {
       "theme-toggle-title": "主題",
@@ -140,10 +158,10 @@
     },
     "tags": {
       "title": "標籤",
-      "jobs_one": "{{count}} 個工作",
-      "jobs_other": "{{count}} 個工作",
+      "jobs_one": "{{count}} 個職位",
+      "jobs_other": "{{count}} 個職位",
       "no-tags-title": "找不到標籤！",
-      "no-tags-msg": "添加一個新標籤來開始。"
+      "no-tags-msg": "新增標籤開始使用。"
     },
     "status": {
       "title": "狀態"
@@ -154,10 +172,10 @@
   },
   "modals": {
     "shared": {
-      "last-updated": "最後更新於 {{date}}, {{time}}",
+      "last-updated": "最後更新於 {{date}}，{{time}}",
       "edit-wait-timer_one": "請等待 {{count}} 秒後再次編輯。",
       "edit-wait-timer_other": "請等待 {{count}} 秒後再次編輯。",
-      "rate-limit-message-tt": "已啟用頻率限制以防止濫用！"
+      "rate-limit-message-tt": "已啟用速率限制以防止濫用！"
     },
     "tag": {
       "shared": {
@@ -170,7 +188,7 @@
         "tag-id": "標籤 ID"
       },
       "create": {
-        "title": "建立標籤"
+        "title": "創建標籤"
       }
     },
     "status": {
@@ -184,7 +202,7 @@
         "status-id": "狀態 ID"
       },
       "create": {
-        "title": "建立狀態"
+        "title": "創建狀態"
       }
     },
     "job": {
@@ -201,8 +219,8 @@
         "URL-placeholder": "輸入網址"
       },
       "edit": {
-        "title": "編輯工作",
-        "job-id": "工作 ID",
+        "title": "編輯職位",
+        "job-id": "職位 ID",
         "external-link-warning": "這是外部網站！"
       }
     }
@@ -220,7 +238,7 @@
     "indigo": "靛藍色",
     "violet": "紫羅蘭色",
     "purple": "紫色",
-    "fuchsia": "桃紅色",
+    "fuchsia": "紫紅色",
     "pink": "粉紅色"
   }
 }

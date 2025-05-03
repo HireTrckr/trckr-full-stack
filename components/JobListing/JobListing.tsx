@@ -9,9 +9,11 @@ import { Tag } from '../../types/tag';
 import { JobStatus } from '../../types/jobStatus';
 import { useStatusStore } from '../../context/statusStore';
 import { useTranslation } from 'react-i18next';
+import { getTailwindColorObjectFromName } from '../../utils/getTailwindColorObject';
 
 const getStatusColor = (status: JobStatus): string => {
-  return `text-white p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed bg-${status?.color ?? 'blue'}-500`;
+  const color = getTailwindColorObjectFromName(status.color);
+  return `p-2 rounded-lg bg-opacity-50 capitalize cursor-pointer inline-block text-center disabled:opacity-50 disabled:cursor-not-allowed bg-${color.tailwindColorName ?? 'blue'}-500`;
 };
 
 export const JobListing = memo(
@@ -198,6 +200,9 @@ export const JobListing = memo(
                 onClick={() => toggleDropDown()}
                 className={getStatusColor(status)}
                 disabled={timeRemaining > 0}
+                style={{
+                  color: getTailwindColorObjectFromName(status.color).textColor,
+                }}
               >
                 {status.deletable ? status.statusName : t(status.statusName)}
               </button>

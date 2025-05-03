@@ -3,7 +3,6 @@ import { useJobStore } from '../../context/jobStore';
 import { useTagStore } from '../../context/tagStore';
 import { Job } from '../../types/job';
 import { JobListing } from '../JobListing/JobListing';
-
 import { ModalProps, useModalStore } from '../../context/modalStore';
 import { ModalTypes } from '../../types/modalTypes';
 import { SkeletonJobListComponent } from '../SkeletonJobListComponent/SkeletonJobListComponent';
@@ -12,10 +11,25 @@ import { useRouter } from 'next/router';
 import { FiBriefcase } from 'react-icons/fi';
 
 import { NoDataComponent } from '../NoDataComponent/NoDataComponent';
+import {
+  DataFilterSorter,
+  FilterOptions,
+  SortDirection,
+  SortField,
+} from '../DataFilterSorter/DataFilterSorter';
 
 export const JobList: React.FC = () => {
   const { jobs, updateJob, deleteJob } = useJobStore.getState();
   const router = useRouter();
+
+  // Add state for sorting and filtering
+  const [sortField, setSortField] = useState<SortField>('dateApplied');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    status: [],
+    searchTerm: '',
+    tags: [],
+  });
 
   const openJobEditorModal = useModalStore((state) => state.openJobEditorModal);
   const closeModal = useModalStore((state) => state.closeModal);
@@ -69,7 +83,85 @@ export const JobList: React.FC = () => {
     closeModal();
   };
 
+  const handleSortChange = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const handleFilterChange = (filters: Partial<FilterOptions>) => {
+    setFilterOptions((prevFilters) => ({ ...prevFilters, ...filters }));
+  };
+
   if (isJobsLoading || isTagsLoading) return <SkeletonJobListComponent />;
+
+  const applySort = (_jobs: Job[]) => {
+    return _jobs.sort((a: Job, b: Job) => {
+      let comparison = 0;
+      switch (sortField) {
+        case 'company':
+          comparison = a.company.localeCompare(b.company);
+          break;
+        case 'position':
+          comparison = a.position.localeCompare(b.position);
+          break;
+        case 'dateApplied':
+          comparison =
+            a.timestamps.createdAt.getTime() - b.timestamps.createdAt.getTime();
+          break;
+        case 'status':
+          comparison = a.statusID.localeCompare(b.statusID);
+          break;
+        default:
+          break;
+      }
+
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  };
+
+  const applyFilters = (_jobs: Job[]) => {
+    return _jobs.filter((job: Job) => {
+      // Filter by status
+      if (
+        filterOptions.status.length > 0 &&
+        !filterOptions.status.includes(job.statusID)
+      ) {
+        return false;
+      }
+
+      // Filter by tags
+      if (
+        filterOptions.tags.length > 0 &&
+        (!job.tagIds ||
+          !job.tagIds.some((tagId) => filterOptions.tags.includes(tagId)))
+      ) {
+        return false;
+      }
+
+      // Filter by search term
+      if (
+        filterOptions.searchTerm &&
+        !job.company
+          .toLowerCase()
+          .includes(filterOptions.searchTerm.toLowerCase()) &&
+        !job.position
+          .toLowerCase()
+          .includes(filterOptions.searchTerm.toLowerCase())
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const getSortedAndFilteredJobs = () => {
+    return applySort(applyFilters(jobs));
+  };
 
   return (
     <div className="w-full transition-colors duration-bg">
@@ -96,9 +188,16 @@ export const JobList: React.FC = () => {
         </div>
       ) : (
         <ul className="relative px-3">
-          <span>Sort</span>
-          <span>Filter</span>
-          {jobs.map((job) => {
+          {jobs.length > 1 && (
+            <DataFilterSorter
+              sortField={sortField}
+              sortDirection={sortDirection}
+              filterOptions={filterOptions}
+              onSortChange={handleSortChange}
+              onFilterChange={handleFilterChange}
+            />
+          )}
+          {getSortedAndFilteredJobs().map((job) => {
             const isActive =
               jobWithOpenDropdown === job ||
               (!jobWithOpenDropdown && hoveredJob === job);

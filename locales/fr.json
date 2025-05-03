@@ -1,6 +1,6 @@
 {
   "common": {
-    "save": "Enregistrer",
+    "save": "Sauvegarder",
     "cancel": "Annuler",
     "reset": "Réinitialiser",
     "edit": "Modifier",
@@ -16,6 +16,24 @@
       "loading": "Chargement des données utilisateur..."
     }
   },
+
+  "filter": {
+    "search-placeholder": "Rechercher des emplois...",
+    "filters": "Filtres",
+    "status": "Statut",
+    "tags": "Étiquettes",
+    "sort-by": "Trier par",
+    "company": "Entreprise",
+    "position": "Poste",
+    "date": "Date de candidature",
+    "clear-all": "Tout effacer",
+    "search": "Rechercher",
+    "tag": "Étiquette",
+    "clear-filters": "Effacer les filtres",
+    "no-results": "Aucun emploi ne correspond à vos filtres",
+    "reset-filters": "Réinitialiser les filtres"
+  },
+
   "cookies": {
     "message": "Ce site utilise des cookies pour vous maintenir connecté.",
     "acknowledge": "J'accepte"
@@ -79,7 +97,7 @@
   "404": {
     "title": "404 - Page Non Trouvée",
     "description": "La page que vous recherchez n'existe pas.",
-    "button": "Retour à l'Accueil"
+    "button": "Retourner à l'Accueil"
   },
   "error": {
     "title": "Erreur {{statusCode}}.",
@@ -87,11 +105,11 @@
     "description": "Veuillez réessayer plus tard."
   },
   "default-status": {
-    "not-applied": "Non Postulé",
+    "not-applied": "Pas Postulé",
     "applied": "Postulé",
     "interviewing": "En Entretien",
     "offer-sent": "Offre Envoyée",
-    "rejected": "Refusé",
+    "rejected": "Rejeté",
     "accepted": "Accepté"
   },
   "tag-editor": {
@@ -106,15 +124,15 @@
     "placeholder_empty": "Ajouter des étiquettes (virgule ou entrée pour séparer)"
   },
   "job-list": {
-    "title_zero": "Mes Candidatures",
-    "title_one": "Mes Candidatures ({{count}})",
-    "title_other": "Mes Candidatures ({{count}})",
+    "title_zero": "Mes Candidatures d'Emploi",
+    "title_one": "Mes Candidatures d'Emploi ({{count}})",
+    "title_other": "Mes Candidatures d'Emploi ({{count}})",
     "no-jobs-title": "Aucun emploi trouvé !",
     "no-jobs-msg": "Ajoutez une nouvelle candidature pour commencer."
   },
   "job-form": {
     "title": "Suivre une Nouvelle Candidature",
-    "submit-button": "Enregistrer la Candidature"
+    "submit-button": "Suivre la Candidature"
   },
   "navbar": {
     "track": "Suivre",
@@ -196,7 +214,7 @@
         "status": "Statut",
         "tags": "Étiquettes",
         "location": "Lieu",
-        "location-placeholder": "Entrez le lieu",
+        "location-placeholder": "Entrez le nom du lieu",
         "URL": "URL",
         "URL-placeholder": "Entrez l'URL"
       },
@@ -212,7 +230,7 @@
     "red": "Rouge",
     "orange": "Orange",
     "yellow": "Jaune",
-    "lime": "Citron Vert",
+    "lime": "Vert citron",
     "green": "Vert",
     "teal": "Bleu-vert",
     "cyan": "Cyan",

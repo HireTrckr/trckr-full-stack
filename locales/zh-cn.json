@@ -5,17 +5,35 @@
     "reset": "重置",
     "edit": "编辑",
     "delete": "删除",
-    "jobs_one": "工作",
-    "jobs_other": "工作",
+    "jobs_one": "职位",
+    "jobs_other": "职位",
     "view-more": "查看更多",
-    "view-less": "收起",
+    "view-less": "查看更少",
     "auth": {
       "sign-in-to-continue": "请登录以继续",
       "sign-in": "登录",
-      "sign-out": "退出登录",
+      "sign-out": "登出",
       "loading": "正在加载用户数据..."
     }
   },
+
+  "filter": {
+    "search-placeholder": "搜索职位...",
+    "filters": "筛选条件",
+    "status": "状态",
+    "tags": "标签",
+    "sort-by": "排序方式",
+    "company": "公司",
+    "position": "职位",
+    "date": "申请日期",
+    "clear-all": "清除全部",
+    "search": "搜索",
+    "tag": "标签",
+    "clear-filters": "清除筛选条件",
+    "no-results": "没有符合筛选条件的职位",
+    "reset-filters": "重置筛选条件"
+  },
+
   "cookies": {
     "message": "本网站使用cookies以确保您保持登录状态。",
     "acknowledge": "确认"
@@ -25,60 +43,60 @@
       "undo": "撤销"
     },
     "titles": {
-      "jobAdded": "工作已添加",
-      "jobDeleted": "工作已删除",
-      "settingsUpdated": "设置已更新",
-      "tagCreated": "标签已创建",
-      "tagDeleted": "标签已删除",
-      "tagUpdated": "标签已更新",
-      "tagAdded": "标签已添加",
-      "tagRemoved": "标签已移除",
-      "statusCreated": "状态已创建",
-      "statusDeleted": "状态已删除",
-      "statusUpdated": "状态已更新",
-      "statusesReset": "状态已重置",
+      "jobAdded": "已添加职位",
+      "jobDeleted": "已删除职位",
+      "settingsUpdated": "已更新设置",
+      "tagCreated": "已创建标签",
+      "tagDeleted": "已删除标签",
+      "tagUpdated": "已更新标签",
+      "tagAdded": "已添加标签",
+      "tagRemoved": "已移除标签",
+      "statusCreated": "已创建状态",
+      "statusDeleted": "已删除状态",
+      "statusUpdated": "已更新状态",
+      "statusesReset": "已重置状态",
       "operationFailed": "操作失败",
       "error": "错误"
     },
-    "jobAdded": "工作 {{position}} 于 {{company}} 已成功添加",
-    "jobDeleted": "工作 {{position}} 于 {{company}} 已成功删除",
-    "settingsUpdated": "设置已成功更新",
-    "tagCreated": "标签 \"{{name}}\" 已成功创建",
-    "tagDeleted": "标签 \"{{name}}\" 已成功删除",
-    "tagUpdated": "标签 \"{{name}}\" 已成功更新",
-    "tagAddedToJob": "标签 \"{{name}}\" 已成功添加到工作",
-    "tagRemovedFromJob": "标签 \"{{name}}\" 已成功从工作中移除",
-    "statusCreated": "状态 \"{{name}}\" 已成功创建",
-    "statusDeleted": "状态 \"{{name}}\" 已成功删除",
-    "statusUpdated": "状态 \"{{name}}\" 已成功更新",
+    "jobAdded": "已成功添加 {{company}} 的 {{position}} 职位",
+    "jobDeleted": "已成功删除 {{company}} 的 {{position}} 职位",
+    "settingsUpdated": "已成功更新设置",
+    "tagCreated": "已成功创建\"{{name}}\"标签",
+    "tagDeleted": "已成功删除\"{{name}}\"标签",
+    "tagUpdated": "已成功更新\"{{name}}\"标签",
+    "tagAddedToJob": "已成功将\"{{name}}\"标签添加至职位",
+    "tagRemovedFromJob": "已成功从职位移除\"{{name}}\"标签",
+    "statusCreated": "已成功创建\"{{name}}\"状态",
+    "statusDeleted": "已成功删除\"{{name}}\"状态",
+    "statusUpdated": "已成功更新\"{{name}}\"状态",
     "statusesReset": "所有状态已重置为默认值",
     "errors": {
       "fetchSettings": "获取设置时出错",
       "updateSettings": "更新设置时出错",
-      "addJob": "添加工作 {{position}} 于 {{company}} 时出错",
-      "deleteJob": "删除工作 {{position}} 于 {{company}} 时出错",
-      "updateJob": "更新工作 {{position}} 于 {{company}} 时出错",
-      "clearJobs": "清除工作时出错",
+      "addJob": "添加 {{company}} 的 {{position}} 职位时出错",
+      "deleteJob": "删除 {{company}} 的 {{position}} 职位时出错",
+      "updateJob": "更新 {{company}} 的 {{position}} 职位时出错",
+      "clearJobs": "清除职位时出错",
       "fetchTags": "获取标签时出错",
-      "createTag": "创建标签 {{name}} 时出错",
-      "deleteTag": "删除标签 {{name}} 时出错",
-      "updateTag": "更新标签 {{name}} 时出错",
-      "addTagToJob": "将标签添加到工作时出错",
-      "removeTagFromJob": "从工作中移除标签时出错",
+      "createTag": "创建\"{{name}}\"标签时出错",
+      "deleteTag": "删除\"{{name}}\"标签时出错",
+      "updateTag": "更新\"{{name}}\"标签时出错",
+      "addTagToJob": "将标签添加至职位时出错",
+      "removeTagFromJob": "从职位移除标签时出错",
       "clearTags": "清除标签时出错",
       "fetchStatuses": "获取状态时出错",
-      "createStatus": "创建状态 {{name}} 时出错",
-      "deleteStatus": "删除状态 {{name}} 时出错",
-      "updateStatus": "更新状态 {{name}} 时出错",
+      "createStatus": "创建\"{{name}}\"状态时出错",
+      "deleteStatus": "删除\"{{name}}\"状态时出错",
+      "updateStatus": "更新\"{{name}}\"状态时出错",
       "resetStatuses": "重置状态时出错",
-      "cannotDeleteDefaultStatus": "无法删除默认状态 \"{{name}}\"",
-      "cannotModifyDefaultStatus": "无法修改默认状态 \"{{name}}\"",
+      "cannotDeleteDefaultStatus": "无法删除默认状态\"{{name}}\"",
+      "cannotModifyDefaultStatus": "无法修改默认状态\"{{name}}\"",
       "statusesNotFound": "{{message}}"
     }
   },
   "404": {
-    "title": "404 - 页面未找到",
-    "description": "您查找的页面不存在。",
+    "title": "404 - 找不到页面",
+    "description": "您要查找的页面不存在。",
     "button": "返回首页"
   },
   "error": {
@@ -90,31 +108,9 @@
     "not-applied": "未申请",
     "applied": "已申请",
     "interviewing": "面试中",
-    "offer-sent": "已收到offer",
+    "offer-sent": "已发出录用通知",
     "rejected": "已拒绝",
     "accepted": "已接受"
-  },
-  "tag-editor": {
-    "tags-used_one": "已使用 {{count}}/{{limit}} 个标签",
-    "tags-used_other": "已使用 {{count}}/{{limit}} 个标签",
-    "new": "(新)",
-    "create-new-tag": "创建新标签：\"{{tag}}\"",
-    "tag-uses_one": "({{count}} 次使用)",
-    "tag-uses_other": "({{count}} 次使用)",
-    "placeholder_max_one": "已达最大数量 ({{count}} 个标签)",
-    "placeholder_max_other": "已达最大数量 ({{count}} 个标签)",
-    "placeholder_empty": "添加标签（以逗号或回车键分隔）"
-  },
-  "job-list": {
-    "title_zero": "我的工作申请",
-    "title_one": "我的工作申请 ({{count}})",
-    "title_other": "我的工作申请 ({{count}})",
-    "no-jobs-title": "没有找到工作！",
-    "no-jobs-msg": "添加一个新的工作申请来开始。"
-  },
-  "job-form": {
-    "title": "跟踪新工作申请",
-    "submit-button": "提交申请"
   },
   "navbar": {
     "track": "跟踪",
@@ -135,15 +131,15 @@
       "language": "语言",
       "theme": {
         "dark-mode": "深色模式",
-        "primary-color": "主题颜色"
+        "primary-color": "主要颜色"
       }
     },
     "tags": {
       "title": "标签",
-      "jobs_one": "{{count}} 个工作",
-      "jobs_other": "{{count}} 个工作",
-      "no-tags-title": "没有找到标签！",
-      "no-tags-msg": "添加一个新标签来开始。"
+      "jobs_one": "{{count}} 个职位",
+      "jobs_other": "{{count}} 个职位",
+      "no-tags-title": "找不到标签！",
+      "no-tags-msg": "添加新标签开始使用。"
     },
     "status": {
       "title": "状态"
@@ -154,10 +150,10 @@
   },
   "modals": {
     "shared": {
-      "last-updated": "最后更新于 {{date}}, {{time}}",
+      "last-updated": "最后更新于 {{date}}，{{time}}",
       "edit-wait-timer_one": "请等待 {{count}} 秒后再次编辑。",
       "edit-wait-timer_other": "请等待 {{count}} 秒后再次编辑。",
-      "rate-limit-message-tt": "已启用频率限制以防止滥用！"
+      "rate-limit-message-tt": "已启用速率限制以防止滥用！"
     },
     "tag": {
       "shared": {
@@ -201,11 +197,33 @@
         "URL-placeholder": "输入网址"
       },
       "edit": {
-        "title": "编辑工作",
-        "job-id": "工作 ID",
+        "title": "编辑职位",
+        "job-id": "职位 ID",
         "external-link-warning": "这是外部网站！"
       }
     }
+  },
+  "tag-editor": {
+    "tags-used_one": "已使用 {{count}}/{{limit}} 个标签",
+    "tags-used_other": "已使用 {{count}}/{{limit}} 个标签",
+    "new": "(新)",
+    "create-new-tag": "创建新标签：\"{{tag}}\"",
+    "tag-uses_one": "(使用 {{count}} 次)",
+    "tag-uses_other": "(使用 {{count}} 次)",
+    "placeholder_max_one": "已达上限 ({{count}} 个标签)",
+    "placeholder_max_other": "已达上限 ({{count}} 个标签)",
+    "placeholder_empty": "添加标签 (逗号或按回车键分隔)"
+  },
+  "job-list": {
+    "title_zero": "我的职位申请",
+    "title_one": "我的职位申请 ({{count}})",
+    "title_other": "我的职位申请 ({{count}})",
+    "no-jobs-title": "找不到职位！",
+    "no-jobs-msg": "添加新职位申请开始使用。"
+  },
+  "job-form": {
+    "title": "跟踪新职位申请",
+    "submit-button": "跟踪申请"
   },
   "colors": {
     "title": "颜色",
@@ -220,7 +238,7 @@
     "indigo": "靛蓝色",
     "violet": "紫罗兰色",
     "purple": "紫色",
-    "fuchsia": "洋红色",
-    "pink": "粉色"
+    "fuchsia": "紫红色",
+    "pink": "粉红色"
   }
 }
