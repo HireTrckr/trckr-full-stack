@@ -4,4 +4,6 @@ export enum ModalTypes {
   tagEditor = 'tagEditor',
   statusCreator = 'statusCreator',
   statusEditor = 'statusEditor',
+  customFieldCreator = 'customFieldCreator',
+  customFieldEditor = 'customFieldEditor',
 }

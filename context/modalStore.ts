@@ -5,15 +5,20 @@ import { CreateTagModalProps } from '../components/Modals/CreateTagModal/CreateT
 import { ModalTypes } from '../types/modalTypes';
 import { CreateStatusModalProps } from '../components/Modals/CreateStatusModal/CreateStatusModal';
 import { EditStatusModalProps } from '../components/Modals/EditStatusModal/EditStatusModal';
+import { CustomFieldCreatorModalProps } from '../components/Modals/CustomFieldCreatorModal/CustomFieldCreatorModal';
+import { CustomFieldEditorModalProps } from '../components/Modals/CustomFieldEditorModal/CustomFieldEditorModal';
 
 export type ModalProps = {
   type: string;
   props:
-    | EditTagModalProps
     | EditJobModalProps
     | CreateTagModalProps
+    | EditTagModalProps
+    | EditTagModalProps
     | CreateStatusModalProps
-    | EditStatusModalProps;
+    | EditStatusModalProps
+    | CustomFieldCreatorModalProps
+    | CustomFieldEditorModalProps;
 };
 
 type ModalStore = {
@@ -25,6 +30,8 @@ type ModalStore = {
   openJobEditorModal: (props: ModalProps) => void;
   openStatusCreatorModal: (props: ModalProps) => void;
   openStatusEditorModal: (props: ModalProps) => void;
+  openCustomFieldCreatorModal: (props: ModalProps) => void;
+  openCustomFieldEditorModal: (props: ModalProps) => void;
 
   /**
    * Closes the currently open modal - regardless of type.
@@ -107,6 +114,36 @@ export const useModalStore = create<ModalStore>((set, get) => ({
     } else {
       console.warn(
         'Modal type mismatch: expected jobEditor, but got',
+        get().modalProps['type']
+      );
+      get().closeModal();
+    }
+  },
+  openCustomFieldCreatorModal: (props: ModalProps) => {
+    if (props.type === ModalTypes.customFieldCreator) {
+      set({
+        isOpen: true,
+        modalType: ModalTypes.customFieldCreator,
+        modalProps: props.props,
+      });
+    } else {
+      console.warn(
+        'Modal type mismatch: expected customFieldCreator, but got',
+        get().modalProps['type']
+      );
+      get().closeModal();
+    }
+  },
+  openCustomFieldEditorModal: (props: ModalProps) => {
+    if (props.type === ModalTypes.customFieldEditor) {
+      set({
+        isOpen: true,
+        modalType: ModalTypes.customFieldEditor,
+        modalProps: props.props,
+      });
+    } else {
+      console.warn(
+        'Modal type mismatch: expected customFieldEditor, but got',
         get().modalProps['type']
       );
       get().closeModal();
