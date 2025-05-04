@@ -6,6 +6,8 @@ import { EditJobModal } from '../../Modals/EditJobModal/EditJobModal';
 import { ModalTypes } from '../../../types/modalTypes';
 import { CreateStatusModal } from '../../Modals/CreateStatusModal/CreateStatusModal';
 import { EditStatusModal } from '../../Modals/EditStatusModal/EditStatusModal';
+import { CustomFieldCreatorModal } from '../../Modals/CustomFieldCreatorModal/CustomFieldCreatorModal';
+import { CustomFieldEditorModal } from '../../Modals/CustomFieldEditorModal/CustomFieldEditorModal';
 
 interface ModalHousingProps {
   children: React.ReactNode;
@@ -63,6 +65,22 @@ export function ModalHousing({ children }: ModalHousingProps) {
             onSave={modalProps.onSave}
           />
         );
+      case ModalTypes.customFieldCreator:
+        return (
+          <CustomFieldCreatorModal
+            onCancel={modalProps.onCancel}
+            onSave={modalProps.onSave}
+          />
+        );
+      case ModalTypes.customFieldEditor:
+        return (
+          <CustomFieldEditorModal
+            field={modalProps.field}
+            onSave={modalProps.onSave}
+            onClose={modalProps.onClose}
+            onDelete={modalProps.onDelete}
+          />
+        );
     }
   };
 
@@ -75,6 +93,8 @@ export function ModalHousing({ children }: ModalHousingProps) {
         ModalTypes.jobEditor,
         ModalTypes.statusCreator,
         ModalTypes.statusEditor,
+        ModalTypes.customFieldCreator,
+        ModalTypes.customFieldEditor,
       ].includes(modalType as ModalTypes)
     ) {
       closeModal();
