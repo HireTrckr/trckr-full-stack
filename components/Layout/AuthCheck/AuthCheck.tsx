@@ -35,7 +35,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   }, []);
 
   useEffect(() => {
-if (user) {
+    if (user) {
       fetchTags();
       fetchJobs();
       fetchSettings();
