@@ -7,6 +7,8 @@ import { TagEditor } from '../../TagEditor/TagEditor';
 import { StatusPickerComponent } from '../../StatusPickerComponent/StatusPickerComponent';
 import { JobStatus } from '../../../types/jobStatus';
 import { useTranslation } from 'react-i18next';
+import { CustomFieldsSection } from '../../JobDetails/CustomFieldsSection/CustomFieldsSection';
+import { CustomFieldValue } from '../../../types/customField';
 
 export interface EditJobModalProps {
   job: Job;
@@ -22,6 +24,9 @@ export function EditJobModal({
   onDelete,
 }: EditJobModalProps): JSX.Element {
   const [formData, setFormData] = useState<Job>(job);
+
+  const [customFieldsAreValid, setCustomFieldsAreValid] =
+    useState<boolean>(true);
 
   const { t } = useTranslation();
 
@@ -90,14 +95,15 @@ export function EditJobModal({
             {t('modals.job.edit.job-id')}: <i>{formData.id}</i>
           </span>
         </div>
-        <form className="w-full space-y-4">
+        <form className="w-full space-y-4 overflow-y-scroll mb-4">
           <div className="space-y-3 relative">
             <div className="w-full">
               <label
                 htmlFor="company"
                 className="text-text-primary block text-xs"
               >
-                {t('modals.job.shared.company')}*
+                {t('modals.job.shared.company')}
+                <span className="text-red-500 ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -116,7 +122,8 @@ export function EditJobModal({
                 htmlFor="position"
                 className="text-text-primary block text-xs"
               >
-                {t('modals.job.shared.position')}*
+                {t('modals.job.shared.position')}
+                <span className="text-red-500 ml-1">*</span>
               </label>
               <input
                 type="text"
@@ -209,9 +216,28 @@ export function EditJobModal({
                   }}
                 />
               </div>
+
+              {/* Custom Fields Section */}
+              <div className="w-full">
+                <CustomFieldsSection
+                  job={formData}
+                  onValid={() => setCustomFieldsAreValid(true)}
+                  onInvalid={() => setCustomFieldsAreValid(false)}
+                  onChange={(value: CustomFieldValue) => {
+                    setFormData((prevData) => ({
+                      ...prevData,
+                      customFields: {
+                        ...prevData.customFields,
+                        [value.fieldId]: value,
+                      },
+                    }));
+                  }}
+                />
+              </div>
             </>
           )}
-
+        </form>
+        <form className="py-2">
           {job.timestamps?.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
@@ -222,13 +248,15 @@ export function EditJobModal({
               </span>
             </div>
           )}
-
           <div className="mt-2 flex justify-center space-x-3">
             <button
               onClick={handleSave}
               className="bg-blue-300 hover:bg-blue-400 text-white px-4 py-2 rounded transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={
-                !formData.position || !formData.company || timeRemaining > 0
+                !formData.position ||
+                !formData.company ||
+                timeRemaining > 0 ||
+                !customFieldsAreValid
               }
             >
               {t('common.save')}

@@ -9,7 +9,7 @@ export default function List() {
       </Head>
 
       <div
-        className="w-full bg-background-primary rounded-lg py-4 shadow-light
+        className="w-full bg-background-primary rounded-lg p-6 shadow-light
                        transition-all duration-bg ease-in-out
                        flex flex-col items-center
                        hover:scale-[1.02]"

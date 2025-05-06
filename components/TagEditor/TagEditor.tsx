@@ -96,9 +96,6 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
       )
       .slice(0, 5);
 
-    // todo fix create tag dropdown not appearing
-    console.log('matchingTags', matchingTags);
-
     if (isMounted) {
       setSuggestions(matchingTags);
       console.log(suggestions);
@@ -259,7 +256,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setIsInputFocused(true)}
-          className="flex-grow min-w-full bg-transparent outline-none border-none p-1 placeholder-text-secondary/50 text-text-primary"
+          className="flex-grow min-w-full bg-transparent outline-none border-none placeholder-text-secondary/50 text-text-primary"
           placeholder={
             selectedTagIds.length >= TAGS_PER_RECORD
               ? t('tag-editor.placeholder_max', { count: TAGS_PER_RECORD })

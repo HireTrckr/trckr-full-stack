@@ -19,6 +19,13 @@
     "deselectAll": "Deselect All"
   },
 
+  "types": {
+    "number": "Number",
+    "string": "Text",
+    "boolean": "Yes/No",
+    "date": "Date",
+    "select": "Select"
+  },
   "filter": {
     "search-placeholder": "Search jobs...",
     "filters": "Filters",

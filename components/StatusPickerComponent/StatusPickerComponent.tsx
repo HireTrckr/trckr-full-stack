@@ -34,7 +34,7 @@ export function StatusPickerComponent({
   return (
     <>
       <button
-        className="w-full px-4 py-2 rounded-lg flex justify-between items-center relative bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text text-left"
+        className="w-full px-4 py-2 rounded-lg flex justify-between items-center bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 transition-all duration-text text-left"
         onClick={() => setStatusDropDownOpen(!statusDropDownOpen)}
         ref={statusDropDownButtonRef}
         type="button"
@@ -50,8 +50,7 @@ export function StatusPickerComponent({
       </button>
       {statusDropDownOpen && (
         <div
-          className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 max-h-full overflow-y-auto
-                "
+          className="absolute right-0 top-full w-3/4 !mt-0 bg-background-secondary border border-accent-primary rounded-lg shadow-light text-text-primary z-50 max-h-full overflow-y-auto"
           ref={statusDropDownRef}
           onMouseLeave={() => setStatusDropDownOpen(false)}
         >

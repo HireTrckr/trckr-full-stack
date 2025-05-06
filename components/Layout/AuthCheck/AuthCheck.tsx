@@ -11,6 +11,7 @@ import { useTagStore } from '../../../context/tagStore';
 import { DEFAULT_SETTINGS } from '../../../types/settings';
 import { useStatusStore } from '../../../context/statusStore';
 import { useTranslation } from 'react-i18next';
+import { useCustomFieldStore } from '../../../context/customFieldStore';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -27,6 +28,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const fetchJobs = useJobStore((state) => state.fetchJobs);
   const fetchSettings = useSettingsStore((state) => state.fetchSettings);
   const fetchStatus = useStatusStore((state) => state.fetchStatuses);
+  const fetchFields = useCustomFieldStore((state) => state.loadFields);
 
   const loadUserDataIntoStores = async () => {
     if (!user) return;
@@ -36,6 +38,7 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     fetchJobs();
     fetchSettings();
     fetchStatus();
+    fetchFields();
   };
 
   useEffect(() => {

@@ -1,7 +1,14 @@
 //context/jobStore.ts
 
 import { create } from 'zustand';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  runTransaction,
+} from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Job, JobNotSavedInDB } from '../types/job';
@@ -11,6 +18,7 @@ import { ToastCategory } from '../types/toast';
 import { timestampToDate } from '../utils/timestampUtils';
 import { useToastStore } from './toastStore';
 import { JobStatus } from '../types/jobStatus';
+import { CustomField } from '../types/customField';
 
 type JobStore = {
   jobs: Job[];
@@ -24,6 +32,8 @@ type JobStore = {
   getJobsWithTags: (tagId: Tag['id'][]) => Job[];
   getJobsWithStatus: (statusId: JobStatus['id']) => Job[];
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
+
+  cleanupFieldValuesFromJobs: (fieldID: CustomField['id']) => Promise<boolean>;
 };
 
 const { createTranslatedToast } = useToastStore.getState();
@@ -275,6 +285,43 @@ export const useJobStore = create<JobStore>((set, get) => ({
         10000
       );
       set({ error: `Failed to clear jobs: ${error}` });
+    } finally {
+      set({ isLoading: false });
+    }
+
+    return !get().error;
+  },
+
+  cleanupFieldValuesFromJobs: async (fieldID: CustomField['id']) => {
+    if (!auth.currentUser) return false;
+
+    set({ isLoading: true, error: null });
+    try {
+      const jobsRef = collection(db, `users/${auth.currentUser.uid}/jobs`);
+      const jobsSnapshot = await getDocs(jobsRef);
+      await runTransaction(db, async (transaction) => {
+        jobsSnapshot.forEach((jobDoc) => {
+          const jobData = jobDoc.data() as Job;
+          if (jobData.customFields[fieldID]) {
+            delete jobData.customFields[fieldID];
+            transaction.update(jobDoc.ref, {
+              customFields: jobData.customFields,
+            });
+          }
+        });
+      });
+    } catch (error) {
+      console.error(`[jobStore.ts] Error cleaning up field values`, error);
+      createTranslatedToast(
+        'toasts.errors.cleanupFieldValues',
+        true,
+        'toasts.titles.error',
+        { message: (error as Error).message },
+        {},
+        ToastCategory.ERROR,
+        10000
+      );
+      set({ error: `Failed to clean up field values: ${error}` });
     } finally {
       set({ isLoading: false });
     }

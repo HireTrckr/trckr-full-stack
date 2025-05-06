@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="title" content="Trckr" />
           <meta name="og:title" content="Trckr" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          
         </Head>
         <Layout>
           <Component {...pageProps} />

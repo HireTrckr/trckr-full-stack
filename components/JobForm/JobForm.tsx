@@ -8,6 +8,8 @@ import { JobStatus } from '../../types/jobStatus';
 import { StatusPickerComponent } from '../StatusPickerComponent/StatusPickerComponent';
 import { NewTag } from '../TagEditor/TagEditor';
 import { useTranslation } from 'react-i18next';
+import { CustomFieldsSection } from '../JobDetails/CustomFieldsSection/CustomFieldsSection';
+import { CustomFieldValue } from '../../types/customField';
 
 export function JobForm() {
   const { addJob } = useJobStore();
@@ -20,7 +22,11 @@ export function JobForm() {
     location: '',
     URL: '',
     tagIds: [],
+    customFields: {},
   });
+
+  const [customFieldsAreValid, setCustomFieldsAreValid] =
+    useState<boolean>(true);
 
   // Track new tags created during form session
   const [newTags, setNewTags] = useState<NewTag[]>([]);
@@ -63,6 +69,7 @@ export function JobForm() {
       location: '',
       URL: '',
       tagIds: [] as Job['tagIds'],
+      customFields: {},
     });
     setNewTags([]);
   };
@@ -74,14 +81,18 @@ export function JobForm() {
           {t('job-form.title')}
         </h2>
       </div>
-      <form onSubmit={handleSubmit} className="w-full space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full space-y-4 overflow-y-scroll mb-4 p-2"
+      >
         <div className="space-y-3 relative">
           <div className="w-full">
             <label
               htmlFor="company"
               className="text-text-primary block text-xs"
             >
-              {t('modals.job.shared.company')}*
+              {t('modals.job.shared.company')}
+              <span className="text-red-500 ml-1">*</span>
             </label>
             <input
               type="text"
@@ -103,7 +114,8 @@ export function JobForm() {
               htmlFor="position"
               className="text-text-primary block text-xs"
             >
-              {t('modals.job.shared.position')}*
+              {t('modals.job.shared.position')}
+              <span className="text-red-500 ml-1">*</span>
             </label>
             <input
               type="text"
@@ -190,13 +202,31 @@ export function JobForm() {
                 onTagsChange={handleTagsChange}
               />
             </div>
+
+            <div className="w-full">
+              <CustomFieldsSection
+                job={job}
+                onValid={() => setCustomFieldsAreValid(true)}
+                onInvalid={() => setCustomFieldsAreValid(false)}
+                onChange={(value: CustomFieldValue) => {
+                  setJob((prevData) => ({
+                    ...prevData,
+                    customFields: {
+                      ...prevData.customFields,
+                      [value.fieldId]: value,
+                    },
+                  }));
+                }}
+              />
+            </div>
           </>
         )}
-
+      </form>
+      <form>
         <button
           type="submit"
           className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:brightness-[80%] text-text-accent font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
-          disabled={!job.company || !job.position}
+          disabled={!job.company || !job.position || !customFieldsAreValid}
         >
           {t('job-form.submit-button')}
         </button>
