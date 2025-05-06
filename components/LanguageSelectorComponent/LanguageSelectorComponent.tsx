@@ -1,7 +1,6 @@
 // components/LanguageSelector/LanguageSelector.tsx
 import React, { useEffect, useState } from 'react';
 import { SupportedLanguage } from '../../types/settings';
-import { useTranslation } from 'react-i18next';
 
 const languages: { value: SupportedLanguage; label: string }[] = [
   { value: 'en', label: 'English' },

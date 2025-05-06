@@ -1,9 +1,9 @@
 import React, { JSX } from 'react';
-import { SearchableItem, SearchResult } from '../../types/SearchBarItemType';
-import { Job } from '../../types/job';
+import { Job } from '../../../../types/job';
+import { Tag } from '../../../../types/tag';
 import { SearchBarItemTag } from '../SearchBarItemTag/SearchBarItemTag';
 import { SearchBarItemJob } from '../SearchBarItemJob/SearchBarItemJob';
-import { Tag } from '../../types/tag';
+import { SearchableItem } from '../../../../types/SearchBarItemType';
 
 interface SearchBarItemProps {
   item: SearchableItem;

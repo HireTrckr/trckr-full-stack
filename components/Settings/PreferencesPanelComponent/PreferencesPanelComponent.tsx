@@ -1,4 +1,4 @@
-import React, { JSX, use, useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import { ThemeSettings } from '../../ThemeSettings/ThemeSettings';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';
 import { useSettingsStore } from '../../../context/settingStore';

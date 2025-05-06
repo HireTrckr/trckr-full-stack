@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React from 'react';
 import { useCustomFieldStore } from '../../../context/customFieldStore';
 import {
   CustomField,
   CustomFieldType,
   CustomFieldValue,
 } from '../../../types/customField';
-import { Job, JobNotSavedInDB } from '../../../types/job';
+import { JobNotSavedInDB } from '../../../types/job';
 
 interface CustomFieldsSectionProps {
   job: JobNotSavedInDB;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Tag, TagNotSavedInDB } from '../../../types/tag';
+import { TagNotSavedInDB } from '../../../types/tag';
 import { getTailwindColorObjectFromName } from '../../../utils/getTailwindColorObject';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 import { ColorPicker } from '../../ColorPicker/ColorPicker';

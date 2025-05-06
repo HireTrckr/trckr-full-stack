@@ -2,8 +2,6 @@ import React, { JSX } from 'react';
 import Link from 'next/link';
 import { NavBarOption } from '../../../types/navBarOption';
 import { SearchBar } from '../SearchBar/SearchBar';
-import { useToastStore } from '../../../context/toastStore';
-import { Toast, ToastCategory } from '../../../types/toast';
 import { UserThumbnail } from '../UserThumbnail/UserThumbnail';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelectorComponent } from '../../LanguageSelectorComponent/LanguageSelectorComponent';

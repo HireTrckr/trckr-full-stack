@@ -1,4 +1,4 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useJobStore } from '../../context/jobStore';
 import { Job, JobNotSavedInDB } from '../../types/job';
 import { Tag } from '../../types/tag';

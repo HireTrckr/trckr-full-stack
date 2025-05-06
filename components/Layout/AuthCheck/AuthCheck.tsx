@@ -30,24 +30,17 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   const fetchStatus = useStatusStore((state) => state.fetchStatuses);
   const fetchFields = useCustomFieldStore((state) => state.loadFields);
 
-  const loadUserDataIntoStores = async () => {
-    if (!user) return;
-
-    // load user data into stores
-    fetchTags();
-    fetchJobs();
-    fetchSettings();
-    fetchStatus();
-    fetchFields();
-  };
-
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (user) {
-      loadUserDataIntoStores();
+if (user) {
+      fetchTags();
+      fetchJobs();
+      fetchSettings();
+      fetchStatus();
+      fetchFields();
     }
   }, [user]);
 
