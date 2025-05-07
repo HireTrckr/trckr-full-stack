@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
-import { TagMap } from '../../../types/tag';
+import { Tag, TagMap } from '../../../types/tag';
 import { timestampToDate } from '../../../utils/timestampUtils';
+import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,27 +28,25 @@ export default async function handler(
         return res.status(200).json({ tagMap: {} });
       }
 
-      const tagData = tagsDoc.data();
+      const tagData: TagMap = tagsDoc.data().tagMap;
       const tagMap: TagMap = {};
 
-      if (tagData.tagMap) {
-        Object.entries(tagData.tagMap).forEach(
-          ([tagId, tag]: [string, any]) => {
-            if (!tag || typeof tag !== 'object') return;
+      if (tagData) {
+        Object.entries(tagData).forEach(([tagId, tag]: [string, Tag]) => {
+          if (!tag || typeof tag !== 'object') return;
 
-            tagMap[tagId] = {
-              id: tagId,
-              name: tag.name,
-              color: tag.color,
-              count: Math.max(tag.count || 0, 0), // sometimes there is negative glitches
-              timestamps: {
-                createdAt: timestampToDate(tag.timestamps?.createdAt),
-                updatedAt: timestampToDate(tag.timestamps?.updatedAt),
-                deletedAt: timestampToDate(tag.timestamps?.deletedAt),
-              },
-            };
-          }
-        );
+          tagMap[tagId] = {
+            id: tagId,
+            name: tag.name,
+            color: tag.color || getRandomTailwindColor().tailwindColorName,
+            count: Math.max(tag.count || 0, 0), // sometimes there is negative glitches
+            timestamps: {
+              createdAt: timestampToDate(tag.timestamps?.createdAt),
+              updatedAt: timestampToDate(tag.timestamps?.updatedAt),
+              deletedAt: timestampToDate(tag.timestamps?.deletedAt),
+            },
+          };
+        });
       }
 
       return res.status(200).json({ tagMap });
