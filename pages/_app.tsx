@@ -15,6 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <title>Trckr</title>
           <meta name="description" content="Track your job applications" />
 
+          <meta
+            name="keywords"
+            content="Job, Jobs, Applications, Application Management, Job Application Tracking"
+          />
+
           <meta property="og:url" content="https://hire-trckr.vercel.app" />
           <meta property="og:type" content="website" />
           <meta property="og:title" content="Trckr" />
@@ -42,6 +47,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             name="twitter:image"
             content="https://hire-trckr.vercel.app/HireTrckr.png"
           />
+
+          <meta name="author" content="Dylan Penney" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <Layout>
           <Component {...pageProps} />
