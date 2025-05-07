@@ -74,7 +74,7 @@ export function Navbar(): JSX.Element {
       </div>
 
       {/*col 3*/}
-      <div className='flex'>
+      <div className="flex">
         <SearchBar />
 
         <UserThumbnail />
