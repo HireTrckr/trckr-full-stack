@@ -26,10 +26,7 @@ provider.setCustomParameters({ prompt: 'select_account' });
 const signIn = async () => {
   try {
     await signInWithPopup(auth, provider);
-  } catch (error: any) {
-    if (error.code === 'auth/popup-closed-by-user') {
-      return;
-    }
+  } catch (error) {
     console.error('Google sign-in error', error);
   }
 };

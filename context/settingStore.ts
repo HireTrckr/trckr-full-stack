@@ -23,11 +23,16 @@ type SettingsStore = {
 export const applyTailwindThemeColor = (
   color: TailwindColor = DEFAULT_SETTINGS.theme.primaryColor
 ) => {
-  document.documentElement.style.setProperty(
-    '--accent-color',
-    colors[color.tailwindColorName][500]
-  );
-  document.documentElement.style.setProperty('--text-accent', color.textColor);
+  if (typeof window !== 'undefined') {
+    document.documentElement.style.setProperty(
+      '--accent-color',
+      colors[color.tailwindColorName][500]
+    );
+    document.documentElement.style.setProperty(
+      '--text-accent',
+      color.textColor
+    );
+  }
 };
 
 export const useSettingsStore = create<SettingsStore>((set, get) => ({

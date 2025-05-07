@@ -26,11 +26,12 @@ i18n.use(initReactI18next).init({
 });
 
 // Add subscription to language changes
-useSettingsStore.subscribe((state) => {
-  const language = state.settings.preferences.language;
-  if (language && i18n.language !== language) {
-    i18n.changeLanguage(language);
-  }
-});
+if (typeof window !== 'undefined')
+  useSettingsStore.subscribe((state) => {
+    const language = state.settings.preferences.language;
+    if (language && i18n.language !== language) {
+      i18n.changeLanguage(language);
+    }
+  });
 
 export default i18n;

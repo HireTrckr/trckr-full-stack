@@ -24,24 +24,36 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (window && typeof window !== 'undefined') {
+  const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Get theme from localStorage or system preference
+    const getInitialTheme = (): Theme => {
+      // Check for saved theme in localStorage
       const savedTheme = localStorage.getItem('theme') as Theme;
-      if (savedTheme) {
+      if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
         return savedTheme;
       }
 
       // If no saved theme, check system preference
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
-      return systemTheme.matches ? 'dark' : 'light';
-    }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
 
-    // fallback
-    return DEFAULT_THEME;
-  });
+      return DEFAULT_THEME;
+    };
+
+    // Set the initial theme
+    setTheme(getInitialTheme());
+  }, []);
 
   // save theme to local storage
   useEffect(() => {
+    if (!mounted) return;
+
     try {
       localStorage.setItem('theme', theme);
       document.documentElement.setAttribute('data-theme', theme);
@@ -110,6 +122,10 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
+
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

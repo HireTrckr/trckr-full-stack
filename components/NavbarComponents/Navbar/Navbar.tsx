@@ -1,18 +1,12 @@
 import React, { JSX } from 'react';
 import Link from 'next/link';
-import { NavBarOption } from '../../../types/navBarOption';
 import { SearchBar } from '../SearchBar/SearchBar';
 import { UserThumbnail } from '../UserThumbnail/UserThumbnail';
 import { useTranslation } from 'react-i18next';
 import { LanguageSelectorComponent } from '../../LanguageSelectorComponent/LanguageSelectorComponent';
 import { useSettingsStore } from '../../../context/settingStore';
 import i18n from '../../../lib/i18n';
-
-const navBarOptions: NavBarOption[] = [
-  { link: '/list', text: 'track' },
-  { link: '/new', text: 'add new' },
-  { link: '/settings', text: 'settings' },
-];
+import Image from 'next/image';
 
 export function Navbar(): JSX.Element {
   const { t } = useTranslation();
@@ -23,10 +17,12 @@ export function Navbar(): JSX.Element {
       <div className="flex items-center gap-2">
         <Link href="/" className="justify-self-start max-h-full h-full">
           <div className="flex items-center space-x-2 p-1 h-full">
-            <img
+            <Image
               src="/HireTrckr.png"
               alt="Trckr Logo"
-              className="aspect-square max-h-[1rem] rounded-[50%]"
+              width={16}
+              height={16}
+              className="max-h-[1rem] rounded-[50%]"
             />
             <h1 className="text-lg font-semibold text-text-primary transition-colors duration-text">
               Trckr

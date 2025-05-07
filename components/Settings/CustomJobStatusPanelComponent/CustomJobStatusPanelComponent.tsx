@@ -3,7 +3,6 @@ import { useStatusStore } from '../../../context/statusStore';
 import { JobStatus, JobStatusNotSavedInDB } from '../../../types/jobStatus';
 import { ModalProps, useModalStore } from '../../../context/modalStore';
 import { ModalTypes } from '../../../types/modalTypes';
-import { useToastStore } from '../../../context/toastStore';
 import { SkeletonCustomJobStatusPanelComponent } from './SkeletonCustomJobStatusPanelComponent/SkeletonCustomJobStatusPanelComponent';
 import { ButtonsComponent } from '../../ButtonsComponent/ButtonsComponent';
 import { useTranslation } from 'react-i18next';
@@ -23,8 +22,6 @@ export function CustomJobStatusPanelComponent(): JSX.Element {
     (state) => state.openStatusEditorModal
   );
   const closeModal = useModalStore((state) => state.closeModal);
-
-  const { createTranslatedToast } = useToastStore();
 
   const handleReset = () => {
     // remove all custom status

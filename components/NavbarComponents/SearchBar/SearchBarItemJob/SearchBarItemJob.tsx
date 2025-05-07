@@ -11,7 +11,7 @@ interface SearchBarItemJobProps {
 export function SearchBarItemJob({ job }: SearchBarItemJobProps): JSX.Element {
   const getTagsFromJob = useTagStore((state) => state.getTagsFromJob);
 
-  const [tags, setTags] = useState<Tag[]>(getTagsFromJob(job));
+  const [tags] = useState<Tag[]>(getTagsFromJob(job));
 
   return (
     <div className="flex gap-2">

@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   CustomField,
   CustomFieldNotSavedInDB,
   CustomFieldType,
-  CustomFieldValue,
 } from '../../../types/customField';
 import { TiArrowSortedDown } from 'react-icons/ti';
 
@@ -26,7 +25,6 @@ export function CustomFieldCreatorModal({
     useState<CustomField['defaultValue']>(null);
   const [isRequired, setIsRequired] = useState(false);
   const [options, setOptions] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
 
   const [fieldTypeDropdownMenuIsOpen, setFieldTypeDropdownMenuIsOpen] =
     useState<boolean>(false);
@@ -42,11 +40,8 @@ export function CustomFieldCreatorModal({
 
   const handleSave = async () => {
     if (!fieldName.trim()) {
-      setError('Field name is required');
       return;
     }
-
-    setError(null);
 
     try {
       const newField: CustomFieldNotSavedInDB = {
@@ -63,7 +58,6 @@ export function CustomFieldCreatorModal({
           .map((option) => option.trim())
           .filter(Boolean);
         if (optionsList.length === 0) {
-          setError('Please provide at least one option for select field');
           return;
         }
 
@@ -77,7 +71,6 @@ export function CustomFieldCreatorModal({
       await onSave(newField);
     } catch (error) {
       console.error('Error creating custom field:', error);
-      setError('Failed to create custom field');
     }
   };
 

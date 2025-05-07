@@ -52,8 +52,13 @@ export function PreferencesPanelComponent(): JSX.Element {
 
   const handleSave = async () => {
     //compare but ignore timestamps
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { timestamps: _, ...formDataWithoutTimestamps } = formData;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { timestamps: __, ...settingsWithoutTimestamps } = settings;
+
     if (
       JSON.stringify(formDataWithoutTimestamps) ===
       JSON.stringify(settingsWithoutTimestamps)

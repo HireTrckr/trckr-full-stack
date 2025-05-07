@@ -1,7 +1,10 @@
+'use client';
+
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 
 export default function Custom404() {
+  // Use a conditional to avoid using browser-specific APIs during SSR
   const { t } = useTranslation();
 
   return (

@@ -123,7 +123,7 @@ export const JobListing = memo(
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, []);
+    });
 
     const handleDropDownClose = () => {
       setIsDropDownOpen(false);
@@ -136,7 +136,11 @@ export const JobListing = memo(
     };
 
     const toggleDropDown = () => {
-      isDropDownOpen ? handleDropDownClose() : handleDropDownOpen();
+      if (isDropDownOpen) {
+        handleDropDownClose();
+      } else {
+        handleDropDownOpen();
+      }
     };
 
     return (

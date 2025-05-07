@@ -1,6 +1,7 @@
 import React, { JSX, useEffect } from 'react';
 import { Job } from '../../types/job';
 import { SiteMetadata } from '../../types/siteMetadata';
+import Image from 'next/image';
 
 interface URLPreviewCardProps {
   job: Job;
@@ -77,10 +78,12 @@ export function UrlPreviewCard({
           }`}
         >
           <div className="h-full w-full flex flex-col items-center justify-center gap-2">
-            <img
+            <Image
               src="/images/website.png"
               alt="website"
               className="rounded-md"
+              width={32}
+              height={32}
             />
             {size == 'large' && (
               <span className="text-xs text-text-primary ">Website</span>
@@ -104,10 +107,12 @@ export function UrlPreviewCard({
           }`}
         >
           <div className="h-full w-full flex flex-col items-center justify-center gap-2">
-            <img
-              src={metadata.favicon}
-              alt={metadata.siteName}
+            <Image
+              src={metadata.favicon || ''}
+              alt={metadata.siteName || ''}
               className="rounded-md"
+              width={32}
+              height={32}
             />
             {size == 'large' && (
               <span className="text-xs text-text-primary ">

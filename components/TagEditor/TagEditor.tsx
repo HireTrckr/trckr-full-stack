@@ -143,7 +143,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     // Handle backspace to remove last tag when input is empty
     if (e.key === 'Backspace' && !inputValue && selectedTagIds.length > 0) {
       const newTags = [...selectedTagIds];
-      const lastTagId = newTags.pop() as string;
+      newTags.pop();
       updateTags(newTags);
     }
   };

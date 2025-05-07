@@ -9,15 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { ModalProps, useModalStore } from '../../../context/modalStore';
 import { ModalTypes } from '../../../types/modalTypes';
 
-interface SearchBarProps {}
-
-export function SearchBar({}: SearchBarProps) {
+export function SearchBar() {
   const jobs = useJobStore((state) => state.jobs);
   const updateJob = useJobStore((state) => state.updateJob);
   const deleteJob = useJobStore((state) => state.deleteJob);
   const tags: TagMap = useTagStore((state) => state.tagMap);
-  const updateTag = useTagStore((state) => state.updateTag);
-  const deleteTag = useTagStore((state) => state.deleteTag);
 
   const openJobEditor = useModalStore((state) => state.openJobEditorModal);
   const openTagEditor = useModalStore((state) => state.openTagEditorModal);

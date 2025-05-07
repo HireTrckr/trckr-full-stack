@@ -3,6 +3,7 @@ import { auth } from '../../../../lib/firebase';
 import Link from 'next/link';
 import { handleSignOut } from '../../../../utils/authUtils';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 
 export function AccountSettingsThumbnail() {
   const [user] = useAuthState(auth);
@@ -23,9 +24,11 @@ export function AccountSettingsThumbnail() {
           <span className="text-xs text-text-accent transition-colors duration-text">
             {t('settings.title')}
           </span>
-          <img
+          <Image
             src={user?.photoURL || ''}
             alt={user?.displayName || ''}
+            width={16}
+            height={16}
             referrerPolicy="no-referrer"
             className="aspect-square max-h-[1rem] rounded-full"
           />

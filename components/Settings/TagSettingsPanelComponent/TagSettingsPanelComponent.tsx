@@ -9,9 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { NoDataComponent } from '../../NoDataComponent/NoDataComponent';
 import { FiTag } from 'react-icons/fi';
 
-interface TagSettingsPanelComponentProps {}
-
-export function TagSettingsPanelComponent({}: TagSettingsPanelComponentProps): JSX.Element {
+export function TagSettingsPanelComponent(): JSX.Element {
   const openTagCreatorModal = useModalStore(
     (state) => state.openTagCreatorModal
   );

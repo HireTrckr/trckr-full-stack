@@ -7,6 +7,7 @@ export default function settings() {
       <Head>
         <title>Trckr | Settings</title>
       </Head>
+
       <div className="w-full bg-background-primary rounded-lg p-4 shadow-light transition-all duration-bg ease-in-out flex flex-col items-center hover:scale-[1.02]">
         <Settings />
       </div>

@@ -14,8 +14,9 @@ export function TagCard({
   onRemoveButtonClick,
   editable = true,
 }: TagCardProps) {
+  const [showDeleteButton, setShowDeleteButton] = useState<boolean>(false);
+
   if (!tag) return null;
-  const [showDeleteButton, setShowDeleteButton] = useState<Boolean>(false);
   const color = getTailwindColorObjectFromName(tag.color);
   return (
     <div
