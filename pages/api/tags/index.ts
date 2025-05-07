@@ -10,9 +10,11 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'GET') {
@@ -30,18 +32,18 @@ export default async function handler(
 
       if (tagData.tagMap) {
         Object.entries(tagData.tagMap).forEach(
-          ([tagId, tagData]: [string, unknown]) => {
-            if (!tagData || typeof tagData !== 'object') return;
+          ([tagId, tag]: [string, any]) => {
+            if (!tag || typeof tag !== 'object') return;
 
             tagMap[tagId] = {
               id: tagId,
-              name: tagData.name,
-              color: tagData.color,
-              count: Math.max(tagData.count, 0), // sometimes there is negative glitches
+              name: tag.name,
+              color: tag.color,
+              count: Math.max(tag.count || 0, 0), // sometimes there is negative glitches
               timestamps: {
-                createdAt: timestampToDate(tagData.timestamps?.createdAt),
-                updatedAt: timestampToDate(tagData.timestamps?.updatedAt),
-                deletedAt: timestampToDate(tagData.timestamps?.deletedAt),
+                createdAt: timestampToDate(tag.timestamps?.createdAt),
+                updatedAt: timestampToDate(tag.timestamps?.updatedAt),
+                deletedAt: timestampToDate(tag.timestamps?.deletedAt),
               },
             };
           }
