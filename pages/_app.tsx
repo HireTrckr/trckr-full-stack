@@ -12,10 +12,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ThemeProvider>
       <I18nextProvider i18n={i18n}>
         <Head>
-          <title>Trckr</title>
-          <meta name="title" content="Trckr" />
-          <meta name="og:title" content="Trckr" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <!-- HTML Meta Tags -->
+<title>Trckr</title>
+<meta name="description" content="Track your job applications">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://hire-trckr.vercel.app">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Trckr">
+<meta property="og:description" content="Track your job applications">
+<meta property="og:image" content="https://hire-trckr.vercel.app/HireTrckr.png">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta property="twitter:domain" content="hire-trckr.vercel.app">
+<meta property="twitter:url" content="https://hire-trckr.vercel.app">
+<meta name="twitter:title" content="Trckr">
+<meta name="twitter:description" content="Track your job applications">
+<meta name="twitter:image" content="https://hire-trckr.vercel.app/HireTrckr.png">
+
         </Head>
         <Layout>
           <Component {...pageProps} />
