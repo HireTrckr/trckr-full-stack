@@ -14,6 +14,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Head>
           <title>Trckr</title>
           <meta name="description" content="Track your job applications" />
+          <meta charSet="UTF-8" />
+
+          <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="/.HireTrckr.png"
+          />
+
+          <link rel="icon" type="image/x-icon" href="/.HireTrckr.png" />
+          <link rel="apple-touch-icon" href="/.HireTrckr.png" />
 
           <meta
             name="keywords"
@@ -31,6 +41,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             property="og:image"
             content="https://hire-trckr.vercel.app/HireTrckr.png"
           />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
 
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="twitter:domain" content="hire-trckr.vercel.app" />
