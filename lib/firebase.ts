@@ -7,13 +7,14 @@ import {
   signOut,
 } from 'firebase/auth';
 
+// Use environment variables for client-side Firebase config
 const firebaseConfig = {
-  apiKey: 'AIzaSyDtUnhFdKXZHXaZ9KrA6PtYbPafAVEOZwc',
-  authDomain: 'jobtrackerapp-f5056.firebaseapp.com',
-  projectId: 'jobtrackerapp-f5056',
-  storageBucket: 'jobtrackerapp-f5056.firebasestorage.app',
-  messagingSenderId: '325843048066',
-  appId: '1:325843048066:web:55612be6606f1ed6c9469b',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);

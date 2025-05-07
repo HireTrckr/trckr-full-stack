@@ -19,6 +19,14 @@
     "deselectAll": "Désélectionner tout"
   },
 
+  "types": {
+    "number": "Nombre",
+    "string": "Texte",
+    "boolean": "Oui/Non",
+    "date": "Date",
+    "select": "Sélection"
+  },
+
   "filter": {
     "search-placeholder": "Rechercher des emplois...",
     "filters": "Filtres",
@@ -242,5 +250,41 @@
     "purple": "Pourpre",
     "fuchsia": "Fuchsia",
     "pink": "Rose"
+  },
+  "api": {
+    "errors": {
+      "userNotAuthenticated": "Utilisateur non authentifié",
+      "fetchJobs": "Échec de récupération des emplois",
+      "addJob": "Échec d'ajout de l'emploi",
+      "updateJob": "Échec de mise à jour de l'emploi",
+      "deleteJob": "Échec de suppression de l'emploi",
+      "cleanupFieldValues": "Échec du nettoyage des valeurs de champ",
+      "fetchSettings": "Échec de récupération des paramètres",
+      "updateSettings": "Échec de mise à jour des paramètres",
+      "updateSetting": "Échec de mise à jour du paramètre",
+      "fetchStatuses": "Échec de récupération des statuts",
+      "createStatus": "Échec de création du statut",
+      "updateStatus": "Échec de mise à jour du statut",
+      "deleteStatus": "Échec de suppression du statut",
+      "resetStatuses": "Échec de réinitialisation des statuts",
+      "fetchTags": "Échec de récupération des étiquettes",
+      "createTag": "Échec de création de l'étiquette",
+      "updateTag": "Échec de mise à jour de l'étiquette",
+      "deleteTag": "Échec de suppression de l'étiquette",
+      "addTagToJob": "Échec d'ajout de l'étiquette à l'emploi",
+      "removeTagFromJob": "Échec de retrait de l'étiquette de l'emploi",
+      "fetchFields": "Échec de récupération des champs personnalisés",
+      "createField": "Échec de création du champ",
+      "updateField": "Échec de mise à jour du champ",
+      "deleteField": "Échec de suppression du champ",
+      "deleteAllFields": "Échec de suppression de tous les champs"
+    }
+  },
+  "theme": {
+    "system": "Système",
+    "light": "Clair",
+    "dark": "Sombre",
+    "error": "Erreur dans l'effet du thème",
+    "metaTagError": "Erreur lors de la mise à jour de la balise meta {{name}}"
   }
 }

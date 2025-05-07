@@ -19,6 +19,14 @@
     "deselectAll": "取消全選"
   },
 
+  "types": {
+    "number": "數字",
+    "string": "文字",
+    "boolean": "是/否",
+    "date": "日期",
+    "select": "選擇"
+  },
+
   "filter": {
     "search-placeholder": "搜尋職位...",
     "filters": "篩選條件",
@@ -242,5 +250,41 @@
     "purple": "紫色",
     "fuchsia": "紫紅色",
     "pink": "粉紅色"
+  },
+  "api": {
+    "errors": {
+      "userNotAuthenticated": "用戶未認證",
+      "fetchJobs": "獲取職位失敗",
+      "addJob": "添加職位失敗",
+      "updateJob": "更新職位失敗",
+      "deleteJob": "刪除職位失敗",
+      "cleanupFieldValues": "清理欄位值失敗",
+      "fetchSettings": "獲取設定失敗",
+      "updateSettings": "更新設定失敗",
+      "updateSetting": "更新設定項失敗",
+      "fetchStatuses": "獲取狀態失敗",
+      "createStatus": "創建狀態失敗",
+      "updateStatus": "更新狀態失敗",
+      "deleteStatus": "刪除狀態失敗",
+      "resetStatuses": "重設狀態失敗",
+      "fetchTags": "獲取標籤失敗",
+      "createTag": "創建標籤失敗",
+      "updateTag": "更新標籤失敗",
+      "deleteTag": "刪除標籤失敗",
+      "addTagToJob": "向職位添加標籤失敗",
+      "removeTagFromJob": "從職位移除標籤失敗",
+      "fetchFields": "獲取自定義欄位失敗",
+      "createField": "創建欄位失敗",
+      "updateField": "更新欄位失敗",
+      "deleteField": "刪除欄位失敗",
+      "deleteAllFields": "刪除所有欄位失敗"
+    }
+  },
+  "theme": {
+    "system": "系統",
+    "light": "淺色",
+    "dark": "深色",
+    "error": "主題效果出錯",
+    "metaTagError": "更新元標籤 {{name}} 時出錯"
   }
 }

@@ -1,24 +1,15 @@
 //context/jobStore.ts
 
 import { create } from 'zustand';
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  runTransaction,
-} from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { auth } from '../lib/firebase';
 import { Job, JobNotSavedInDB } from '../types/job';
 import { Tag } from '../types/tag';
 import { ToastCategory } from '../types/toast';
 
-import { timestampToDate } from '../utils/timestampUtils';
 import { useToastStore } from './toastStore';
 import { JobStatus } from '../types/jobStatus';
 import { CustomField } from '../types/customField';
+import { jobsApi } from '../lib/api';
 
 type JobStore = {
   jobs: Job[];
@@ -50,34 +41,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const q = query(
-        collection(db, `users/${auth.currentUser.uid}/jobs`),
-        where('statusID', '!=', 'deleted')
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        console.warn('[jobStore.ts] No job files found');
-        set({ jobs: [], isLoading: false });
-        return true;
-      }
-
-      const jobs = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        timestamps: {
-          createdAt: timestampToDate(doc.data().timestamps.createdAt),
-          updatedAt: timestampToDate(doc.data().timestamps.updatedAt),
-          deletedAt: doc.data().timestamps.deletedAt
-            ? timestampToDate(doc.data().timestamps.deletedAt)
-            : null,
-        },
-      })) as Job[];
-
+      // Use the API client instead of direct Firebase access
+      const jobs = await jobsApi.fetchJobs();
+      
       set({ jobs });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[jobStore.ts] Error fetching jobs:', error);
-      set({ error: `Failed to fetch jobs: ${error}` });
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      set({ error: `Failed to fetch jobs: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -104,25 +75,11 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const completeJob: Job = {
-        ...job,
-        timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-      } as Job;
-      const docRef = await addDoc(
-        collection(db, `users/${auth.currentUser.uid}/jobs`),
-        completeJob
-      );
-
-      if (!docRef) {
-        throw Error('Failed to add job');
-      }
+      // Use the API client instead of direct Firebase access
+      const newJob = await jobsApi.addJob(job);
 
       set((state) => ({
-        jobs: [...state.jobs, { ...completeJob, id: docRef.id }],
+        jobs: [...state.jobs, newJob],
       }));
 
       // send toast notification
@@ -137,11 +94,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
         () => {},
         (toast) => {
           // undo function
-          get().deleteJob({ ...completeJob, id: docRef.id } as Job);
+          get().deleteJob(newJob);
         }
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[jobStore.ts] Error adding job:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.addJob',
         true,
@@ -149,13 +107,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
         {
           position: job.position,
           company: job.company,
-          message: (error as Error).message,
+          message: errorMessage,
         },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to add job: ${error}` });
+      set({ error: `Failed to add job: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -171,23 +129,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const jobRef = doc(db, 'users', auth.currentUser.uid, 'jobs', job.id);
-
-      if (!jobRef) {
-        throw new Error('Job not found');
-      }
-
-      await updateDoc(jobRef, {
-        statusID: 'deleted',
-        timestamps: {
-          ...job.timestamps,
-          updatedAt: new Date(),
-          deletedAt: new Date(),
-        },
-      });
+      // Use the API client instead of direct Firebase access
+      await jobsApi.deleteJob(job);
+      
       set((state) => ({
         jobs: state.jobs.filter((j) => j.id !== job.id),
       }));
+      
       // send toast notification
       createTranslatedToast(
         'toasts.jobDeleted',
@@ -203,8 +151,9 @@ export const useJobStore = create<JobStore>((set, get) => ({
           get().updateJob(job);
         }
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[jobStore.ts] Error deleting job: ${job.id}`, error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.deleteJob',
         true,
@@ -212,13 +161,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
         {
           position: job.position,
           company: job.company,
-          message: (error as Error).message,
+          message: errorMessage,
         },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to delete job: ${error}` });
+      set({ error: `Failed to delete job: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -232,22 +181,15 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const jobRef = doc(db, 'users', auth.currentUser.uid, 'jobs', job.id);
-
-      if (!jobRef) {
-        throw new Error('Job not found');
-      }
-      job.timestamps = {
-        ...job.timestamps,
-        updatedAt: new Date(),
-        deletedAt: null,
-      };
-      await updateDoc(jobRef, job);
+      // Use the API client instead of direct Firebase access
+      const updatedJob = await jobsApi.updateJob(job);
+      
       set((state) => ({
-        jobs: state.jobs.map((j) => (j.id === job.id ? job : j)),
+        jobs: state.jobs.map((j) => (j.id === updatedJob.id ? updatedJob : j)),
       }));
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[jobStore.ts] Error updating job: ${job.id}`, error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.updateJob',
         true,
@@ -255,13 +197,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
         {
           position: job.position,
           company: job.company,
-          message: (error as Error).message,
+          message: errorMessage,
         },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to update job: ${error}` });
+      set({ error: `Failed to update job: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -273,18 +215,19 @@ export const useJobStore = create<JobStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       set({ jobs: [] });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[jobStore.ts] Error clearing jobs`, error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.clearJobs',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to clear jobs: ${error}` });
+      set({ error: `Failed to clear jobs: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -297,31 +240,21 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const jobsRef = collection(db, `users/${auth.currentUser.uid}/jobs`);
-      const jobsSnapshot = await getDocs(jobsRef);
-      await runTransaction(db, async (transaction) => {
-        jobsSnapshot.forEach((jobDoc) => {
-          const jobData = jobDoc.data() as Job;
-          if (jobData.customFields[fieldID]) {
-            delete jobData.customFields[fieldID];
-            transaction.update(jobDoc.ref, {
-              customFields: jobData.customFields,
-            });
-          }
-        });
-      });
-    } catch (error) {
+      // Use the API client instead of direct Firebase access
+      await jobsApi.cleanupFieldValues(fieldID);
+    } catch (error: unknown) {
       console.error(`[jobStore.ts] Error cleaning up field values`, error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.cleanupFieldValues',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to clean up field values: ${error}` });
+      set({ error: `Failed to clean up field values: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }

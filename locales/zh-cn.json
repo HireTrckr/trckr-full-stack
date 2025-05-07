@@ -19,6 +19,14 @@
     "deselectAll": "取消全选"
   },
 
+  "types": {
+    "number": "数字",
+    "string": "文本",
+    "boolean": "是/否",
+    "date": "日期",
+    "select": "选择"
+  },
+
   "filter": {
     "search-placeholder": "搜索职位...",
     "filters": "筛选条件",
@@ -242,5 +250,41 @@
     "purple": "紫色",
     "fuchsia": "紫红色",
     "pink": "粉红色"
+  },
+  "api": {
+    "errors": {
+      "userNotAuthenticated": "用户未认证",
+      "fetchJobs": "获取职位失败",
+      "addJob": "添加职位失败",
+      "updateJob": "更新职位失败",
+      "deleteJob": "删除职位失败",
+      "cleanupFieldValues": "清理字段值失败",
+      "fetchSettings": "获取设置失败",
+      "updateSettings": "更新设置失败",
+      "updateSetting": "更新设置项失败",
+      "fetchStatuses": "获取状态失败",
+      "createStatus": "创建状态失败",
+      "updateStatus": "更新状态失败",
+      "deleteStatus": "删除状态失败",
+      "resetStatuses": "重置状态失败",
+      "fetchTags": "获取标签失败",
+      "createTag": "创建标签失败",
+      "updateTag": "更新标签失败",
+      "deleteTag": "删除标签失败",
+      "addTagToJob": "向职位添加标签失败",
+      "removeTagFromJob": "从职位移除标签失败",
+      "fetchFields": "获取自定义字段失败",
+      "createField": "创建字段失败",
+      "updateField": "更新字段失败",
+      "deleteField": "删除字段失败",
+      "deleteAllFields": "删除所有字段失败"
+    }
+  },
+  "theme": {
+    "system": "系统",
+    "light": "浅色",
+    "dark": "深色",
+    "error": "主题效果出错",
+    "metaTagError": "更新元标签 {{name}} 时出错"
   }
 }

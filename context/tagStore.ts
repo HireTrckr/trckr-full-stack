@@ -2,16 +2,14 @@
 
 import { create } from 'zustand';
 import { TagMap, TagNotSavedInDB } from '../types/tag';
-import { getDoc, setDoc, updateDoc, deleteField } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
-import { doc } from 'firebase/firestore';
-import { timestampToDate } from '../utils/timestampUtils';
+import { auth } from '../lib/firebase';
 import { Job } from '../types/job';
 import { useJobStore } from './jobStore';
 import { Tag } from '../types/tag';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { ToastCategory } from '../types/toast';
 import { useToastStore } from './toastStore';
+import { tagsApi } from '../lib/api';
 
 /**
  * @interface TagStore
@@ -143,53 +141,23 @@ export const useTagStore = create<TagStore>((set, get) => {
 
       set({ isLoading: true, error: null });
       try {
-        // not using query as tags are in one document
-        const tagsRef = doc(db, `users/${auth.currentUser.uid}/metadata/tags`);
-        const tagsDoc = await getDoc(tagsRef);
-
-        if (!tagsDoc.exists()) {
-          console.warn('[tagStore.ts] No tags file found');
-          await setDoc(tagsRef, { tagMap: {} });
-          set({ tagMap: {}, isLoading: false });
-          return true;
-        }
-
-        const tagData = tagsDoc.data();
-        const tagMap: TagMap = {};
-
-        if (tagData.tagMap) {
-          Object.entries(tagData.tagMap).forEach(
-            ([tagId, tagData]: [string, any]) => {
-              if (!tagData || typeof tagData !== 'object') return;
-
-              tagMap[tagId] = {
-                id: tagId,
-                name: tagData.name,
-                color: tagData.color,
-                count: Math.max(tagData.count, 0), // sometimes there is negative glitches
-                timestamps: {
-                  createdAt: timestampToDate(tagData.timestamps?.createdAt),
-                  updatedAt: timestampToDate(tagData.timestamps?.updatedAt),
-                  deletedAt: timestampToDate(tagData.timestamps?.deletedAt),
-                },
-              };
-            }
-          );
-        }
+        // Use the API client instead of direct Firebase access
+        const tagMap = await tagsApi.fetchTags();
 
         set({ tagMap, _lastFetched: new Date() } as TagStorePlusPrivate);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('[tagStore.ts] Error fetching tags:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.fetchTags',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-        set({ error: `Failed to fetch tags: ${error}` });
+        set({ error: `Failed to fetch tags: ${errorMessage}` });
       } finally {
         set({ isLoading: false });
       }
@@ -212,37 +180,33 @@ export const useTagStore = create<TagStore>((set, get) => {
       try {
         // check if any jobs use tag
         const tag = get().tagMap[tagId];
+        
+        if (!tag) {
+          throw new Error('Tag not found');
+        }
 
-        const jobsWithTag = tag
-          ? useJobStore.getState().getJobsWithTags([tagId])
-          : [];
+        const jobsWithTag = useJobStore.getState().getJobsWithTags([tagId]);
 
         if (jobsWithTag.length > 0) {
           // remove tag from jobs
           const jobStore = useJobStore.getState();
           const updatePromises = jobsWithTag.map((job: Job) => {
             const updatedTags =
-              job.tagIds?.filter((tag) => tag !== tagId) || [];
+              job.tagIds?.filter((t) => t !== tagId) || [];
             return jobStore.updateJob({ ...job, tagIds: updatedTags });
           });
 
           await Promise.all(updatePromises);
         }
 
-        const tagsRef = doc(db, `users/${auth.currentUser.uid}/metadata/tags`);
-
-        if (!tagsRef) {
-          throw new Error('Tags document not found');
-        }
-
-        await updateDoc(tagsRef, {
-          [`tagMap.${tagId}`]: deleteField(),
-        });
+        // Use the API client instead of direct Firebase access
+        await tagsApi.deleteTag(tagId);
 
         // remove tag from local state
         const newTagMap = { ...get().tagMap };
         delete newTagMap[tagId];
         set({ tagMap: newTagMap });
+        
         createTranslatedToast(
           'toasts.tagDeleted',
           true,
@@ -257,18 +221,23 @@ export const useTagStore = create<TagStore>((set, get) => {
             get().createTag(tag);
           }
         );
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`[tagStore.ts] Error deleting tag: ${tagId}`, error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        
+        // Safely access tag name if it exists
+        const tagName = get().tagMap[tagId]?.name || 'Unknown tag';
+        
         createTranslatedToast(
           'toasts.errors.deleteTag',
           true,
           'toasts.titles.error',
-          { name: get().tagMap[tagId].name, message: (error as Error).message },
+          { name: tagName, message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-        set({ error: `Failed to delete tag: ${error}` });
+        set({ error: `Failed to delete tag: ${errorMessage}` });
       } finally {
         set({ isLoading: false });
       }
@@ -289,27 +258,14 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Tag already exists');
         }
 
-        const newTag: Tag = {
-          id: newID,
+        // Use the API client instead of direct Firebase access
+        const newTag = await tagsApi.createTag({
           name: tag.name,
           color: tag.color || getRandomTailwindColor().tailwindColorName,
-          count: 0,
-          timestamps: {
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            deletedAt: null,
-          },
-        };
-
-        await updateDoc(
-          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-          {
-            [`tagMap.${newTag.id}`]: newTag,
-          }
-        );
+        });
 
         set((state) => ({
-          tagMap: { ...state.tagMap, [newID]: newTag },
+          tagMap: { ...state.tagMap, [newTag.id]: newTag },
           isLoading: false,
         }));
 
@@ -323,22 +279,23 @@ export const useTagStore = create<TagStore>((set, get) => {
           5000,
           () => {},
           () => {
-            get().deleteTag(newID);
+            get().deleteTag(newTag.id);
           }
         );
-        return newID;
-      } catch (error) {
+        return newTag.id;
+      } catch (error: unknown) {
         console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.createTag',
           true,
           'toasts.titles.error',
-          { name: tag.name, message: (error as Error).message },
+          { name: tag.name, message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-        set({ error: `Failed to create tag: ${error}` });
+        set({ error: `Failed to create tag: ${errorMessage}` });
         return false;
       }
     },
@@ -350,7 +307,7 @@ export const useTagStore = create<TagStore>((set, get) => {
       try {
         set({ isLoading: true, error: null });
 
-        // update job with tag
+        // Get the job
         const jobStore = useJobStore.getState();
         const job = jobStore.jobs.find((job: Job) => job.id === jobId);
 
@@ -358,66 +315,54 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Job not found');
         }
 
-        if (!job.tagIds) {
-          job.tagIds = [];
-        }
-
-        // check if job has reached tag limit already
-        if (job.tagIds.length > TAGS_PER_RECORD) {
+        // Check if job has reached tag limit
+        if (job.tagIds && job.tagIds.length > TAGS_PER_RECORD) {
           throw new Error('Job has reached the maximum number of tags');
         }
 
-        // check if job already has this tag
-        if (job.tagIds.includes(tagId)) {
+        // Check if job already has this tag
+        if (job.tagIds && job.tagIds.includes(tagId)) {
           throw new Error('Job already has this tag');
         }
 
+        // Get the tag
         let tag = get().tagMap[tagId];
 
         if (!tag) {
-          // need to create new tag
-          if (
-            !(await get().createTag({
-              name: 'untitled',
-              color: getRandomTailwindColor().tailwindColorName,
-              count: 1,
-            } as TagNotSavedInDB))
-          ) {
+          // Need to create new tag if it doesn't exist
+          const newTagId = await get().createTag({
+            name: 'untitled',
+            color: getRandomTailwindColor().tailwindColorName,
+          } as TagNotSavedInDB);
+          
+          if (!newTagId) {
             throw new Error('Failed to create tag');
           }
+          
           tag = get().tagMap[tagId];
         }
 
+        // Use the API client instead of direct Firebase access
+        const updatedTag = await tagsApi.addTagToJob(jobId, tagId);
+        
+        // Update the job locally
         const updatedJob: Job = {
           ...job,
           tagIds: job.tagIds ? [...job.tagIds, tagId] : [tagId],
         };
         await jobStore.updateJob(updatedJob);
-
-        const newCount = self()._calculateTagCount(tagId);
-
-        await updateDoc(
-          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-          {
-            [`tagMap.${tagId}`]: {
-              ...tag,
-              count: newCount,
-              timestamps: {
-                ...tag.timestamps,
-                updatedAt: new Date(),
-              },
-            },
-          }
-        );
+        
+        // Update the tag in the local state
         set((state) => ({
           tagMap: {
             ...state.tagMap,
             [tagId]: {
               ...state.tagMap[tagId],
-              count: newCount,
+              count: updatedTag.count,
             },
           },
         }));
+        
         createTranslatedToast(
           'toasts.tagAddedToJob',
           true,
@@ -432,19 +377,20 @@ export const useTagStore = create<TagStore>((set, get) => {
             get().removeTagFromJob(jobId, tagId);
           }
         );
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`[tagStore.ts] Error adding tag to job: ${jobId}`, error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.addTagToJob',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
         set({
-          error: `Failed to add tag [${tagId}] to job [${jobId}]: ${error}`,
+          error: `Failed to add tag [${tagId}] to job [${jobId}]: ${errorMessage}`,
         });
       } finally {
         set({ isLoading: false });
@@ -464,6 +410,7 @@ export const useTagStore = create<TagStore>((set, get) => {
       try {
         set({ isLoading: true, error: null });
 
+        // Get the tag
         const tag = get().tagMap[tagId];
 
         if (!tag) {
@@ -471,38 +418,41 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Tag not found');
         }
 
-        const newCount = self()._calculateTagCount(tagId) - 1;
-
-        if (newCount <= 0) {
-          await get().deleteTag(tagId);
-        } else {
-          await updateDoc(
-            doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-            {
-              [`tagMap.${tagId}`]: {
-                ...tag,
-                count: newCount,
-                timestamps: {
-                  ...tag.timestamps,
-                  updatedAt: new Date(),
-                },
-              },
-            }
-          );
-        }
-
+        // Get the job
         const jobStore = useJobStore.getState();
         const job = jobStore.jobs.find((job: Job) => job.id === jobId);
+        
         if (!job) {
           console.error(`[tagStore.ts] Job not found: ${jobId}`);
           throw new Error('Job not found');
         }
 
+        // Use the API client instead of direct Firebase access
+        const updatedTag = await tagsApi.removeTagFromJob(jobId, tagId);
+        
+        // If tag count is 0, delete the tag
+        if (updatedTag.count <= 0) {
+          await get().deleteTag(tagId);
+        } else {
+          // Update the tag in the local state
+          set((state) => ({
+            tagMap: {
+              ...state.tagMap,
+              [tagId]: {
+                ...state.tagMap[tagId],
+                count: updatedTag.count,
+              },
+            },
+          }));
+        }
+
+        // Update the job locally
         const updatedJob: Job = {
           ...job,
-          tagIds: (job.tagIds || []).filter((tag) => tag !== tagId),
+          tagIds: (job.tagIds || []).filter((t) => t !== tagId),
         };
         await jobStore.updateJob(updatedJob);
+        
         createTranslatedToast(
           'toasts.tagRemovedFromJob',
           true,
@@ -517,22 +467,23 @@ export const useTagStore = create<TagStore>((set, get) => {
             get().addTagToJob(jobId, tagId);
           }
         );
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(
           `[tagStore.ts] Error removing tag from job: ${jobId}`,
           error
         );
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.removeTagFromJob',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
         set({
-          error: `Failed to remove tag [${tagId}] from job [${jobId}]: ${error}`,
+          error: `Failed to remove tag [${tagId}] from job [${jobId}]: ${errorMessage}`,
         });
       } finally {
         set({ isLoading: false });
@@ -560,18 +511,19 @@ export const useTagStore = create<TagStore>((set, get) => {
       set({ isLoading: true, error: null });
       try {
         set({ tagMap: {} });
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(`[tagStore.ts] Error clearing tags`, error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.clearTags',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-        set({ error: `Failed to clear tags: ${error}` });
+        set({ error: `Failed to clear tags: ${errorMessage}` });
       } finally {
         set({ isLoading: false });
       }
@@ -585,44 +537,41 @@ export const useTagStore = create<TagStore>((set, get) => {
 
       set({ isLoading: true, error: null });
       try {
-        updatedTag.timestamps.updatedAt = new Date();
-
-        await updateDoc(
-          doc(db, `users/${auth.currentUser.uid}/metadata/tags`),
-          {
-            [`tagMap.${updatedTag.id}`]: updatedTag,
-          }
-        );
+        // Use the API client instead of direct Firebase access
+        const tag = await tagsApi.updateTag(updatedTag);
+        
         set((state) => ({
           tagMap: {
             ...state.tagMap,
-            [updatedTag.id]: updatedTag,
+            [tag.id]: tag,
           },
         }));
+        
         createTranslatedToast(
           'toasts.tagUpdated',
           true,
           'toasts.titles.tagUpdated',
-          { name: updatedTag.name },
+          { name: tag.name },
           {},
           ToastCategory.INFO,
           3000
         );
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(
           `[tagStore.ts] Error updating tag: ${updatedTag.id}`,
           error
         );
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.updateTag',
           true,
           'toasts.titles.error',
-          { name: updatedTag.name, message: (error as Error).message },
+          { name: updatedTag.name, message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-        set({ error: `Failed to update job: ${error}` });
+        set({ error: `Failed to update tag: ${errorMessage}` });
       } finally {
         set({ isLoading: false });
       }

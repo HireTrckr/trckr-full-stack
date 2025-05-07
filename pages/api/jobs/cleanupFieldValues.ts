@@ -1,0 +1,51 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { collection, getDocs, runTransaction } from 'firebase/firestore';
+import { db } from '../../../lib/firebase';
+import { Job } from '../../../types/job';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // Get user ID from the request
+  const userId = req.headers['user-id'] as string;
+  
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+  }
+
+  if (req.method === 'POST') {
+    try {
+      const { fieldId } = req.body;
+      
+      if (!fieldId) {
+        return res.status(400).json({ error: 'Field ID is required' });
+      }
+
+      const jobsRef = collection(db, `users/${userId}/jobs`);
+      const jobsSnapshot = await getDocs(jobsRef);
+      
+      await runTransaction(db, async (transaction) => {
+        jobsSnapshot.forEach((jobDoc) => {
+          const jobData = jobDoc.data() as Job;
+          if (jobData.customFields && jobData.customFields[fieldId]) {
+            delete jobData.customFields[fieldId];
+            transaction.update(jobDoc.ref, {
+              customFields: jobData.customFields,
+            });
+          }
+        });
+      });
+
+      return res.status(200).json({ 
+        message: `Field ${fieldId} removed from all jobs successfully` 
+      });
+    } catch (error) {
+      console.error(`[API] Error cleaning up field values:`, error);
+      return res.status(500).json({ error: `Failed to clean up field values: ${error}` });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}

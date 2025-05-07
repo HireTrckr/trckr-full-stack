@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { DEFAULT_SETTINGS, Settings } from '../types/settings';
-import { auth, db } from '../lib/firebase';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { auth } from '../lib/firebase';
 import { TailwindColor } from '../types/tailwindColor';
+import { settingsApi } from '../lib/api';
 
 import colors from 'tailwindcss/colors';
 import { useToastStore } from './toastStore';
@@ -45,50 +45,27 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const settingsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/settings`
-      );
-      const settingsDoc = await getDoc(settingsRef);
-
-      if (!settingsDoc.exists()) {
-        console.warn('[settingsStore.ts] No settings file found');
-        await setDoc(settingsRef, { settings: DEFAULT_SETTINGS });
-        set({ settings: DEFAULT_SETTINGS, isLoading: false });
-        return true;
-      }
-
-      const settingsData = settingsDoc.data();
-
-      if (!settingsData) {
-        console.warn('[settingsStore.ts] No settings data found');
-        await setDoc(settingsRef, { settings: DEFAULT_SETTINGS });
-        set({ settings: DEFAULT_SETTINGS, isLoading: false });
-        return true;
-      }
-
-      const settings = {
-        ...DEFAULT_SETTINGS,
-        ...settingsData.settings,
-      } as Settings;
-
+      // Use the API client instead of direct Firebase access
+      const settings = await settingsApi.fetchSettings();
+      
       applyTailwindThemeColor(settings.theme.primaryColor);
-
+      
       set({ settings });
-    } catch (error) {
-      console.error('[tagStore.ts] Error fetching settings:', error);
+    } catch (error: unknown) {
+      console.error('[settingStore.ts] Error fetching settings:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(
           'toasts.errors.fetchSettings',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-      set({ error: `Failed to fetch settings: ${error}` });
+      set({ error: `Failed to fetch settings: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -102,26 +79,14 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
     const currentSettings = get().settings;
 
-    const updatedSettings: Settings = {
-      ...currentSettings,
-      ...newSettings,
-      timestamps: {
-        ...currentSettings.timestamps,
-        updatedAt: new Date(),
-      },
-    };
-
     set({ isLoading: true, error: null });
     try {
-      await updateDoc(
-        doc(db, `users/${auth.currentUser.uid}/metadata/settings`),
-        {
-          settings: updatedSettings,
-        }
-      );
+      // Use the API client instead of direct Firebase access
+      const updatedSettings = await settingsApi.updateSettings(newSettings);
 
-      set({ settings: newSettings });
-      applyTailwindThemeColor(newSettings.theme.primaryColor);
+      set({ settings: updatedSettings });
+      applyTailwindThemeColor(updatedSettings.theme.primaryColor);
+      
       useToastStore.getState().createTranslatedToast(
         'toasts.settingsUpdated',
         true,
@@ -136,20 +101,21 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
           get().updateSettings(currentSettings);
         }
       );
-    } catch (error) {
-      console.error('[settingsStore.ts] Error updating settings:', error);
+    } catch (error: unknown) {
+      console.error('[settingStore.ts] Error updating settings:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(
           'toasts.errors.updateSettings',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-      set({ error: `Failed to update settings: ${error}` });
+      set({ error: `Failed to update settings: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -158,35 +124,20 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
   updateSetting: async (key, value) => {
     if (!auth.currentUser) return false;
-
     if (!get().settings) return false;
-
     if (!(key && value)) return false;
-
     if (!(key in get().settings)) return false;
 
     const currentSettings = get().settings;
 
-    const newSettings: Settings = {
-      ...currentSettings,
-      [key]: value,
-      timestamps: {
-        ...currentSettings.timestamps,
-        updatedAt: new Date(),
-      },
-    };
-
     set({ isLoading: true, error: null });
     try {
-      await updateDoc(
-        doc(db, `users/${auth.currentUser.uid}/metadata/settings`),
-        {
-          settings: newSettings,
-        }
-      );
+      // Use the API client instead of direct Firebase access
+      const newSettings = await settingsApi.updateSetting(key, value);
 
       set({ settings: newSettings });
       applyTailwindThemeColor(newSettings.theme.primaryColor);
+      
       useToastStore.getState().createTranslatedToast(
         'toasts.settingsUpdated',
         true,
@@ -201,20 +152,21 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
           get().updateSettings(currentSettings);
         }
       );
-    } catch (error) {
-      console.error('[settingsStore.ts] Error updating settings:', error);
+    } catch (error: unknown) {
+      console.error('[settingStore.ts] Error updating settings:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(
           'toasts.errors.updateSettings',
           true,
           'toasts.titles.error',
-          { message: (error as Error).message },
+          { message: errorMessage },
           {},
           ToastCategory.ERROR,
           10000
         );
-      set({ error: `Failed to update settings: ${error}` });
+      set({ error: `Failed to update settings: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
