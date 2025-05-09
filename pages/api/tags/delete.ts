@@ -38,31 +38,31 @@ export default async function handler(
       // 2. Find all jobs with this tag and remove it from their tagIds array
       const jobsRef = adminDb.collection(`users/${userId}/jobs`);
       const jobsSnapshot = await jobsRef.get();
-      
+
       let updatedJobsCount = 0;
-      
+
       if (!jobsSnapshot.empty) {
         const batch = adminDb.batch();
-        
-        jobsSnapshot.forEach(doc => {
+
+        jobsSnapshot.forEach((doc) => {
           const jobData = doc.data() as Job;
-          
+
           if (jobData.tagIds && jobData.tagIds.includes(tagId)) {
             // Remove the tag from the job's tagIds array
-            const updatedTagIds = jobData.tagIds.filter(id => id !== tagId);
-            
-            batch.update(doc.ref, { 
+            const updatedTagIds = jobData.tagIds.filter((id) => id !== tagId);
+
+            batch.update(doc.ref, {
               tagIds: updatedTagIds,
               timestamps: {
                 ...jobData.timestamps,
-                updatedAt: new Date()
-              }
+                updatedAt: new Date(),
+              },
             });
-            
+
             updatedJobsCount++;
           }
         });
-        
+
         if (updatedJobsCount > 0) {
           await batch.commit();
         }
@@ -71,7 +71,7 @@ export default async function handler(
       return res.status(200).json({
         tagId,
         message: 'Tag deleted successfully and removed from all jobs',
-        jobsUpdated: updatedJobsCount
+        jobsUpdated: updatedJobsCount,
       });
     } catch (error) {
       console.error(`[API] Error deleting tag:`, error);

@@ -60,11 +60,13 @@ export default async function handler(
         return res.status(400).json({ message: 'Invalid action' });
     }
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Authentication failed';
-    const errorCode = error && typeof error === 'object' && 'code' in error 
-      ? (error.code as string) 
-      : 'unknown_error';
-      
+    const errorMessage =
+      error instanceof Error ? error.message : 'Authentication failed';
+    const errorCode =
+      error && typeof error === 'object' && 'code' in error
+        ? (error.code as string)
+        : 'unknown_error';
+
     return res.status(500).json({
       message: errorMessage,
       code: errorCode,

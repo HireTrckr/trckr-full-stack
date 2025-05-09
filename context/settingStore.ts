@@ -47,13 +47,14 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     try {
       // Use the API client instead of direct Firebase access
       const settings = await settingsApi.fetchSettings();
-      
+
       applyTailwindThemeColor(settings.theme.primaryColor);
-      
+
       set({ settings });
     } catch (error: unknown) {
       console.error('[settingStore.ts] Error fetching settings:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(
@@ -86,7 +87,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
       set({ settings: updatedSettings });
       applyTailwindThemeColor(updatedSettings.theme.primaryColor);
-      
+
       useToastStore.getState().createTranslatedToast(
         'toasts.settingsUpdated',
         true,
@@ -103,7 +104,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       );
     } catch (error: unknown) {
       console.error('[settingStore.ts] Error updating settings:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(
@@ -137,7 +139,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
       set({ settings: newSettings });
       applyTailwindThemeColor(newSettings.theme.primaryColor);
-      
+
       useToastStore.getState().createTranslatedToast(
         'toasts.settingsUpdated',
         true,
@@ -154,7 +156,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       );
     } catch (error: unknown) {
       console.error('[settingStore.ts] Error updating settings:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       useToastStore
         .getState()
         .createTranslatedToast(

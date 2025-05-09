@@ -8,9 +8,11 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'GET') {
@@ -38,7 +40,9 @@ export default async function handler(
       return res.status(200).json({ fieldMap });
     } catch (error) {
       console.error('[API] Error fetching custom fields:', error);
-      return res.status(500).json({ error: `Failed to fetch custom fields: ${error}` });
+      return res
+        .status(500)
+        .json({ error: `Failed to fetch custom fields: ${error}` });
     }
   } else {
     res.setHeader('Allow', ['GET']);

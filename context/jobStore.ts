@@ -43,11 +43,12 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       // Use the API client instead of direct Firebase access
       const jobs = await jobsApi.fetchJobs();
-      
+
       set({ jobs });
     } catch (error: unknown) {
       console.error('[jobStore.ts] Error fetching jobs:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       set({ error: `Failed to fetch jobs: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
@@ -99,7 +100,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
       );
     } catch (error: unknown) {
       console.error('[jobStore.ts] Error adding job:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.addJob',
         true,
@@ -130,11 +132,11 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       // Use the API client instead of direct Firebase access
       await jobsApi.deleteJob(job);
-      
+
       set((state) => ({
         jobs: state.jobs.filter((j) => j.id !== job.id),
       }));
-      
+
       // send toast notification
       createTranslatedToast(
         'toasts.jobDeleted',
@@ -152,7 +154,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
       );
     } catch (error: unknown) {
       console.error(`[jobStore.ts] Error deleting job: ${job.id}`, error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.deleteJob',
         true,
@@ -182,13 +185,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
     try {
       // Use the API client instead of direct Firebase access
       const updatedJob = await jobsApi.updateJob(job);
-      
+
       set((state) => ({
         jobs: state.jobs.map((j) => (j.id === updatedJob.id ? updatedJob : j)),
       }));
     } catch (error: unknown) {
       console.error(`[jobStore.ts] Error updating job: ${job.id}`, error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.updateJob',
         true,
@@ -216,7 +220,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
       set({ jobs: [] });
     } catch (error: unknown) {
       console.error(`[jobStore.ts] Error clearing jobs`, error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.clearJobs',
         true,
@@ -243,7 +248,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
       await jobsApi.cleanupFieldValues(fieldID);
     } catch (error: unknown) {
       console.error(`[jobStore.ts] Error cleaning up field values`, error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.cleanupFieldValues',
         true,

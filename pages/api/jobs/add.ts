@@ -8,15 +8,17 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'POST') {
     try {
       const job = req.body as JobNotSavedInDB;
-      
+
       if (!job.statusID || !job.company || !job.position) {
         return res.status(400).json({ error: 'Missing required job fields' });
       }
@@ -30,15 +32,17 @@ export default async function handler(
         },
       } as Job;
 
-      const docRef = await adminDb.collection(`users/${userId}/jobs`).add(completeJob);
+      const docRef = await adminDb
+        .collection(`users/${userId}/jobs`)
+        .add(completeJob);
 
       if (!docRef) {
         throw Error('Failed to add job');
       }
 
-      return res.status(201).json({ 
+      return res.status(201).json({
         job: { ...completeJob, id: docRef.id },
-        message: 'Job added successfully' 
+        message: 'Job added successfully',
       });
     } catch (error) {
       console.error('[API] Error adding job:', error);

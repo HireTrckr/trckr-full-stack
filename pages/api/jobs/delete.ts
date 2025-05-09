@@ -7,15 +7,17 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'DELETE') {
     try {
       const { jobId, timestamps } = req.body;
-      
+
       if (!jobId) {
         return res.status(400).json({ error: 'Job ID is required' });
       }
@@ -35,9 +37,9 @@ export default async function handler(
         },
       });
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         jobId,
-        message: 'Job deleted successfully' 
+        message: 'Job deleted successfully',
       });
     } catch (error) {
       console.error(`[API] Error deleting job:`, error);

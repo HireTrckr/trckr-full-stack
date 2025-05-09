@@ -8,15 +8,17 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'PUT') {
     try {
       const job = req.body as Job;
-      
+
       if (!job.id) {
         return res.status(400).json({ error: 'Job ID is required' });
       }
@@ -35,9 +37,9 @@ export default async function handler(
 
       await jobRef.update(job);
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         job,
-        message: 'Job updated successfully' 
+        message: 'Job updated successfully',
       });
     } catch (error) {
       console.error(`[API] Error updating job:`, error);

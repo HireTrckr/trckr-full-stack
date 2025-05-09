@@ -8,15 +8,17 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'PUT') {
     try {
       const settings = req.body as Settings;
-      
+
       if (!settings) {
         return res.status(400).json({ error: 'Settings object is required' });
       }
@@ -34,13 +36,15 @@ export default async function handler(
         settings: updatedSettings,
       });
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         settings: updatedSettings,
-        message: 'Settings updated successfully' 
+        message: 'Settings updated successfully',
       });
     } catch (error) {
       console.error('[API] Error updating settings:', error);
-      return res.status(500).json({ error: `Failed to update settings: ${error}` });
+      return res
+        .status(500)
+        .json({ error: `Failed to update settings: ${error}` });
     }
   } else {
     res.setHeader('Allow', ['PUT']);

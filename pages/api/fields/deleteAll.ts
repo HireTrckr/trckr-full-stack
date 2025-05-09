@@ -7,9 +7,11 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'DELETE') {
@@ -23,12 +25,14 @@ export default async function handler(
       // Reset the document to an empty object
       await fieldsRef.set({});
 
-      return res.status(200).json({ 
-        message: 'All fields deleted successfully' 
+      return res.status(200).json({
+        message: 'All fields deleted successfully',
       });
     } catch (error) {
       console.error(`[API] Error deleting all fields:`, error);
-      return res.status(500).json({ error: `Failed to delete all fields: ${error}` });
+      return res
+        .status(500)
+        .json({ error: `Failed to delete all fields: ${error}` });
     }
   } else {
     res.setHeader('Allow', ['DELETE']);
