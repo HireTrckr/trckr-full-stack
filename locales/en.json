@@ -249,5 +249,41 @@
     "purple": "Purple",
     "fuchsia": "Fuchsia",
     "pink": "Pink"
+  },
+  "api": {
+    "errors": {
+      "userNotAuthenticated": "User not authenticated",
+      "fetchJobs": "Failed to fetch jobs",
+      "addJob": "Failed to add job",
+      "updateJob": "Failed to update job",
+      "deleteJob": "Failed to delete job",
+      "cleanupFieldValues": "Failed to clean up field values",
+      "fetchSettings": "Failed to fetch settings",
+      "updateSettings": "Failed to update settings",
+      "updateSetting": "Failed to update setting",
+      "fetchStatuses": "Failed to fetch statuses",
+      "createStatus": "Failed to create status",
+      "updateStatus": "Failed to update status",
+      "deleteStatus": "Failed to delete status",
+      "resetStatuses": "Failed to reset statuses",
+      "fetchTags": "Failed to fetch tags",
+      "createTag": "Failed to create tag",
+      "updateTag": "Failed to update tag",
+      "deleteTag": "Failed to delete tag",
+      "addTagToJob": "Failed to add tag to job",
+      "removeTagFromJob": "Failed to remove tag from job",
+      "fetchFields": "Failed to fetch custom fields",
+      "createField": "Failed to create field",
+      "updateField": "Failed to update field",
+      "deleteField": "Failed to delete field",
+      "deleteAllFields": "Failed to delete all fields"
+    }
+  },
+  "theme": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "error": "Error in theme effect",
+    "metaTagError": "Error updating meta tag {{name}}"
   }
 }

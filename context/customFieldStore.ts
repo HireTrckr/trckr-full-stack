@@ -1,12 +1,5 @@
 import { create } from 'zustand';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  deleteField,
-  updateDoc,
-} from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import { auth } from '../lib/firebase';
 import {
   CustomField,
   CustomFieldNotSavedInDB,
@@ -15,6 +8,7 @@ import {
 import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 import { useJobStore } from './jobStore';
+import { fieldsApi } from '../lib/api';
 
 interface CustomFieldStore {
   fieldMap: Record<string, CustomField>;
@@ -42,37 +36,11 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const fieldsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/customFields`
-      );
-      const fieldsDoc = await getDoc(fieldsRef);
+      // Use the API client instead of direct Firebase access
+      const fieldMap = await fieldsApi.fetchFields();
 
-      if (!fieldsDoc.exists()) {
-        console.warn('[customFieldStore.ts] No custom fields file found');
-        await setDoc(fieldsRef, {});
-        set({ fieldMap: {}, isLoading: false });
-        return true;
-      }
-
-      const fieldData = fieldsDoc.data();
-      if (!fieldData) {
-        console.warn('[customFieldStore.ts] No custom fields found');
-        set({ fieldMap: {}, isLoading: false });
-        return true;
-      }
-
-      const fieldMap: Record<string, CustomField> = {};
-
-      if (fieldData) {
-        for (const fieldId in fieldData) {
-          const field = fieldData[fieldId] as CustomField;
-          fieldMap[fieldId] = field;
-        }
-
-        set({ fieldMap });
-      }
-    } catch (err: any) {
+      set({ fieldMap });
+    } catch (err: unknown) {
       console.error('[customFieldStore.ts] Error loading custom fields:', err);
       createTranslatedToast(
         'toasts.errors.fetchFields',
@@ -83,7 +51,8 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to fetch fields: ${(err as Error).message}` });
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      set({ error: `Failed to fetch fields: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -102,18 +71,8 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         throw new Error('Field not found');
       }
 
-      const fieldsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/customFields`
-      );
-
-      if (!fieldsRef) {
-        throw new Error('Fields document not found');
-      }
-
-      await updateDoc(fieldsRef, {
-        [fieldId]: deleteField(),
-      });
+      // Use the API client instead of direct Firebase access
+      await fieldsApi.deleteField(fieldId);
 
       // remove field from local state
       const newFieldMap = { ...get().fieldMap };
@@ -127,7 +86,7 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         'toasts.fieldDeleted',
         true,
         'toasts.titles.fieldDeleted',
-        { name: newFieldMap[fieldId].name },
+        { name: field.name },
         {},
         ToastCategory.INFO,
         10000,
@@ -137,18 +96,20 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
           get().createField(field);
         }
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[customFieldStore.ts] Error deleting field`, error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.deleteField',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to delete field: ${error}` });
+      set({ error: `Failed to delete field: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -173,30 +134,13 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         throw new Error('Default value is required');
       }
 
-      const newField: CustomField = {
-        id: newID,
+      // Use the API client instead of direct Firebase access
+      const newField = await fieldsApi.createField({
         name: field.name,
         type: field.type,
         options: field.type === CustomFieldType.SELECT ? field.options : null,
         required: field.required ?? false,
         defaultValue: field.defaultValue ?? null,
-        timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      };
-
-      const fieldsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/customFields`
-      );
-
-      if (!fieldsRef) {
-        throw new Error('Fields document not found');
-      }
-
-      await updateDoc(fieldsRef, {
-        [newField.id]: newField,
       });
 
       set((state) => ({
@@ -218,21 +162,23 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         }
       );
       return newField.id;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(
         `[customFieldStore.ts] Error creating field: ${field.name}`,
         error
       );
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.createField',
         true,
         'toasts.titles.error',
-        { name: field.name, message: (error as Error).message },
+        { name: field.name, message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to create field: ${error}` });
+      set({ error: `Failed to create field: ${errorMessage}` });
       return null;
     } finally {
       set({ isLoading: false });
@@ -246,22 +192,11 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      field.timestamps.updatedAt = new Date();
-      const fieldsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/customFields`
-      );
-
-      if (!fieldsRef) {
-        throw new Error('Fields document not found');
-      }
-
-      await updateDoc(fieldsRef, {
-        [field.id]: field,
-      });
+      // Use the API client instead of direct Firebase access
+      const updatedField = await fieldsApi.updateField(field);
 
       set((state) => ({
-        fieldMap: { ...state.fieldMap, [field.id]: field },
+        fieldMap: { ...state.fieldMap, [updatedField.id]: updatedField },
         isLoading: false,
       }));
 
@@ -269,23 +204,25 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
         'toasts.fieldUpdated',
         true,
         'toasts.titles.tagUpdated',
-        { name: field.name },
+        { name: updatedField.name },
         {},
         ToastCategory.INFO,
         3000
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`[customFieldStore.ts] Error updating field`, error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.updateField',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to update field: ${error}` });
+      set({ error: `Failed to update field: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }
@@ -297,30 +234,35 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const fieldsRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/customFields`
-      );
+      // Use the API client instead of direct Firebase access
+      await fieldsApi.deleteAllFields();
 
-      if (!fieldsRef) {
-        throw new Error('Fields document not found');
-      }
-
-      setDoc(fieldsRef, {});
-
+      // Clear fields from local state
       set({ fieldMap: {}, isLoading: false });
-    } catch (error) {
+
+      createTranslatedToast(
+        'toasts.allFieldsDeleted',
+        true,
+        'toasts.titles.fieldsDeleted',
+        {},
+        {},
+        ToastCategory.INFO,
+        5000
+      );
+    } catch (error: unknown) {
       console.error(`[customFieldStore.ts] Error deleting all fields`, error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.deleteAllFields',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR,
         10000
       );
-      set({ error: `Failed to delete all fields: ${error}` });
+      set({ error: `Failed to delete all fields: ${errorMessage}` });
     } finally {
       set({ isLoading: false });
     }

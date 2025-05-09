@@ -30,5 +30,6 @@ export const DEFAULT_SETTINGS: Settings = {
   timestamps: {
     createdAt: new Date(),
     updatedAt: new Date(),
+    deletedAt: null,
   },
 };

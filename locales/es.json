@@ -19,6 +19,14 @@
     "deselectAll": "Deseleccionar Todo"
   },
 
+  "types": {
+    "number": "Número",
+    "string": "Texto",
+    "boolean": "Sí/No",
+    "date": "Fecha",
+    "select": "Seleccionar"
+  },
+
   "filter": {
     "search-placeholder": "Buscar empleos...",
     "filters": "Filtros",
@@ -242,5 +250,41 @@
     "purple": "Morado",
     "fuchsia": "Fucsia",
     "pink": "Rosa"
+  },
+  "api": {
+    "errors": {
+      "userNotAuthenticated": "Usuario no autenticado",
+      "fetchJobs": "Error al obtener empleos",
+      "addJob": "Error al añadir empleo",
+      "updateJob": "Error al actualizar empleo",
+      "deleteJob": "Error al eliminar empleo",
+      "cleanupFieldValues": "Error al limpiar valores de campo",
+      "fetchSettings": "Error al obtener configuración",
+      "updateSettings": "Error al actualizar configuración",
+      "updateSetting": "Error al actualizar configuración",
+      "fetchStatuses": "Error al obtener estados",
+      "createStatus": "Error al crear estado",
+      "updateStatus": "Error al actualizar estado",
+      "deleteStatus": "Error al eliminar estado",
+      "resetStatuses": "Error al restablecer estados",
+      "fetchTags": "Error al obtener etiquetas",
+      "createTag": "Error al crear etiqueta",
+      "updateTag": "Error al actualizar etiqueta",
+      "deleteTag": "Error al eliminar etiqueta",
+      "addTagToJob": "Error al añadir etiqueta al empleo",
+      "removeTagFromJob": "Error al eliminar etiqueta del empleo",
+      "fetchFields": "Error al obtener campos personalizados",
+      "createField": "Error al crear campo",
+      "updateField": "Error al actualizar campo",
+      "deleteField": "Error al eliminar campo",
+      "deleteAllFields": "Error al eliminar todos los campos"
+    }
+  },
+  "theme": {
+    "system": "Sistema",
+    "light": "Claro",
+    "dark": "Oscuro",
+    "error": "Error en el efecto del tema",
+    "metaTagError": "Error al actualizar la etiqueta meta {{name}}"
   }
 }

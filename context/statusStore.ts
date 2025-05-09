@@ -1,15 +1,6 @@
 // context/statusStore.ts
 import { create } from 'zustand';
-import { auth, db } from '../lib/firebase';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  deleteField,
-  DocumentReference,
-  DocumentData,
-} from 'firebase/firestore';
+import { auth } from '../lib/firebase';
 import {
   JobStatus,
   JobStatusNotSavedInDB,
@@ -19,7 +10,7 @@ import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { useJobStore } from './jobStore';
-import { timestampToDate } from '../utils/timestampUtils';
+import { statusesApi } from '../lib/api';
 
 type StatusStore = {
   /** Current map of all statuses (both default and custom) */
@@ -84,43 +75,6 @@ type StatusStore = {
 const { createTranslatedToast } = useToastStore.getState();
 const { getJobsWithStatus, updateJob } = useJobStore.getState();
 
-const getStatusMap = async (
-  ref: DocumentReference<DocumentData, DocumentData>,
-  onErrorMsg?: string
-): Promise<StatusMap> => {
-  const statusDoc = await getDoc(ref);
-
-  if (!statusDoc.exists()) {
-    createTranslatedToast(
-      'toasts.errors.statusesNotFound',
-      true,
-      'toasts.titles.error',
-      { message: onErrorMsg ?? 'Statuses not found' },
-      {},
-      ToastCategory.ERROR
-    );
-    return {} as StatusMap;
-  }
-
-  return statusDoc.data().statusMap ?? statusDoc.data();
-};
-
-const getDefaultStatusMap = async (): Promise<StatusMap> => {
-  return await getStatusMap(
-    doc(db, 'config/defaultStatusMap'),
-    'Default statuses not found'
-  );
-};
-
-const getUserCustomStatusMap = async (): Promise<StatusMap> => {
-  if (!auth.currentUser) return {} as StatusMap;
-  const map = await getStatusMap(
-    doc(db, `users/${auth.currentUser.uid}/metadata/statuses`),
-    'User statuses not found'
-  );
-  return map;
-};
-
 export const useStatusStore = create<StatusStore>((set, get) => ({
   statusMap: {},
   isLoading: false,
@@ -131,49 +85,30 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const defaultStatuses = await getDefaultStatusMap();
+      // Use the API client instead of direct Firebase access
+      const statusMap = await statusesApi.fetchStatuses();
 
-      const customStatuses = await getUserCustomStatusMap();
-
-      Object.values(customStatuses).map((status: JobStatus) => {
-        if (status.timestamps) {
-          status.timestamps.createdAt = timestampToDate(
-            status.timestamps.createdAt
-          );
-          status.timestamps.updatedAt = timestampToDate(
-            status.timestamps.updatedAt
-          );
-        }
-      });
-
-      Object.values(defaultStatuses).map((status: JobStatus) => {
-        if (status.timestamps) {
-          status.timestamps.createdAt = timestampToDate(
-            status.timestamps.createdAt
-          );
-          status.timestamps.updatedAt = timestampToDate(
-            status.timestamps.updatedAt
-          );
-        }
-      });
-
-      // Merge default statuses with custom ones (custom ones override defaults if same ID)
       set({
-        statusMap: { ...defaultStatuses, ...customStatuses },
+        statusMap,
         isLoading: false,
       });
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[statusStore.ts] Error fetching statuses:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.fetchStatuses',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR
       );
-      set({ error: `Failed to fetch statuses: ${error}`, isLoading: false });
+      set({
+        error: `Failed to fetch statuses: ${errorMessage}`,
+        isLoading: false,
+      });
       return false;
     }
   },
@@ -190,27 +125,14 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         throw new Error('Status already exists');
       }
 
-      const newStatus: JobStatus = {
-        id: newID,
+      // Use the API client instead of direct Firebase access
+      const newStatus = await statusesApi.createStatus({
         statusName: status.statusName || 'New Status',
         color: status.color || getRandomTailwindColor().tailwindColorName,
-        deletable: true,
-        timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        },
-      };
-
-      await updateDoc(
-        doc(db, `users/${auth.currentUser.uid}/metadata/statuses`),
-        {
-          [`statusMap.${newID}`]: newStatus,
-        }
-      );
+      });
 
       set((state) => ({
-        statusMap: { ...state.statusMap, [newID]: newStatus },
+        statusMap: { ...state.statusMap, [newStatus.id]: newStatus },
         isLoading: false,
       }));
 
@@ -224,22 +146,27 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         5000,
         undefined,
         () => {
-          get().deleteStatus(newID);
+          get().deleteStatus(newStatus.id);
         }
       );
 
-      return newID;
-    } catch (error) {
+      return newStatus.id;
+    } catch (error: unknown) {
       console.error('[statusStore.ts] Error creating status:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.createStatus',
         true,
         'toasts.titles.error',
-        { name: status.statusName, message: (error as Error).message },
+        { name: status.statusName, message: errorMessage },
         {},
         ToastCategory.ERROR
       );
-      set({ error: `Failed to create status: ${error}`, isLoading: false });
+      set({
+        error: `Failed to create status: ${errorMessage}`,
+        isLoading: false,
+      });
       return false;
     }
   },
@@ -265,13 +192,8 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const statusRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/statuses`
-      );
-      await updateDoc(statusRef, {
-        [`statuses.${statusId}`]: deleteField(),
-      });
+      // Use the API client instead of direct Firebase access
+      await statusesApi.deleteStatus(statusId);
 
       set((state) => {
         const newStatusMap = { ...state.statusMap };
@@ -300,17 +222,22 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       );
 
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[statusStore.ts] Error deleting status:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.deleteStatus',
         true,
         'toasts.titles.error',
-        { name: status.statusName, message: (error as Error).message },
+        { name: status.statusName, message: errorMessage },
         {},
         ToastCategory.ERROR
       );
-      set({ error: `Failed to delete status: ${error}`, isLoading: false });
+      set({
+        error: `Failed to delete status: ${errorMessage}`,
+        isLoading: false,
+      });
       return false;
     }
   },
@@ -336,24 +263,11 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const statusRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/statuses`
-      );
-      const updatedStatus = {
-        ...status,
-        timestamps: {
-          ...status.timestamps,
-          updatedAt: new Date(),
-        },
-      };
-
-      await updateDoc(statusRef, {
-        [`statuses.${status.id}`]: updatedStatus,
-      });
+      // Use the API client instead of direct Firebase access
+      const updatedStatus = await statusesApi.updateStatus(status);
 
       set((state) => ({
-        statusMap: { ...state.statusMap, [status.id]: updatedStatus },
+        statusMap: { ...state.statusMap, [updatedStatus.id]: updatedStatus },
         isLoading: false,
       }));
 
@@ -372,17 +286,22 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       );
 
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[statusStore.ts] Error updating status:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.updateStatus',
         true,
         'toasts.titles.error',
-        { name: status.statusName, message: (error as Error).message },
+        { name: status.statusName, message: errorMessage },
         {},
         ToastCategory.ERROR
       );
-      set({ error: `Failed to update status: ${error}`, isLoading: false });
+      set({
+        error: `Failed to update status: ${errorMessage}`,
+        isLoading: false,
+      });
       return false;
     }
   },
@@ -392,22 +311,22 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // First fetch default statuses
-      const defaultStatusRef = doc(db, 'config/defaultStatusMap');
-      const defaultStatusDoc = await getDoc(defaultStatusRef);
+      // Use the API client instead of direct Firebase access
+      const response = await fetch('/api/statuses/reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'user-id': auth.currentUser.uid,
+        },
+      });
 
-      if (!defaultStatusDoc.exists()) {
-        throw new Error('Default statuses not found');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to reset statuses');
       }
 
-      const defaultStatuses = defaultStatusDoc.data() as StatusMap;
-
-      // Reset user's statuses document to empty
-      const userStatusRef = doc(
-        db,
-        `users/${auth.currentUser.uid}/metadata/statuses`
-      );
-      await setDoc(userStatusRef, {});
+      const data = await response.json();
+      const defaultStatuses = data.statusMap;
 
       // Update local state with just default statuses
       set({
@@ -425,13 +344,15 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       );
 
       return true;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('[statusStore.ts] Error resetting statuses:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
       createTranslatedToast(
         'toasts.errors.resetStatuses',
         true,
         'toasts.titles.error',
-        { message: (error as Error).message },
+        { message: errorMessage },
         {},
         ToastCategory.ERROR
       );
