@@ -16,14 +16,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta name="description" content="Track your job applications" />
           <meta charSet="UTF-8" />
 
-          <link
-            rel="shortcut icon"
-            type="image/x-icon"
-            href="/.HireTrckr.png"
-          />
+          <link rel="shortcut icon" type="image/x-icon" href="/HireTrckr.png" />
 
-          <link rel="icon" type="image/x-icon" href="/.HireTrckr.png" />
-          <link rel="apple-touch-icon" href="/.HireTrckr.png" />
+          <link rel="icon" type="image/x-icon" href="/HireTrckr.png" />
+          <link rel="apple-touch-icon" href="/HireTrckr.png" />
 
           <meta
             name="keywords"

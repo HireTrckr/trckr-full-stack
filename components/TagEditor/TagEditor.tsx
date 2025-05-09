@@ -98,7 +98,6 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
 
     if (isMounted) {
       setSuggestions(matchingTags);
-      console.log(suggestions);
     }
 
     return () => {
@@ -172,6 +171,7 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
         timestamps: {
           createdAt: new Date(),
           updatedAt: new Date(),
+          deletedAt: null,
         },
         isNew: true,
       };

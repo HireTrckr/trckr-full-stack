@@ -31,8 +31,7 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch jobs');
+      throw new Error(response.statusText || 'Failed to fetch jobs');
     }
 
     const data = await response.json();
@@ -55,8 +54,7 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to add job');
+      throw new Error(response.statusText || 'Failed to add job');
     }
 
     const data = await response.json();
@@ -79,8 +77,7 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update job');
+      throw new Error(response.statusText || 'Failed to update job');
     }
 
     const data = await response.json();
@@ -106,14 +103,13 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to delete job');
+      throw new Error(response.statusText || 'Failed to delete job');
     }
 
     const data = await response.json();
     return data.jobId;
   },
-  
+
   cleanupFieldValues: async (fieldId: string): Promise<boolean> => {
     const userId = getUserId();
     if (!userId) {
@@ -130,8 +126,7 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to clean up field values');
+      throw new Error(response.statusText || 'Failed to clean up field values');
     }
 
     return true;
@@ -155,8 +150,7 @@ export const settingsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch settings');
+      throw new Error(response.statusText || 'Failed to fetch settings');
     }
 
     const data = await response.json();
@@ -179,15 +173,17 @@ export const settingsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update settings');
+      throw new Error(response.statusText || 'Failed to update settings');
     }
 
     const data = await response.json();
     return data.settings;
   },
 
-  updateSetting: async <K extends keyof Settings>(key: K, value: Settings[K]): Promise<Settings> => {
+  updateSetting: async <K extends keyof Settings>(
+    key: K,
+    value: Settings[K]
+  ): Promise<Settings> => {
     const userId = getUserId();
     if (!userId) {
       throw new Error('User not authenticated');
@@ -203,8 +199,7 @@ export const settingsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update setting');
+      throw new Error(response.statusText || 'Failed to update setting');
     }
 
     const data = await response.json();
@@ -229,8 +224,7 @@ export const statusesApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch statuses');
+      throw new Error(response.statusText || 'Failed to fetch statuses');
     }
 
     const data = await response.json();
@@ -255,14 +249,13 @@ export const statusesApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to create status');
+      throw new Error(response.statusText || 'Failed to create status');
     }
 
     const data = await response.json();
     return data.status;
   },
-  
+
   updateStatus: async (status: JobStatus): Promise<JobStatus> => {
     const userId = getUserId();
     if (!userId) {
@@ -279,8 +272,7 @@ export const statusesApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update status');
+      throw new Error(response.statusText || 'Failed to update status');
     }
 
     const data = await response.json();
@@ -303,14 +295,13 @@ export const statusesApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to delete status');
+      throw new Error(response.statusText || 'Failed to delete status');
     }
 
     const data = await response.json();
     return data.statusId;
   },
-  
+
   resetStatuses: async (): Promise<StatusMap> => {
     const userId = getUserId();
     if (!userId) {
@@ -326,8 +317,7 @@ export const statusesApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to reset statuses');
+      throw new Error(response.statusText || 'Failed to reset statuses');
     }
 
     const data = await response.json();
@@ -352,8 +342,7 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch tags');
+      throw new Error(response.statusText || 'Failed to fetch tags');
     }
 
     const data = await response.json();
@@ -376,8 +365,7 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to create tag');
+      throw new Error(response.statusText || 'Failed to create tag');
     }
 
     const data = await response.json();
@@ -400,8 +388,7 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update tag');
+      throw new Error(response.statusText || 'Failed to update tag');
     }
 
     const data = await response.json();
@@ -424,14 +411,13 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to delete tag');
+      throw new Error(response.statusText || 'Failed to delete tag');
     }
 
     const data = await response.json();
     return data.tagId;
   },
-  
+
   addTagToJob: async (jobId: string, tagId: string): Promise<Tag> => {
     const userId = getUserId();
     if (!userId) {
@@ -448,14 +434,13 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to add tag to job');
+      throw new Error(response.statusText || 'Failed to add tag to job');
     }
 
     const data = await response.json();
     return data.tag;
   },
-  
+
   removeTagFromJob: async (jobId: string, tagId: string): Promise<Tag> => {
     const userId = getUserId();
     if (!userId) {
@@ -472,8 +457,7 @@ export const tagsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to remove tag from job');
+      throw new Error(response.statusText || 'Failed to remove tag from job');
     }
 
     const data = await response.json();
@@ -498,8 +482,7 @@ export const fieldsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch custom fields');
+      throw new Error(response.statusText || 'Failed to fetch custom fields');
     }
 
     const data = await response.json();
@@ -524,14 +507,13 @@ export const fieldsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to create field');
+      throw new Error(response.statusText || 'Failed to create field');
     }
 
     const data = await response.json();
     return data.field;
   },
-  
+
   updateField: async (field: CustomField): Promise<CustomField> => {
     const userId = getUserId();
     if (!userId) {
@@ -548,8 +530,7 @@ export const fieldsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update field');
+      throw new Error(response.statusText || 'Failed to update field');
     }
 
     const data = await response.json();
@@ -572,14 +553,13 @@ export const fieldsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to delete field');
+      throw new Error(response.statusText || 'Failed to delete field');
     }
 
     const data = await response.json();
     return data.fieldId;
   },
-  
+
   deleteAllFields: async (): Promise<boolean> => {
     const userId = getUserId();
     if (!userId) {
@@ -595,8 +575,7 @@ export const fieldsApi = {
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to delete all fields');
+      throw new Error(response.statusText || 'Failed to delete all fields');
     }
 
     return true;

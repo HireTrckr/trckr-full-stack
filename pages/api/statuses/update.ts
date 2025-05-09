@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { JobStatus } from '../../../types/jobStatus';
 
 export default async function handler(
@@ -23,10 +22,10 @@ export default async function handler(
       }
 
       // Get the current status to check if it's deletable
-      const statusesRef = doc(db, `users/${userId}/metadata/statuses`);
-      const statusesDoc = await getDoc(statusesRef);
+      const statusesRef = adminDb.doc(`users/${userId}/metadata/statuses`);
+      const statusesDoc = await statusesRef.get();
       
-      if (!statusesDoc.exists()) {
+      if (!statusesDoc.exists) {
         return res.status(404).json({ error: 'Statuses document not found' });
       }
       
@@ -45,7 +44,7 @@ export default async function handler(
       // Update the timestamp
       status.timestamps.updatedAt = new Date();
 
-      await updateDoc(statusesRef, {
+      await statusesRef.update({
         [`statusMap.${status.id}`]: status,
       });
 

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { StatusMap } from '../../../types/jobStatus';
 
 export default async function handler(
@@ -17,18 +16,18 @@ export default async function handler(
   if (req.method === 'POST') {
     try {
       // First fetch default statuses
-      const defaultStatusRef = doc(db, 'config/defaultStatusMap');
-      const defaultStatusDoc = await getDoc(defaultStatusRef);
+      const defaultStatusRef = adminDb.doc('config/defaultStatusMap');
+      const defaultStatusDoc = await defaultStatusRef.get();
       
-      if (!defaultStatusDoc.exists()) {
+      if (!defaultStatusDoc.exists) {
         return res.status(404).json({ error: 'Default statuses not found' });
       }
       
       const defaultStatuses = defaultStatusDoc.data() as StatusMap;
       
       // Reset user's statuses document to empty
-      const userStatusRef = doc(db, `users/${userId}/metadata/statuses`);
-      await setDoc(userStatusRef, {});
+      const userStatusRef = adminDb.doc(`users/${userId}/metadata/statuses`);
+      await userStatusRef.set({});
       
       return res.status(200).json({ 
         statusMap: defaultStatuses,

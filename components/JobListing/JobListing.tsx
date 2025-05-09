@@ -40,7 +40,7 @@ export const JobListing = memo(
   }): JSX.Element {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(
-      Date.now() - job?.timestamps?.updatedAt.getTime() || 0
+      new Date().getTime() - new Date(job.timestamps.updatedAt).getTime()
     );
     const [deleting, setDeleting] = useState<boolean>(false);
 

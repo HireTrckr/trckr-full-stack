@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Settings } from '../../../types/settings';
 
 export default async function handler(
@@ -23,10 +22,10 @@ export default async function handler(
       }
 
       // Get current settings
-      const settingsRef = doc(db, `users/${userId}/metadata/settings`);
-      const settingsDoc = await getDoc(settingsRef);
+      const settingsRef = adminDb.doc(`users/${userId}/metadata/settings`);
+      const settingsDoc = await settingsRef.get();
       
-      if (!settingsDoc.exists()) {
+      if (!settingsDoc.exists) {
         return res.status(404).json({ error: 'Settings not found' });
       }
       
@@ -47,7 +46,7 @@ export default async function handler(
         },
       };
 
-      await updateDoc(settingsRef, {
+      await settingsRef.update({
         settings: newSettings,
       });
 

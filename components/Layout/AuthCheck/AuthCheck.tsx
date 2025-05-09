@@ -12,6 +12,7 @@ import { DEFAULT_SETTINGS } from '../../../types/settings';
 import { useStatusStore } from '../../../context/statusStore';
 import { useTranslation } from 'react-i18next';
 import { useCustomFieldStore } from '../../../context/customFieldStore';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface AuthCheckProps {
   children: ReactNode;
@@ -34,15 +35,21 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
     setMounted(true);
   }, []);
 
+  useEffect(() => {}, [user]);
+
   useEffect(() => {
-    if (user) {
-      fetchTags();
-      fetchJobs();
-      fetchSettings();
-      fetchStatus();
-      fetchFields();
-    }
-  }, [user]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        fetchTags();
+        fetchJobs();
+        fetchSettings();
+        fetchStatus();
+        fetchFields();
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   // i hate hydration errors
   if (!mounted) {

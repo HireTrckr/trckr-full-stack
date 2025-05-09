@@ -122,7 +122,6 @@ export const useJobStore = create<JobStore>((set, get) => ({
   },
 
   deleteJob: async (job: Job) => {
-    console.log('Deleting job:', job);
     if (!auth.currentUser) return false;
     if (!job.id) return false;
 

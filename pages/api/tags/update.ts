@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Tag } from '../../../types/tag';
 
 export default async function handler(
@@ -25,12 +24,9 @@ export default async function handler(
       // Update the timestamp
       tag.timestamps.updatedAt = new Date();
 
-      await updateDoc(
-        doc(db, `users/${userId}/metadata/tags`),
-        {
-          [`tagMap.${tag.id}`]: tag,
-        }
-      );
+      await adminDb.doc(`users/${userId}/metadata/tags`).update({
+        [`tagMap.${tag.id}`]: tag,
+      });
 
       return res.status(200).json({ 
         tag,

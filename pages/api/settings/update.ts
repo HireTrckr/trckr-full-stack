@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Settings } from '../../../types/settings';
 
 export default async function handler(
@@ -31,12 +30,9 @@ export default async function handler(
         },
       };
 
-      await updateDoc(
-        doc(db, `users/${userId}/metadata/settings`),
-        {
-          settings: updatedSettings,
-        }
-      );
+      await adminDb.doc(`users/${userId}/metadata/settings`).update({
+        settings: updatedSettings,
+      });
 
       return res.status(200).json({ 
         settings: updatedSettings,

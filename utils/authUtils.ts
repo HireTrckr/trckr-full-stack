@@ -7,6 +7,7 @@ import { useTagStore } from '../context/tagStore';
 export const signInWithGoogle = async () => {
   useJobStore.getState().clearJobs();
   useTagStore.getState().clearTags();
+
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
 

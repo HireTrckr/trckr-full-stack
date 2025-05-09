@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Tag, TagMap } from '../../../types/tag';
-import { timestampToDate } from '../../../utils/timestampUtils';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 
 export default async function handler(
@@ -20,33 +18,38 @@ export default async function handler(
 
   if (req.method === 'GET') {
     try {
-      const tagsRef = doc(db, `users/${userId}/metadata/tags`);
-      const tagsDoc = await getDoc(tagsRef);
+      const tagsRef = adminDb.doc(`users/${userId}/metadata/tags`);
+      const tagsDoc = await tagsRef.get();
 
-      if (!tagsDoc.exists()) {
-        await setDoc(tagsRef, { tagMap: {} });
+      if (!tagsDoc.exists) {
+        await tagsRef.set({ tagMap: {} });
         return res.status(200).json({ tagMap: {} });
       }
 
-      const tagData: TagMap = tagsDoc.data().tagMap;
+      const tagData = tagsDoc.data();
+
+      if (!tagData) {
+        await tagsRef.set({ tagMap: {} });
+        return res.status(200).json({ tagMap: {} });
+      }
       const tagMap: TagMap = {};
 
-      if (tagData) {
-        Object.entries(tagData).forEach(([tagId, tag]: [string, Tag]) => {
-          if (!tag || typeof tag !== 'object') return;
+      if (tagData.tagMap) {
+        Object.entries(tagData.tagMap as TagMap).forEach(
+          ([tagId, tag]: [string, Tag]) => {
+            if (!tag || typeof tag !== 'object') return;
 
-          tagMap[tagId] = {
-            id: tagId,
-            name: tag.name,
-            color: tag.color || getRandomTailwindColor().tailwindColorName,
-            count: Math.max(tag.count || 0, 0), // sometimes there is negative glitches
-            timestamps: {
-              createdAt: timestampToDate(tag.timestamps?.createdAt),
-              updatedAt: timestampToDate(tag.timestamps?.updatedAt),
-              deletedAt: timestampToDate(tag.timestamps?.deletedAt),
-            },
-          };
-        });
+            tagMap[tagId] = {
+              id: tagId,
+              name: tag.name,
+              color: tag.color || getRandomTailwindColor().tailwindColorName,
+              count: Math.max(tag.count || 0, 0), // sometimes there is negative glitches
+              timestamps: {
+                ...tag.timestamps,
+              },
+            };
+          }
+        );
       }
 
       return res.status(200).json({ tagMap });

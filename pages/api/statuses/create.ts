@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { JobStatus, JobStatusNotSavedInDB } from '../../../types/jobStatus';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 
@@ -28,10 +27,8 @@ export default async function handler(
       const newID = status.statusName.toLowerCase().replace(/\\s/g, '-');
 
       // throw error if status already exists
-      const statusDoc = await getDoc(
-        doc(db, `users/${userId}/metadata/statuses`)
-      );
-      if (statusDoc.exists()) {
+      const statusDoc = await adminDb.doc(`users/${userId}/metadata/statuses`).get();
+      if (statusDoc.exists) {
         const statusMap: { [key: string]: JobStatus } =
           statusDoc.data().statusMap;
         if (statusMap[newID]) {
@@ -51,7 +48,7 @@ export default async function handler(
         },
       };
 
-      await updateDoc(doc(db, `users/${userId}/metadata/statuses`), {
+      await adminDb.doc(`users/${userId}/metadata/statuses`).update({
         [`statusMap.${newID}`]: newStatus,
       });
 

@@ -46,7 +46,6 @@ export function DataFilterSorter({
       : [...filterOptions.status, status];
 
     onFilterChange({ status: newStatuses });
-    console.log(newStatuses);
   };
 
   // Handle tag filter change

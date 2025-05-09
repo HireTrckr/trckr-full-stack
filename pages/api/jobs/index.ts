@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
-import { timestampToDate } from '../../../utils/timestampUtils';
+import { adminDb } from '../../../lib/firebase-admin';
+
 import { Job } from '../../../types/job';
 
 export default async function handler(
@@ -10,31 +9,33 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'GET') {
     try {
-      const q = query(
-        collection(db, `users/${userId}/jobs`),
-        where('statusID', '!=', 'deleted')
-      );
-      const querySnapshot = await getDocs(q);
+      // get the user's jobs
+      const userDoc = await adminDb
+        .collection(`users/${userId}/jobs`)
+        .where('statusID', '!=', 'deleted')
+        .get();
 
-      if (querySnapshot.empty) {
+      if (userDoc.empty) {
         return res.status(200).json({ jobs: [] });
       }
 
-      const jobs = querySnapshot.docs.map((doc) => ({
+      const jobs = userDoc.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         timestamps: {
-          createdAt: timestampToDate(doc.data().timestamps.createdAt),
-          updatedAt: timestampToDate(doc.data().timestamps.updatedAt),
+          createdAt: new Date(doc.data().timestamps.createdAt),
+          updatedAt: new Date(doc.data().timestamps.updatedAt),
           deletedAt: doc.data().timestamps.deletedAt
-            ? timestampToDate(doc.data().timestamps.deletedAt)
+            ? new Date(doc.data().timestamps.deletedAt)
             : null,
         },
       })) as Job[];

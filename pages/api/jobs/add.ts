@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Job, JobNotSavedInDB } from '../../../types/job';
 
 export default async function handler(
@@ -31,10 +30,7 @@ export default async function handler(
         },
       } as Job;
 
-      const docRef = await addDoc(
-        collection(db, `users/${userId}/jobs`),
-        completeJob
-      );
+      const docRef = await adminDb.collection(`users/${userId}/jobs`).add(completeJob);
 
       if (!docRef) {
         throw Error('Failed to add job');

@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Tag, TagNotSavedInDB } from '../../../types/tag';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
 
@@ -39,7 +38,7 @@ export default async function handler(
         },
       };
 
-      await updateDoc(doc(db, `users/${userId}/metadata/tags`), {
+      await adminDb.doc(`users/${userId}/metadata/tags`).update({
         [`tagMap.${newID}`]: newTag,
       });
 

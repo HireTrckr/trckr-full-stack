@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 
 export default async function handler(
@@ -22,7 +21,7 @@ export default async function handler(
         return res.status(400).json({ error: 'Job ID is required' });
       }
 
-      const jobRef = doc(db, 'users', userId, 'jobs', job.id);
+      const jobRef = adminDb.doc(`users/${userId}/jobs/${job.id}`);
 
       if (!jobRef) {
         throw new Error('Job not found');
@@ -34,7 +33,7 @@ export default async function handler(
         deletedAt: null,
       };
 
-      await updateDoc(jobRef, job);
+      await jobRef.update(job);
 
       return res.status(200).json({ 
         job,

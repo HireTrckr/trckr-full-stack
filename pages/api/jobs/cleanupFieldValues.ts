@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { collection, getDocs, runTransaction } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 
 export default async function handler(
@@ -22,20 +21,21 @@ export default async function handler(
         return res.status(400).json({ error: 'Field ID is required' });
       }
 
-      const jobsRef = collection(db, `users/${userId}/jobs`);
-      const jobsSnapshot = await getDocs(jobsRef);
+      const jobsRef = adminDb.collection(`users/${userId}/jobs`);
+      const jobsSnapshot = await jobsRef.get();
       
-      await runTransaction(db, async (transaction) => {
-        jobsSnapshot.forEach((jobDoc) => {
-          const jobData = jobDoc.data() as Job;
-          if (jobData.customFields && jobData.customFields[fieldId]) {
-            delete jobData.customFields[fieldId];
-            transaction.update(jobDoc.ref, {
-              customFields: jobData.customFields,
-            });
-          }
-        });
+      const batch = adminDb.batch();
+      jobsSnapshot.forEach((jobDoc) => {
+        const jobData = jobDoc.data() as Job;
+        if (jobData.customFields && jobData.customFields[fieldId]) {
+          delete jobData.customFields[fieldId];
+          batch.update(jobDoc.ref, {
+            customFields: jobData.customFields,
+          });
+        }
       });
+      
+      await batch.commit();
 
       return res.status(200).json({ 
         message: `Field ${fieldId} removed from all jobs successfully` 

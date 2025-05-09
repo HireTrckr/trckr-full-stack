@@ -147,7 +147,8 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ tagMap, _lastFetched: new Date() } as TagStorePlusPrivate);
       } catch (error: unknown) {
         console.error('[tagStore.ts] Error fetching tags:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.fetchTags',
           true,
@@ -180,23 +181,9 @@ export const useTagStore = create<TagStore>((set, get) => {
       try {
         // check if any jobs use tag
         const tag = get().tagMap[tagId];
-        
+
         if (!tag) {
           throw new Error('Tag not found');
-        }
-
-        const jobsWithTag = useJobStore.getState().getJobsWithTags([tagId]);
-
-        if (jobsWithTag.length > 0) {
-          // remove tag from jobs
-          const jobStore = useJobStore.getState();
-          const updatePromises = jobsWithTag.map((job: Job) => {
-            const updatedTags =
-              job.tagIds?.filter((t) => t !== tagId) || [];
-            return jobStore.updateJob({ ...job, tagIds: updatedTags });
-          });
-
-          await Promise.all(updatePromises);
         }
 
         // Use the API client instead of direct Firebase access
@@ -206,7 +193,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         const newTagMap = { ...get().tagMap };
         delete newTagMap[tagId];
         set({ tagMap: newTagMap });
-        
+
         createTranslatedToast(
           'toasts.tagDeleted',
           true,
@@ -223,11 +210,12 @@ export const useTagStore = create<TagStore>((set, get) => {
         );
       } catch (error: unknown) {
         console.error(`[tagStore.ts] Error deleting tag: ${tagId}`, error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+
         // Safely access tag name if it exists
         const tagName = get().tagMap[tagId]?.name || 'Unknown tag';
-        
+
         createTranslatedToast(
           'toasts.errors.deleteTag',
           true,
@@ -285,7 +273,8 @@ export const useTagStore = create<TagStore>((set, get) => {
         return newTag.id;
       } catch (error: unknown) {
         console.error(`[tagStore.ts] Error creating tag: ${tag.name}`, error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.createTag',
           true,
@@ -334,24 +323,24 @@ export const useTagStore = create<TagStore>((set, get) => {
             name: 'untitled',
             color: getRandomTailwindColor().tailwindColorName,
           } as TagNotSavedInDB);
-          
+
           if (!newTagId) {
             throw new Error('Failed to create tag');
           }
-          
+
           tag = get().tagMap[tagId];
         }
 
         // Use the API client instead of direct Firebase access
         const updatedTag = await tagsApi.addTagToJob(jobId, tagId);
-        
+
         // Update the job locally
         const updatedJob: Job = {
           ...job,
           tagIds: job.tagIds ? [...job.tagIds, tagId] : [tagId],
         };
         await jobStore.updateJob(updatedJob);
-        
+
         // Update the tag in the local state
         set((state) => ({
           tagMap: {
@@ -362,7 +351,7 @@ export const useTagStore = create<TagStore>((set, get) => {
             },
           },
         }));
-        
+
         createTranslatedToast(
           'toasts.tagAddedToJob',
           true,
@@ -379,7 +368,8 @@ export const useTagStore = create<TagStore>((set, get) => {
         );
       } catch (error: unknown) {
         console.error(`[tagStore.ts] Error adding tag to job: ${jobId}`, error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.addTagToJob',
           true,
@@ -421,7 +411,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         // Get the job
         const jobStore = useJobStore.getState();
         const job = jobStore.jobs.find((job: Job) => job.id === jobId);
-        
+
         if (!job) {
           console.error(`[tagStore.ts] Job not found: ${jobId}`);
           throw new Error('Job not found');
@@ -429,7 +419,7 @@ export const useTagStore = create<TagStore>((set, get) => {
 
         // Use the API client instead of direct Firebase access
         const updatedTag = await tagsApi.removeTagFromJob(jobId, tagId);
-        
+
         // If tag count is 0, delete the tag
         if (updatedTag.count <= 0) {
           await get().deleteTag(tagId);
@@ -452,7 +442,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           tagIds: (job.tagIds || []).filter((t) => t !== tagId),
         };
         await jobStore.updateJob(updatedJob);
-        
+
         createTranslatedToast(
           'toasts.tagRemovedFromJob',
           true,
@@ -472,7 +462,8 @@ export const useTagStore = create<TagStore>((set, get) => {
           `[tagStore.ts] Error removing tag from job: ${jobId}`,
           error
         );
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.removeTagFromJob',
           true,
@@ -513,7 +504,8 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ tagMap: {} });
       } catch (error: unknown) {
         console.error(`[tagStore.ts] Error clearing tags`, error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.clearTags',
           true,
@@ -539,14 +531,14 @@ export const useTagStore = create<TagStore>((set, get) => {
       try {
         // Use the API client instead of direct Firebase access
         const tag = await tagsApi.updateTag(updatedTag);
-        
+
         set((state) => ({
           tagMap: {
             ...state.tagMap,
             [tag.id]: tag,
           },
         }));
-        
+
         createTranslatedToast(
           'toasts.tagUpdated',
           true,
@@ -561,7 +553,8 @@ export const useTagStore = create<TagStore>((set, get) => {
           `[tagStore.ts] Error updating tag: ${updatedTag.id}`,
           error
         );
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
         createTranslatedToast(
           'toasts.errors.updateTag',
           true,

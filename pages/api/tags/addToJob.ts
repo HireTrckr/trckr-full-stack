@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 import { Tag } from '../../../types/tag';
 
@@ -24,10 +23,10 @@ export default async function handler(
       }
 
       // Get the job
-      const jobRef = doc(db, `users/${userId}/jobs`, jobId);
-      const jobDoc = await getDoc(jobRef);
+      const jobRef = adminDb.doc(`users/${userId}/jobs/${jobId}`);
+      const jobDoc = await jobRef.get();
       
-      if (!jobDoc.exists()) {
+      if (!jobDoc.exists) {
         return res.status(404).json({ error: 'Job not found' });
       }
       
@@ -39,10 +38,10 @@ export default async function handler(
       }
       
       // Get the tag
-      const tagsRef = doc(db, `users/${userId}/metadata/tags`);
-      const tagsDoc = await getDoc(tagsRef);
+      const tagsRef = adminDb.doc(`users/${userId}/metadata/tags`);
+      const tagsDoc = await tagsRef.get();
       
-      if (!tagsDoc.exists()) {
+      if (!tagsDoc.exists) {
         return res.status(404).json({ error: 'Tags document not found' });
       }
       
@@ -56,14 +55,14 @@ export default async function handler(
       // Update the job with the new tag
       const updatedTagIds = job.tagIds ? [...job.tagIds, tagId] : [tagId];
       
-      await updateDoc(jobRef, {
+      await jobRef.update({
         tagIds: updatedTagIds,
       });
       
       // Update the tag count
       const newCount = (tag.count || 0) + 1;
       
-      await updateDoc(tagsRef, {
+      await tagsRef.update({
         [`tagMap.${tagId}`]: {
           ...tag,
           count: newCount,
