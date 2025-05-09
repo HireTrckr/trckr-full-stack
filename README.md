@@ -2,9 +2,11 @@
 
 ![Code Quality](https://github.com/HireTrckr/hire-trckr-ui/actions/workflows/prettify.yml/badge.svg)
 
-# trckr
+# [trckr](hire-trckr.vercel.app)
 
-A job application tracking application built with Next.js, Firebase, and Zustand.
+A job application tracking application built with Next.js, Firebase, Zustand and Vercel.
+
+*Try it [**here**](hire-trckr.vercel.app)!*
 
 ## Setup Instructions
 
@@ -30,7 +32,7 @@ A job application tracking application built with Next.js, Firebase, and Zustand
 
 ## Architecture
 
-The application uses a serverless architecture with Next.js API routes to handle data operations. This keeps Firebase API keys secure by moving them to the server side.
+The application uses a serverless architecture with Next.js (Vercel) API routes to handle data operations. This keeps Firebase API keys secure by moving them to the server side.
 
 ### Client-Side
 
@@ -40,15 +42,6 @@ The application uses a serverless architecture with Next.js API routes to handle
 
 ### Server-Side
 
-- Next.js API routes for serverless functions
+- Next.js (Vercel) API routes for serverless functions
 - Firebase Admin SDK for secure database operations
 - Environment variables for configuration
-
-## Security Improvements
-
-The application has been updated to improve security by:
-
-1. Moving Firebase operations to server-side API routes
-2. Using environment variables for Firebase configuration
-3. Implementing Firebase Admin SDK for server-side operations
-4. Keeping API keys hidden from client-side code
