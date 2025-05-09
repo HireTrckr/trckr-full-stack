@@ -6,9 +6,9 @@
 
 A job application tracking application built with Next.js, Firebase, Zustand and Vercel.
 
-*Try it [**here**](hire-trckr.vercel.app)!*
+_Try it [**here**](hire-trckr.vercel.app)!_
 
-## Setup Instructions
+## Setup Instructions (for your own firebase)
 
 1. Clone the repository
 2. Install dependencies:
