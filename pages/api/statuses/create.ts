@@ -27,10 +27,12 @@ export default async function handler(
       const newID = status.statusName.toLowerCase().replace(/\\s/g, '-');
 
       // throw error if status already exists
-      const statusDoc = await adminDb.doc(`users/${userId}/metadata/statuses`).get();
+      const statusDoc = await adminDb
+        .doc(`users/${userId}/metadata/statuses`)
+        .get();
       if (statusDoc.exists) {
         const statusMap: { [key: string]: JobStatus } =
-          statusDoc.data().statusMap;
+          statusDoc.data()?.statusMap ?? statusDoc.data();
         if (statusMap[newID]) {
           return res.status(400).json({ error: 'Status already exists' });
         }

@@ -1,6 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
-import { CustomField, CustomFieldNotSavedInDB, CustomFieldType } from '../../../types/customField';
+import {
+  CustomField,
+  CustomFieldNotSavedInDB,
+  CustomFieldType,
+} from '../../../types/customField';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,24 +12,30 @@ export default async function handler(
 ) {
   // Get user ID from the request
   const userId = req.headers['user-id'] as string;
-  
+
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized - User ID is required' });
+    return res
+      .status(401)
+      .json({ error: 'Unauthorized - User ID is required' });
   }
 
   if (req.method === 'POST') {
     try {
       const field = req.body as Partial<CustomFieldNotSavedInDB>;
-      
+
       if (!field.name || !field.type) {
-        return res.status(400).json({ error: 'Field name and type are required' });
+        return res
+          .status(400)
+          .json({ error: 'Field name and type are required' });
       }
 
       const newID = field.name.toLowerCase().replace(/\s/g, '-');
-      
+
       // check there is a default value if required
       if (field.required && field.defaultValue === null) {
-        return res.status(400).json({ error: 'Default value is required for required fields' });
+        return res
+          .status(400)
+          .json({ error: 'Default value is required for required fields' });
       }
 
       const newField: CustomField = {
@@ -38,6 +48,7 @@ export default async function handler(
         timestamps: {
           createdAt: new Date(),
           updatedAt: new Date(),
+          deletedAt: null,
         },
       };
 
@@ -51,13 +62,15 @@ export default async function handler(
         [newField.id]: newField,
       });
 
-      return res.status(201).json({ 
+      return res.status(201).json({
         field: newField,
-        message: 'Field created successfully' 
+        message: 'Field created successfully',
       });
     } catch (error) {
       console.error('[API] Error creating field:', error);
-      return res.status(500).json({ error: `Failed to create field: ${error}` });
+      return res
+        .status(500)
+        .json({ error: `Failed to create field: ${error}` });
     }
   } else {
     res.setHeader('Allow', ['POST']);
