@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,14 +14,14 @@ export default async function handler(
 
   if (req.method === 'DELETE') {
     try {
-      const fieldsRef = doc(db, `users/${userId}/metadata/customFields`);
+      const fieldsRef = adminDb.doc(`users/${userId}/metadata/customFields`);
 
       if (!fieldsRef) {
         throw new Error('Fields document not found');
       }
 
       // Reset the document to an empty object
-      await setDoc(fieldsRef, {});
+      await fieldsRef.set({});
 
       return res.status(200).json({ 
         message: 'All fields deleted successfully' 

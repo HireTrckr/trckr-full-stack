@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { CustomField } from '../../../types/customField';
 
 export default async function handler(
@@ -16,11 +15,11 @@ export default async function handler(
 
   if (req.method === 'GET') {
     try {
-      const fieldsRef = doc(db, `users/${userId}/metadata/customFields`);
-      const fieldsDoc = await getDoc(fieldsRef);
+      const fieldsRef = adminDb.doc(`users/${userId}/metadata/customFields`);
+      const fieldsDoc = await fieldsRef.get();
 
-      if (!fieldsDoc.exists()) {
-        await setDoc(fieldsRef, {});
+      if (!fieldsDoc.exists) {
+        await fieldsRef.set({});
         return res.status(200).json({ fieldMap: {} });
       }
 

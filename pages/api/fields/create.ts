@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../../lib/firebase';
+import { adminDb } from '../../../lib/firebase-admin';
 import { CustomField, CustomFieldNotSavedInDB, CustomFieldType } from '../../../types/customField';
 
 export default async function handler(
@@ -42,13 +41,13 @@ export default async function handler(
         },
       };
 
-      const fieldsRef = doc(db, `users/${userId}/metadata/customFields`);
+      const fieldsRef = adminDb.doc(`users/${userId}/metadata/customFields`);
 
       if (!fieldsRef) {
         throw new Error('Fields document not found');
       }
 
-      await updateDoc(fieldsRef, {
+      await fieldsRef.update({
         [newField.id]: newField,
       });
 
