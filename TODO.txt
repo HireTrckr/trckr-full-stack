@@ -2,3 +2,4 @@
 - creating a tag when creating a new job doesnt work
 - fix date logic
 - custom field component boolean optimisations
+- error handling for when api returns !response.ok (toast notifcation)
