@@ -20,7 +20,7 @@ export default async function handler(
     try {
       const field = req.body as CustomField;
 
-      if (!field || field.id) {
+      if (!field || !field.id) {
         return res.status(400).json({ error: 'Field ID is required' });
       }
 
