@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Settings } from '../../../types/settings';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,11 +25,11 @@ export default async function handler(
       }
 
       // Update the timestamp
-      const updatedSettings = {
+      const updatedSettings: Settings = {
         ...settings,
         timestamps: {
           ...settings.timestamps,
-          updatedAt: new Date(),
+          updatedAt: Timestamp.fromDate(new Date()),
         },
       };
 

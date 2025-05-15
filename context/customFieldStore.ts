@@ -9,6 +9,8 @@ import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 import { useJobStore } from './jobStore';
 import { fieldsApi } from '../lib/api';
+import { getIDFromName } from '../utils/idUtils';
+import { TimestampsFromJSON } from '../utils/dateUtils';
 
 interface CustomFieldStore {
   fieldMap: Record<string, CustomField>;
@@ -37,7 +39,16 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const fieldMap = await fieldsApi.fetchFields();
+      const fieldMap: Record<string, CustomField> = {};
+
+      for (let [fieldId, field] of Object.entries(
+        await fieldsApi.fetchFields()
+      )) {
+        fieldMap[fieldId] = {
+          ...field,
+          timestamps: TimestampsFromJSON(field.timestamps),
+        } as CustomField;
+      }
 
       set({ fieldMap });
     } catch (err: unknown) {
@@ -123,7 +134,7 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const newID = field.name.toLowerCase().replace(/\s/g, '-');
+      const newID = getIDFromName(field.name);
 
       if (get().fieldMap[newID]) {
         throw new Error('Field already exists');

@@ -5,6 +5,8 @@ import {
   CustomFieldNotSavedInDB,
   CustomFieldType,
 } from '../../../types/customField';
+import { getIDFromName } from '../../../utils/idUtils';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,7 +31,7 @@ export default async function handler(
           .json({ error: 'Field name and type are required' });
       }
 
-      const newID = field.name.toLowerCase().replace(/\s/g, '-');
+      const newID = getIDFromName(field.name);
 
       // check there is a default value if required
       if (field.required && field.defaultValue === null) {
@@ -46,8 +48,8 @@ export default async function handler(
         required: field.required ?? false,
         defaultValue: field.defaultValue ?? null,
         timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
           deletedAt: null,
         },
       };

@@ -31,7 +31,7 @@ export const jobsApi = {
     });
 
     if (!response.ok) {
-      throw new Error(response.statusText || 'Failed to fetch jobs');
+      throw new Error(response?.statusText || 'Failed to fetch jobs');
     }
 
     const data = await response.json();
@@ -250,6 +250,7 @@ export const statusesApi = {
 
     if (!response.ok) {
       throw new Error(response.statusText || 'Failed to create status');
+      // generate toast
     }
 
     const data = await response.json();
@@ -299,7 +300,7 @@ export const statusesApi = {
     }
 
     const data = await response.json();
-    return data.statusId;
+    return data.statusMap;
   },
 
   resetStatuses: async (): Promise<StatusMap> => {
@@ -418,7 +419,10 @@ export const tagsApi = {
     return data.tagId;
   },
 
-  addTagToJob: async (jobId: string, tagId: string): Promise<Tag> => {
+  addTagToJob: async (
+    jobId: string,
+    tagId: string
+  ): Promise<{ updatedTag: Tag; updatedJob: Job }> => {
     const userId = getUserId();
     if (!userId) {
       throw new Error('User not authenticated');
@@ -437,11 +441,14 @@ export const tagsApi = {
       throw new Error(response.statusText || 'Failed to add tag to job');
     }
 
-    const data = await response.json();
-    return data.tag;
+    const data: { tag: Tag; job: Job } = await response.json();
+    return { updatedTag: data.tag, updatedJob: data.job };
   },
 
-  removeTagFromJob: async (jobId: string, tagId: string): Promise<Tag> => {
+  removeTagFromJob: async (
+    jobId: string,
+    tagId: string
+  ): Promise<{ updatedTag: Tag; updatedJob: Job }> => {
     const userId = getUserId();
     if (!userId) {
       throw new Error('User not authenticated');
@@ -460,8 +467,8 @@ export const tagsApi = {
       throw new Error(response.statusText || 'Failed to remove tag from job');
     }
 
-    const data = await response.json();
-    return data.tag;
+    const data: { tag: Tag; job: Job } = await response.json();
+    return { updatedTag: data.tag, updatedJob: data.job };
   },
 };
 

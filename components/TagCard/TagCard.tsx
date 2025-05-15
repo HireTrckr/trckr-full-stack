@@ -20,7 +20,7 @@ export function TagCard({
   const color = getTailwindColorObjectFromName(tag.color);
   return (
     <div
-      className={`${tag.color ? `bg-${color.tailwindColorName}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1`}
+      className={`${tag.color ? `bg-${color.tailwindColorName}-300` : 'bg-accent-primary text-text-accent'} rounded-lg flex items-center justify-between px-2 py-1 whitespace-nowrap`}
       onMouseEnter={() => {
         if (editable) setShowDeleteButton(true);
       }}

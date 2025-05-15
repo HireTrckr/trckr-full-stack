@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '../../../lib/firebase-admin';
+import { Timestamp } from 'firebase-admin/firestore';
+import { StatusMap } from '../../../types/jobStatus';
 
 export default async function handler(
   req: NextApiRequest,
@@ -49,7 +51,7 @@ export default async function handler(
             statusID: defaultStatusID,
             timestamps: {
               ...doc.data().timestamps,
-              updatedAt: new Date(),
+              updatedAt: Timestamp.fromDate(new Date()),
             },
           });
         });

@@ -1,19 +1,19 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useJobStore } from '../../context/jobStore';
-import { Job, JobNotSavedInDB } from '../../types/job';
+import { JobNotSavedInDB } from '../../types/job';
 import { Tag } from '../../types/tag';
 import { useTagStore } from '../../context/tagStore';
 import { TagEditor } from '../TagEditor/TagEditor';
 import { JobStatus } from '../../types/jobStatus';
 import { StatusPickerComponent } from '../StatusPickerComponent/StatusPickerComponent';
-import { NewTag } from '../TagEditor/TagEditor';
 import { useTranslation } from 'react-i18next';
 import { CustomFieldsSection } from '../JobDetails/CustomFieldsSection/CustomFieldsSection';
 import { CustomFieldValue } from '../../types/customField';
+import { getRandomTailwindColor } from '../../utils/generateRandomColor';
 
 export function JobForm() {
   const { addJob } = useJobStore();
-  const { createTag } = useTagStore();
+  const { createTag, addTagToJob } = useTagStore();
 
   const [job, setJob] = useState<JobNotSavedInDB>({
     company: '',
@@ -29,49 +29,78 @@ export function JobForm() {
     useState<boolean>(true);
 
   // Track new tags created during form session
-  const [newTags, setNewTags] = useState<NewTag[]>([]);
+  const [newTags, setNewTags] = useState<Partial<Tag>[]>([]);
 
   const [attributeDropDownOpen, setAttributeDropDownOpen] = useState(false);
+
+  // Create a key to force TagEditor to re-render when form is submitted
+  const [tagEditorKey, setTagEditorKey] = useState<number>(0);
 
   const { t } = useTranslation();
 
   // Handler for tag changes
-  const handleTagsChange = (tagIds: Tag['id'][], localNewTags?: NewTag[]) => {
+  const handleTagsChange = (
+    tagIds: Tag['id'][],
+    localNewTags?: Partial<Tag>[]
+  ) => {
     setJob({ ...job, tagIds });
     if (localNewTags) {
       setNewTags(localNewTags);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!job.company || !job.position) return;
 
+    const newTagIds: Tag['id'][] = [];
+
+    // Create a copy of the job to work with
+    const jobToAdd: JobNotSavedInDB = { ...job };
+
+    // Process new tags first
     for (const newTag of newTags) {
-      if (
-        await createTag({
+      if (newTag.name) {
+        const tagId = await createTag({
           name: newTag.name,
-          count: 1,
-        } as Partial<Tag>)
-      ) {
-        setJob((prevJob) => ({
-          ...prevJob,
-          tagIds: [...(prevJob.tagIds || []), newTag.id],
-        }));
+          color: newTag.color || getRandomTailwindColor().tailwindColorName,
+        } as Partial<Tag>);
+
+        if (!tagId) {
+          // remove new Tag from newTags
+          setNewTags(newTags.filter((tag) => tag !== newTag));
+          jobToAdd.tagIds = jobToAdd.tagIds.filter(
+            (_tagId) => _tagId !== tagId
+          );
+        } else {
+          newTagIds.push(tagId);
+        }
       }
     }
 
-    await addJob(job);
+    // Add the job with the updated tagIds
+    const jobId = await addJob(jobToAdd);
+
+    if (jobId) {
+      for (const newTagId of newTagIds) {
+        // add tag to job
+        await addTagToJob(jobId, newTagId);
+      }
+    }
+
+    // Reset form state
     setJob({
       company: '',
       position: '',
       statusID: 'not-applied',
       location: '',
       URL: '',
-      tagIds: [] as Job['tagIds'],
+      tagIds: [],
       customFields: {},
     });
     setNewTags([]);
+
+    // Increment the key to force TagEditor to re-render with empty state
+    setTagEditorKey((prevKey) => prevKey + 1);
   };
 
   return (
@@ -81,10 +110,7 @@ export function JobForm() {
           {t('job-form.title')}
         </h2>
       </div>
-      <form
-        onSubmit={handleSubmit}
-        className="w-full space-y-4 overflow-y-scroll mb-4 p-2"
-      >
+      <div className="w-full space-y-4 overflow-y-scroll mb-4 p-2">
         <div className="space-y-3 relative">
           <div className="w-full">
             <label
@@ -198,6 +224,7 @@ export function JobForm() {
                 {t('modals.job.shared.tags')}
               </label>
               <TagEditor
+                key={tagEditorKey}
                 tagIds={job.tagIds || []}
                 onTagsChange={handleTagsChange}
               />
@@ -221,16 +248,17 @@ export function JobForm() {
             </div>
           </>
         )}
-      </form>
-      <form>
+      </div>
+      <div>
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           className="w-full px-4 py-2 rounded-lg bg-accent-primary hover:brightness-[80%] text-text-accent font-medium transition-all duration-bg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50"
           disabled={!job.company || !job.position || !customFieldsAreValid}
         >
           {t('job-form.submit-button')}
         </button>
-      </form>
+      </div>
     </>
   );
 }

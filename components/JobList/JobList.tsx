@@ -251,7 +251,7 @@ export const JobList: React.FC = () => {
               onFilterChange={handleFilterChange}
             />
           )}
-          <ul className="relative px-3 border border-text-secondary rounded-md">
+          <ul className="relative px-3">
             {getSortedAndFilteredJobs().map((job) => {
               const isActive =
                 jobWithOpenDropdown === job ||

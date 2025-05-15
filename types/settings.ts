@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import { getDefaultTailwindColorObject } from '../utils/getTailwindColorObject';
 import { TailwindColor } from './tailwindColor';
 import { timestamps } from './timestamps';
@@ -28,8 +29,8 @@ export const DEFAULT_SETTINGS: Settings = {
   },
 
   timestamps: {
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: Timestamp.fromDate(new Date()),
+    updatedAt: Timestamp.fromDate(new Date()),
     deletedAt: null,
   },
 };

@@ -15,6 +15,6 @@ export type JobNotSavedInDB = {
   location?: string;
   statusID: JobStatus['id'];
   URL?: string;
-  tagIds?: Tag['id'][]; // tag_ids
+  tagIds: Tag['id'][]; // tag_ids
   customFields: JobCustomFields;
 };

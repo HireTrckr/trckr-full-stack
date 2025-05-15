@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { JobStatus, JobStatusNotSavedInDB } from '../../../types/jobStatus';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
+import { getIDFromName } from '../../../utils/idUtils';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,19 +26,7 @@ export default async function handler(
         return res.status(400).json({ error: 'Status name is required' });
       }
 
-      const newID = status.statusName.toLowerCase().replace(/\\s/g, '-');
-
-      // throw error if status already exists
-      const statusDoc = await adminDb
-        .doc(`users/${userId}/metadata/statuses`)
-        .get();
-      if (statusDoc.exists) {
-        const statusMap: { [key: string]: JobStatus } =
-          statusDoc.data()?.statusMap ?? statusDoc.data();
-        if (statusMap[newID]) {
-          return res.status(400).json({ error: 'Status already exists' });
-        }
-      }
+      const newID = getIDFromName(status.statusName);
 
       const newStatus: JobStatus = {
         id: newID,
@@ -44,8 +34,8 @@ export default async function handler(
         color: status.color || getRandomTailwindColor().tailwindColorName,
         deletable: true,
         timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
           deletedAt: null,
         },
       };

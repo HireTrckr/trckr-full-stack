@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 import { Tag } from '../../../types/tag';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +19,13 @@ export default async function handler(
 
   if (req.method === 'POST') {
     try {
-      const { jobId, tagId } = req.body;
+      const {
+        jobId,
+        tagId,
+      }: {
+        jobId: Job['id'];
+        tagId: Tag['id'];
+      } = req.body;
 
       if (!jobId || !tagId) {
         return res
@@ -64,35 +71,34 @@ export default async function handler(
       }
 
       // Update the job by removing the tag
-      const updatedTagIds = job.tagIds.filter((id) => id !== tagId);
+      const updatedJob: Job = {
+        ...job,
+        tagIds: job.tagIds.filter((id) => id !== tagId),
+        timestamps: {
+          ...job.timestamps,
+          updatedAt: Timestamp.fromDate(new Date()),
+        },
+      };
+      const updatedTag: Tag = {
+        ...tag,
+        count: Math.max(tag.count || 0 - 1, 0),
+        timestamps: {
+          ...tag.timestamps,
+          updatedAt: Timestamp.fromDate(new Date()),
+        },
+      };
 
-      await jobRef.update({
-        tagIds: updatedTagIds,
-      });
-
-      // Update the tag count
-      const newCount = Math.max((tag.count || 0) - 1, 0);
+      await jobRef.update(updatedJob);
 
       // If tag count is 0, we could delete it, but we'll just update the count
       // The deleteTag endpoint should be used for actual deletion
       await tagsRef.update({
-        [`tagMap.${tagId}`]: {
-          ...tag,
-          count: newCount,
-          timestamps: {
-            ...tag.timestamps,
-            updatedAt: new Date(),
-          },
-        },
+        [`tagMap.${tagId}`]: updatedTag,
       });
 
       return res.status(200).json({
-        jobId,
-        tagId,
-        tag: {
-          ...tag,
-          count: newCount,
-        },
+        tag: updatedTag,
+        job: updatedJob,
         message: 'Tag removed from job successfully',
       });
     } catch (error) {

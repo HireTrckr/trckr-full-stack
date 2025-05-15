@@ -1,5 +1,7 @@
+import { FieldValue, Timestamp } from 'firebase-admin/firestore';
+
 export type timestamps = {
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  deletedAt: Timestamp | null;
 };

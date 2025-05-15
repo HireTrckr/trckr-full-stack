@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 import { Tag } from '../../../types/tag';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,7 +19,13 @@ export default async function handler(
 
   if (req.method === 'POST') {
     try {
-      const { jobId, tagId } = req.body;
+      const {
+        jobId,
+        tagId,
+      }: {
+        jobId: Job['id'];
+        tagId: Tag['id'];
+      } = req.body;
 
       if (!jobId || !tagId) {
         return res
@@ -64,33 +71,33 @@ export default async function handler(
       }
 
       // Update the job with the new tag
-      const updatedTagIds = job.tagIds ? [...job.tagIds, tagId] : [tagId];
-
-      await jobRef.update({
-        tagIds: updatedTagIds,
-      });
+      const updatedJob: Job = {
+        ...job,
+        tagIds: job.tagIds ? [...job.tagIds, tagId] : [tagId],
+        timestamps: {
+          ...job.timestamps,
+          updatedAt: Timestamp.fromDate(new Date()),
+        },
+      };
+      await jobRef.update(updatedJob);
 
       // Update the tag count
-      const newCount = (tag.count || 0) + 1;
+      const updatedTag: Tag = {
+        ...tag,
+        count: tag.count ? tag.count + 1 : 1,
+        timestamps: {
+          ...tag.timestamps,
+          updatedAt: Timestamp.fromDate(new Date()),
+        },
+      };
 
       await tagsRef.update({
-        [`tagMap.${tagId}`]: {
-          ...tag,
-          count: newCount,
-          timestamps: {
-            ...tag.timestamps,
-            updatedAt: new Date(),
-          },
-        },
+        [`tagMap.${tagId}`]: updatedTag,
       });
 
       return res.status(200).json({
-        jobId,
-        tagId,
-        tag: {
-          ...tag,
-          count: newCount,
-        },
+        tag: updatedTag,
+        job: updatedJob,
         message: 'Tag added to job successfully',
       });
     } catch (error) {

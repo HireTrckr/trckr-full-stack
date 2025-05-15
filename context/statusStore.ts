@@ -11,6 +11,9 @@ import { ToastCategory } from '../types/toast';
 import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { useJobStore } from './jobStore';
 import { statusesApi } from '../lib/api';
+import { getIDFromName } from '../utils/idUtils';
+import { Timestamp } from 'firebase/firestore';
+import { TimestampsFromJSON } from '../utils/dateUtils';
 
 type StatusStore = {
   /** Current map of all statuses (both default and custom) */
@@ -86,7 +89,16 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
 
     try {
       // Use the API client instead of direct Firebase access
-      const statusMap = await statusesApi.fetchStatuses();
+      const statusMap: StatusMap = {};
+
+      for (let [statusId, status] of Object.entries(
+        await statusesApi.fetchStatuses()
+      )) {
+        statusMap[statusId] = {
+          ...status,
+          timestamps: TimestampsFromJSON(status.timestamps),
+        } as JobStatus;
+      }
 
       set({
         statusMap,
@@ -119,7 +131,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
 
     set({ isLoading: true, error: null });
     try {
-      const newID = status.statusName.toLowerCase().replace(/\s/g, '-');
+      const newID = getIDFromName(status.statusName);
 
       if (get().statusMap[newID]) {
         throw new Error('Status already exists');
@@ -202,10 +214,6 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       });
 
       // change jobs with this status to not allowed
-      const jobsWithStatus = getJobsWithStatus(statusId);
-      jobsWithStatus.forEach((job) => {
-        updateJob({ ...job, statusID: 'notAllowed' });
-      });
 
       createTranslatedToast(
         'toasts.statusDeleted',
@@ -220,6 +228,8 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
           get().createStatus(status);
         }
       );
+
+      get().fetchStatuses();
 
       return true;
     } catch (error: unknown) {
@@ -373,11 +383,11 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       ({
         id: 'not-applied',
         statusName: 'default-status.not-applied',
-        color: 'gray',
+        color: getRandomTailwindColor().tailwindColorName,
         deletable: false,
         timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
           deletedAt: null,
         },
       } as JobStatus)

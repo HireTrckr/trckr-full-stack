@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { FieldValue } from 'firebase-admin/firestore';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,7 +56,7 @@ export default async function handler(
               tagIds: updatedTagIds,
               timestamps: {
                 ...jobData.timestamps,
-                updatedAt: new Date(),
+                updatedAt: Timestamp.fromDate(new Date()),
               },
             });
 

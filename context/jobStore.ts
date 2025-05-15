@@ -10,6 +10,7 @@ import { useToastStore } from './toastStore';
 import { JobStatus } from '../types/jobStatus';
 import { CustomField } from '../types/customField';
 import { jobsApi } from '../lib/api';
+import { TimestampsFromJSON } from '../utils/dateUtils';
 
 type JobStore = {
   jobs: Job[];
@@ -17,7 +18,7 @@ type JobStore = {
   error: string | null;
 
   fetchJobs: () => Promise<boolean>;
-  addJob: (job: JobNotSavedInDB) => Promise<boolean>;
+  addJob: (job: JobNotSavedInDB) => Promise<Job['id'] | false>;
   deleteJob: (job: Job) => Promise<boolean>;
   updateJob: (job: Job) => Promise<boolean>;
   getJobsWithTags: (tagId: Tag['id'][]) => Job[];
@@ -42,7 +43,17 @@ export const useJobStore = create<JobStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const jobs = await jobsApi.fetchJobs();
+      const jobs = (await jobsApi.fetchJobs()).map((job) => {
+        // convert timestamps
+        return {
+          ...job,
+          timestamps: TimestampsFromJSON({
+            updatedAt: job.timestamps.updatedAt,
+            createdAt: job.timestamps.createdAt,
+            deletedAt: job.timestamps.deletedAt ?? null,
+          }),
+        } as Job;
+      });
 
       set({ jobs });
     } catch (error: unknown) {
@@ -98,6 +109,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
           get().deleteJob(newJob);
         }
       );
+      return newJob.id;
     } catch (error: unknown) {
       console.error('[jobStore.ts] Error adding job:', error);
       const errorMessage =
@@ -119,8 +131,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
     } finally {
       set({ isLoading: false });
     }
-
-    return !get().error;
+    return false;
   },
 
   deleteJob: async (job: Job) => {

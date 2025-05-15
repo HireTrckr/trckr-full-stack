@@ -7,6 +7,7 @@ import { settingsApi } from '../lib/api';
 import colors from 'tailwindcss/colors';
 import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
+import { TimestampsFromJSON } from '../utils/dateUtils';
 
 type SettingsStore = {
   settings: Settings;
@@ -47,6 +48,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     try {
       // Use the API client instead of direct Firebase access
       const settings = await settingsApi.fetchSettings();
+      settings.timestamps = TimestampsFromJSON(settings.timestamps);
 
       applyTailwindThemeColor(settings.theme.primaryColor);
 

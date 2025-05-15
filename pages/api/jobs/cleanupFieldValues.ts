@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
+import { Timestamp } from 'firebase-admin/firestore';
+import { serverTimestamp } from 'firebase/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,6 +35,10 @@ export default async function handler(
           delete jobData.customFields[fieldId];
           batch.update(jobDoc.ref, {
             customFields: jobData.customFields,
+            timestamps: {
+              ...jobData.timestamps,
+              updated: Timestamp.fromDate(new Date()),
+            },
           });
         }
       });

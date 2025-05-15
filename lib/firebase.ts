@@ -17,8 +17,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only if an instance doesn't already exist
+
+function initialiseClientFirebaseApp(appName: string | undefined) {
+  console.log('Firebase Client initialized successfully');
+  return initializeApp(firebaseConfig, appName);
+}
+
 const app =
-  getApps().length > 0 ? getApp() : initializeApp(firebaseConfig, 'client-app');
+  getApps().length > 0
+    ? getApp(process.env.NEXT_PUBLIC_FIREBASE_CLIENT_APP_NAME)
+    : initialiseClientFirebaseApp(
+        process.env.NEXT_PUBLIC_FIREBASE_CLIENT_APP_NAME
+      );
 
 const db = getFirestore(app);
 

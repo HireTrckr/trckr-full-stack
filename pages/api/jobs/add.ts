@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
-import { Job, JobNotSavedInDB } from '../../../types/job';
+import { JobNotSavedInDB } from '../../../types/job';
+import { Timestamp } from 'firebase-admin/firestore';
+import { TagMap } from '../../../types/tag';
+import { serverTimestamp } from 'firebase/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,14 +26,14 @@ export default async function handler(
         return res.status(400).json({ error: 'Missing required job fields' });
       }
 
-      const completeJob: Job = {
+      const completeJob = {
         ...job,
         timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
           deletedAt: null,
         },
-      } as Job;
+      };
 
       const docRef = await adminDb
         .collection(`users/${userId}/jobs`)
@@ -39,6 +42,24 @@ export default async function handler(
       if (!docRef) {
         throw Error('Failed to add job');
       }
+
+      const tagMap = (
+        await adminDb.doc(`users/${userId}/metadata/tags`).get()
+      ).data()?.tagMap as TagMap;
+
+      for (const tagId of job.tagIds) {
+        // increment count by one
+        const tag = tagMap[tagId];
+        if (tag) {
+          tagMap[tagId] = {
+            ...tagMap[tagId],
+            count: tagMap[tagId].count + 1,
+          };
+        }
+      }
+      await adminDb
+        .doc(`users/${userId}/metadata/tags`)
+        .set({ tagMap: tagMap });
 
       return res.status(201).json({
         job: { ...completeJob, id: docRef.id },

@@ -60,10 +60,18 @@ export function TagSettingsPanelComponent(): JSX.Element {
     return {
       props: {
         tag,
-        onSave: async (updatedTag: Tag) => {
+        onSave: async (updatedTag: Tag, tagJobs: Job[]) => {
           // Handle saving the updated tag
           await useTagStore.getState().updateTag(updatedTag);
           closeModal();
+
+          // add tags to each job
+          tagJobs.forEach((job: Job) => {
+            // add, unless job already has tag
+            if (!job.tagIds || !job.tagIds.includes(tag.id)) {
+              addTagsToJob(job.id, tag.id);
+            }
+          });
         },
         onDelete: async (tag: Tag) => {
           // Handle deleting the tag

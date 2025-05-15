@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 
 import { Job } from '../../../types/job';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,17 +29,22 @@ export default async function handler(
         return res.status(200).json({ jobs: [] });
       }
 
-      const jobs = userDoc.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        timestamps: {
-          createdAt: new Date(doc.data().timestamps.createdAt),
-          updatedAt: new Date(doc.data().timestamps.updatedAt),
-          deletedAt: doc.data().timestamps.deletedAt
-            ? new Date(doc.data().timestamps.deletedAt)
-            : null,
-        },
-      })) as Job[];
+      const jobs = userDoc.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...(doc.data() as {
+            position: Job['position'];
+            company: Job['company'];
+            tagIds: Job['tagIds'];
+            statusID: Job['statusID'];
+            customFields: Job['customFields'];
+          }),
+          timestamps: {
+            ...doc.data().timestamps,
+            deletedAt: null,
+          },
+        };
+      }) as Job[];
 
       return res.status(200).json({ jobs });
     } catch (error) {

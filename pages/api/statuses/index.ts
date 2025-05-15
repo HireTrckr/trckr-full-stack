@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { StatusMap } from '../../../types/jobStatus';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,15 +51,15 @@ export default async function handler(
       // Convert timestamps
       Object.values(customStatuses as StatusMap).forEach((status) => {
         if (status.timestamps) {
-          status.timestamps.createdAt = new Date(status.timestamps.createdAt);
-          status.timestamps.updatedAt = new Date(status.timestamps.updatedAt);
+          status.timestamps.createdAt = Timestamp.fromDate(new Date());
+          status.timestamps.updatedAt = Timestamp.fromDate(new Date());
         }
       });
 
       Object.values(defaultStatuses).forEach((status) => {
         if (status.timestamps) {
-          status.timestamps.createdAt = new Date(status.timestamps.createdAt);
-          status.timestamps.updatedAt = new Date(status.timestamps.updatedAt);
+          status.timestamps.createdAt = Timestamp.fromDate(new Date());
+          status.timestamps.updatedAt = Timestamp.fromDate(new Date());
         }
       });
 

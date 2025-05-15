@@ -1,5 +1,5 @@
 import React, { JSX, useState, useEffect } from 'react';
-import { Job } from '../../../types/job';
+import { Job, JobNotSavedInDB } from '../../../types/job';
 import { ToolTip } from '../../ToolTip/ToolTip';
 import { UrlPreviewCard } from '../../URLPreviewCard/URLPreviewCard';
 import { TiWarningOutline } from 'react-icons/ti';
@@ -9,6 +9,10 @@ import { JobStatus } from '../../../types/jobStatus';
 import { useTranslation } from 'react-i18next';
 import { CustomFieldsSection } from '../../JobDetails/CustomFieldsSection/CustomFieldsSection';
 import { CustomFieldValue } from '../../../types/customField';
+import { useTagStore } from '../../../context/tagStore';
+import { Tag } from '../../../types/tag';
+import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
+import { Timestamp } from 'firebase/firestore';
 
 export interface EditJobModalProps {
   job: Job;
@@ -23,10 +27,18 @@ export function EditJobModal({
   onClose,
   onDelete,
 }: EditJobModalProps): JSX.Element {
+  const { createTag, addTagToJob, removeTagFromJob, tagMap } =
+    useTagStore.getState();
+
   const [formData, setFormData] = useState<Job>(job);
+  const [newTags, setNewTags] = useState<Partial<Tag>[]>([]);
 
   const [customFieldsAreValid, setCustomFieldsAreValid] =
     useState<boolean>(true);
+
+  const updatedAtDate: Date = job.timestamps.updatedAt.toDate
+    ? job.timestamps.updatedAt.toDate()
+    : new Date();
 
   const { t } = useTranslation();
 
@@ -34,12 +46,11 @@ export function EditJobModal({
   const [timeRemaining, setTimeRemaining] = useState(0);
 
   const [attributeDropDownOpen, setAttributeDropDownOpen] = useState(false);
-
   useEffect(() => {
     if (!job.timestamps.updatedAt) return;
 
     const updateTimeRemaining = () => {
-      const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
+      const timeSinceUpdate = new Date().getTime() - updatedAtDate.getTime();
       const remaingSeconds = Math.max(
         0,
         30 - Math.floor(timeSinceUpdate / 1000)
@@ -54,7 +65,7 @@ export function EditJobModal({
 
     // unmount
     return () => clearInterval(interval);
-  }, [job.timestamps?.updatedAt]);
+  }, [job.timestamps.updatedAt, updatedAtDate]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -65,11 +76,76 @@ export function EditJobModal({
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSave = () => {
+  const handleTagsChange = (
+    tagIds: Tag['id'][],
+    localNewTags: Partial<Tag>[]
+  ) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      tagIds: tagIds,
+    }));
+    setNewTags(localNewTags);
+  };
+
+  const handleSave = async () => {
+    if (!formData.company || !formData.position) return;
+
+    const newTagIds: Tag['id'][] = [];
+
     const updatedJob: Job = {
       ...job,
       ...formData,
     };
+
+    // Create new tags first
+    for (const newTag of newTags) {
+      if (newTag.name) {
+        const tagId = await createTag({
+          name: newTag.name,
+          color: newTag.color || getRandomTailwindColor().tailwindColorName,
+        } as Partial<Tag>);
+
+        if (tagId) {
+          newTagIds.push(tagId);
+        }
+      }
+    }
+
+    // Compare original job tags with updated job tags
+    const originalTagIds = new Set(job.tagIds || []);
+    const updatedTagIds = new Set(updatedJob.tagIds || []);
+
+    // Find tags that were added (present in updated but not in original)
+    const addedTagIds = [...updatedTagIds].filter(
+      (id) => !originalTagIds.has(id)
+    );
+
+    // Find tags that were removed (present in original but not in updated)
+    const removedTagIds = [...originalTagIds].filter(
+      (id) => !updatedTagIds.has(id)
+    );
+
+    // Process tag updates
+    const tagUpdatePromises = [];
+
+    // Handle tag additions (for existing tags that weren't newly created)
+    for (const tagId of addedTagIds) {
+      if (tagId && tagMap[tagId]) {
+        // Only process existing tags, not new ones we just created
+        tagUpdatePromises.push(addTagToJob(job.id, tagId));
+      }
+    }
+
+    // Handle tag removals
+    for (const tagId of removedTagIds) {
+      if (tagId) {
+        tagUpdatePromises.push(removeTagFromJob(job.id, tagId));
+      }
+    }
+
+    // Wait for all tag updates to complete
+    await Promise.all(tagUpdatePromises);
+
     onSave(updatedJob);
     onClose();
   };
@@ -95,7 +171,7 @@ export function EditJobModal({
             {t('modals.job.edit.job-id')}: <i>{formData.id}</i>
           </span>
         </div>
-        <form className="w-full space-y-4 overflow-y-scroll mb-4">
+        <div className="w-full space-y-4 overflow-y-scroll mb-4 p-2">
           <div className="space-y-3 relative">
             <div className="w-full">
               <label
@@ -208,19 +284,14 @@ export function EditJobModal({
                 </label>
                 <TagEditor
                   tagIds={formData.tagIds || []}
-                  onTagsChange={(tagIds) => {
-                    setFormData((prevData) => ({
-                      ...prevData,
-                      tagIds: tagIds,
-                    }));
-                  }}
+                  onTagsChange={handleTagsChange}
                 />
               </div>
 
               {/* Custom Fields Section */}
               <div className="w-full">
                 <CustomFieldsSection
-                  job={formData}
+                  job={formData as JobNotSavedInDB}
                   onValid={() => setCustomFieldsAreValid(true)}
                   onInvalid={() => setCustomFieldsAreValid(false)}
                   onChange={(value: CustomFieldValue) => {
@@ -236,14 +307,14 @@ export function EditJobModal({
               </div>
             </>
           )}
-        </form>
-        <form className="py-2">
-          {job.timestamps?.updatedAt && (
+        </div>
+        <div className="py-2">
+          {job.timestamps.updatedAt && (
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
                 {t('modals.shared.last-updated', {
-                  date: job.timestamps.updatedAt.toLocaleDateString(),
-                  time: job.timestamps.updatedAt.toLocaleTimeString(),
+                  date: updatedAtDate.toLocaleDateString(),
+                  time: updatedAtDate.toLocaleTimeString(),
                 })}
               </span>
             </div>
@@ -289,7 +360,7 @@ export function EditJobModal({
               </ToolTip>
             </div>
           )}
-        </form>
+        </div>
       </div>
       {formData.URL && (
         <div className="flex flex-col flex-1 flex-grow items-center min-h-full">

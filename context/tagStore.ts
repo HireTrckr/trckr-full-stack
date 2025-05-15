@@ -10,6 +10,8 @@ import { getRandomTailwindColor } from '../utils/generateRandomColor';
 import { ToastCategory } from '../types/toast';
 import { useToastStore } from './toastStore';
 import { tagsApi } from '../lib/api';
+import { getIDFromName } from '../utils/idUtils';
+import { TimestampsFromJSON } from '../utils/dateUtils';
 
 /**
  * @interface TagStore
@@ -44,14 +46,6 @@ type TagStore = {
    * @throws Error if tag deletion fails or user is not authenticated
    */
   deleteTag: (tagId: string) => Promise<boolean>;
-
-  /**
-   * @function getRecentTags
-   * @description Retrieves the most recently updated tags
-   * @param limit - Maximum number of tags to return
-   * @returns Array of tags sorted by update timestamp
-   */
-  getRecentTags: (limit: number) => Tag[];
 
   /**
    * @function addTagToJob
@@ -142,7 +136,21 @@ export const useTagStore = create<TagStore>((set, get) => {
       set({ isLoading: true, error: null });
       try {
         // Use the API client instead of direct Firebase access
-        const tagMap = await tagsApi.fetchTags();
+
+        const tagMap: TagMap = {};
+
+        // loop through all of the keys and values of the tagMap produced in await tagsApi.fetchTags()
+
+        for (let [tagId, tag] of Object.entries(await tagsApi.fetchTags())) {
+          tagMap[tagId] = {
+            ...tag,
+            timestamps: TimestampsFromJSON({
+              updatedAt: tag.timestamps.updatedAt,
+              createdAt: tag.timestamps.createdAt,
+              deletedAt: tag.timestamps.deletedAt ?? null,
+            }),
+          } as Tag;
+        }
 
         set({ tagMap, _lastFetched: new Date() } as TagStorePlusPrivate);
       } catch (error: unknown) {
@@ -240,7 +248,7 @@ export const useTagStore = create<TagStore>((set, get) => {
 
       set({ isLoading: true, error: null });
       try {
-        const newID = tag.name.toLowerCase().replace(/\s/g, '-');
+        const newID = getIDFromName(tag.name);
 
         if (get().tagMap[newID]) {
           throw new Error('Tag already exists');
@@ -331,15 +339,11 @@ export const useTagStore = create<TagStore>((set, get) => {
           tag = get().tagMap[tagId];
         }
 
-        // Use the API client instead of direct Firebase access
-        const updatedTag = await tagsApi.addTagToJob(jobId, tagId);
-
-        // Update the job locally
-        const updatedJob: Job = {
-          ...job,
-          tagIds: job.tagIds ? [...job.tagIds, tagId] : [tagId],
-        };
-        await jobStore.updateJob(updatedJob);
+        // Use the API client to add tag to job
+        const { updatedTag, updatedJob } = await tagsApi.addTagToJob(
+          jobId,
+          tagId
+        );
 
         // Update the tag in the local state
         set((state) => ({
@@ -417,31 +421,27 @@ export const useTagStore = create<TagStore>((set, get) => {
           throw new Error('Job not found');
         }
 
-        // Use the API client instead of direct Firebase access
-        const updatedTag = await tagsApi.removeTagFromJob(jobId, tagId);
+        // Use the API client to remove tag from job
+        const { updatedTag, updatedJob } = await tagsApi.removeTagFromJob(
+          jobId,
+          tagId
+        );
 
-        // If tag count is 0, delete the tag
-        if (updatedTag.count <= 0) {
-          await get().deleteTag(tagId);
-        } else {
-          // Update the tag in the local state
-          set((state) => ({
-            tagMap: {
-              ...state.tagMap,
-              [tagId]: {
-                ...state.tagMap[tagId],
-                count: updatedTag.count,
-              },
+        // update state
+        set((state) => ({
+          tagMap: {
+            ...state.tagMap,
+            [tagId]: {
+              ...state.tagMap[tagId],
+              count: updatedTag.count,
             },
-          }));
-        }
+          },
+        }));
 
-        // Update the job locally
-        const updatedJob: Job = {
-          ...job,
-          tagIds: (job.tagIds || []).filter((t) => t !== tagId),
-        };
-        await jobStore.updateJob(updatedJob);
+        // update useJobStore state
+        useJobStore.getState().jobs = useJobStore
+          .getState()
+          .jobs.map((j: Job) => (j.id === updatedJob.id ? updatedJob : j));
 
         createTranslatedToast(
           'toasts.tagRemovedFromJob',
@@ -485,17 +485,6 @@ export const useTagStore = create<TagStore>((set, get) => {
       }
 
       return !get().error;
-    },
-
-    getRecentTags(limit: number = 5): Tag[] {
-      if (limit <= 0) return [];
-      const tags = Object.values(get().tagMap);
-      tags.sort((a, b) => {
-        return (
-          b.timestamps.updatedAt.getTime() - a.timestamps.updatedAt.getTime()
-        );
-      });
-      return tags.slice(0, limit);
     },
 
     clearTags: () => {

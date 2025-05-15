@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,16 +30,18 @@ export default async function handler(
         throw new Error('Job not found');
       }
 
-      job.timestamps = {
-        ...job.timestamps,
-        updatedAt: new Date(),
-        deletedAt: null,
+      const updatedJob: Job = {
+        ...job,
+        timestamps: {
+          ...job.timestamps,
+          updatedAt: Timestamp.fromDate(new Date()),
+        },
       };
 
-      await jobRef.update(job);
+      await jobRef.update(updatedJob);
 
       return res.status(200).json({
-        job,
+        job: updatedJob,
         message: 'Job updated successfully',
       });
     } catch (error) {

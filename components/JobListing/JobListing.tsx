@@ -39,8 +39,13 @@ export const JobListing = memo(
     onDropdownClose: () => void;
   }): JSX.Element {
     const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+
+    const lastUpdated: Date = job.timestamps.updatedAt.toDate
+      ? job.timestamps.updatedAt.toDate()
+      : new Date();
+
     const [timeRemaining, setTimeRemaining] = useState(
-      new Date().getTime() - new Date(job.timestamps.updatedAt).getTime()
+      new Date().getTime() - lastUpdated.getTime()
     );
     const [deleting, setDeleting] = useState<boolean>(false);
 
@@ -67,7 +72,7 @@ export const JobListing = memo(
       if (!job.timestamps.updatedAt) return;
 
       const updateTimeRemaining = () => {
-        const timeSinceUpdate = Date.now() - job.timestamps.updatedAt.getTime();
+        const timeSinceUpdate = new Date().getTime() - lastUpdated.getTime();
         const remaingSeconds = Math.max(
           0,
           30 - Math.floor(timeSinceUpdate / 1000)

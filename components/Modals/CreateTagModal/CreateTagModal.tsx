@@ -7,7 +7,7 @@ import { Job } from '../../../types/job';
 import { useJobStore } from '../../../context/jobStore';
 import { useTranslation } from 'react-i18next';
 
-const getGridRowsClassName = (jobCount: number) => {
+export const getGridRowsClassName = (jobCount: number) => {
   if (jobCount >= 3) return 'grid-rows-3';
   if (jobCount === 2) return 'grid-rows-2';
   if (jobCount === 1) return 'grid-rows-1';

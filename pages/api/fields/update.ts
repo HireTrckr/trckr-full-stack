@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { CustomField } from '../../../types/customField';
+import { serverTimestamp } from 'firebase/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +25,9 @@ export default async function handler(
       }
 
       // Update the timestamp
-      field.timestamps.updatedAt = new Date();
+      field.timestamps.updatedAt = firebase.firestore.Timestamp.fromDate(
+        new Date()
+      );
 
       const fieldsRef = adminDb.doc(`users/${userId}/metadata/customFields`);
 

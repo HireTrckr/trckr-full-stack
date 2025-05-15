@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Tag, TagNotSavedInDB } from '../../../types/tag';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
+import { getIDFromName } from '../../../utils/idUtils';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +26,7 @@ export default async function handler(
         return res.status(400).json({ error: 'Tag name is required' });
       }
 
-      const newID = tag.name.toLowerCase().replace(/\s/g, '-');
+      const newID = getIDFromName(tag.name);
 
       const newTag: Tag = {
         id: newID,
@@ -32,8 +34,8 @@ export default async function handler(
         color: tag.color || getRandomTailwindColor().tailwindColorName,
         count: 0,
         timestamps: {
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
           deletedAt: null,
         },
       };

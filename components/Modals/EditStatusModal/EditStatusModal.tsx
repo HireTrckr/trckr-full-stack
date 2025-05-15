@@ -23,7 +23,7 @@ export function EditStatusModal({
 
   const [timeRemaining, setTimeRemaining] = useState(0);
 
-  const lastUpdated: Date = new Date(status.timestamps.updatedAt);
+  const lastUpdated: Date = status.timestamps.updatedAt.toDate();
 
   const { t } = useTranslation();
 
@@ -31,7 +31,7 @@ export function EditStatusModal({
     if (!status.timestamps.updatedAt) return;
 
     const updateTimeRemaining = () => {
-      const timeSinceUpdate = Date.now() - lastUpdated.getTime();
+      const timeSinceUpdate = Date.now() - new Date(lastUpdated).getTime();
       const remainingSeconds = Math.max(
         0,
         30 - Math.floor(timeSinceUpdate / 1000)
@@ -118,8 +118,8 @@ export function EditStatusModal({
         <div className="mb-2 flex justify-center items-center">
           <span className="text-xs text-text-secondary transition-all duration-text">
             {t('modals.shared.last-updated', {
-              date: status.timestamps.updatedAt.toLocaleDateString(),
-              time: status.timestamps.updatedAt.toLocaleTimeString(),
+              date: status.timestamps.updatedAt.toDate().toLocaleDateString(),
+              time: status.timestamps.updatedAt.toDate().toLocaleTimeString(),
             })}
           </span>
         </div>

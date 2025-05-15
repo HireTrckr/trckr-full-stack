@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Tag } from '../../../types/tag';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +25,7 @@ export default async function handler(
       }
 
       // Update the timestamp
-      tag.timestamps.updatedAt = new Date();
+      tag.timestamps.updatedAt = Timestamp.fromDate(new Date());
 
       await adminDb.doc(`users/${userId}/metadata/tags`).update({
         [`tagMap.${tag.id}`]: tag,
