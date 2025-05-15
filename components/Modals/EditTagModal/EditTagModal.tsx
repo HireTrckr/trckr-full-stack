@@ -32,7 +32,9 @@ export function EditTagModal({
     getJobsWithTags([tag.id]) || []
   );
 
-  const updatedAtDate: Date = tag.timestamps.updatedAt.toDate();
+  const updatedAtDate: Date = tag.timestamps.updatedAt.toDate
+    ? tag.timestamps.updatedAt.toDate()
+    : new Date();
 
   const { t } = useTranslation();
 

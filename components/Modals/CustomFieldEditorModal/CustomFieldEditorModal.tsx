@@ -328,6 +328,17 @@ export function CustomFieldEditorModal({
         </div>
       )}
 
+      {field.timestamps?.updatedAt && (
+        <div className="mb-2 flex justify-center items-center">
+          <span className="text-xs text-text-secondary transition-all duration-text">
+            {t('modals.shared.last-updated', {
+              date: field.timestamps.updatedAt.toDate().toLocaleDateString(),
+              time: field.timestamps.updatedAt.toDate().toLocaleTimeString(),
+            })}
+          </span>
+        </div>
+      )}
+
       <div className="flex justify-center space-x-3 mt-2">
         <button
           onClick={handleSave}

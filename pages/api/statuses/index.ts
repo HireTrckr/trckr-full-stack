@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { StatusMap } from '../../../types/jobStatus';
-import { Timestamp } from 'firebase-admin/firestore';
+import { TimestampsFromJSON } from '../../../utils/dateUtils';
 
 export default async function handler(
   req: NextApiRequest,
@@ -50,17 +50,11 @@ export default async function handler(
 
       // Convert timestamps
       Object.values(customStatuses as StatusMap).forEach((status) => {
-        if (status.timestamps) {
-          status.timestamps.createdAt = Timestamp.fromDate(new Date());
-          status.timestamps.updatedAt = Timestamp.fromDate(new Date());
-        }
+        status.timestamps = TimestampsFromJSON(status.timestamps);
       });
 
       Object.values(defaultStatuses).forEach((status) => {
-        if (status.timestamps) {
-          status.timestamps.createdAt = Timestamp.fromDate(new Date());
-          status.timestamps.updatedAt = Timestamp.fromDate(new Date());
-        }
+        status.timestamps = TimestampsFromJSON(status.timestamps);
       });
 
       // Merge default statuses with custom ones (custom ones override defaults if same ID)

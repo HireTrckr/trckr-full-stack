@@ -23,7 +23,9 @@ export function EditStatusModal({
 
   const [timeRemaining, setTimeRemaining] = useState(0);
 
-  const lastUpdated: Date = status.timestamps.updatedAt.toDate();
+  const lastUpdated: Date = status.timestamps.updatedAt.toDate
+    ? status.timestamps.updatedAt.toDate()
+    : new Date();
 
   const { t } = useTranslation();
 
