@@ -287,7 +287,7 @@ export const JobList: React.FC = () => {
             })}
           </ul>
           {/* Mass Delete Controls */}
-          <div className="flex items-center flex-row-reverse gap-2">
+          <div className="flex items-center justify-center gap-2">
             <div className="flex items-center gap-2 px-4 py-2">
               <label
                 htmlFor="select-all"
