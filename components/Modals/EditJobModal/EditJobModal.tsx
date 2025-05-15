@@ -35,7 +35,7 @@ export function EditJobModal({
   const [customFieldsAreValid, setCustomFieldsAreValid] =
     useState<boolean>(true);
 
-  const updatedAtDate: Date = job.timestamps.updatedAt.toDate
+  const lastUpdated: Date = job.timestamps.updatedAt.toDate
     ? job.timestamps.updatedAt.toDate()
     : new Date();
 
@@ -49,7 +49,7 @@ export function EditJobModal({
     if (!job.timestamps.updatedAt) return;
 
     const updateTimeRemaining = () => {
-      const timeSinceUpdate = new Date().getTime() - updatedAtDate.getTime();
+      const timeSinceUpdate = new Date().getTime() - lastUpdated.getTime();
       const remaingSeconds = Math.max(
         0,
         30 - Math.floor(timeSinceUpdate / 1000)
@@ -64,7 +64,7 @@ export function EditJobModal({
 
     // unmount
     return () => clearInterval(interval);
-  }, [job.timestamps.updatedAt, updatedAtDate]);
+  }, [job.timestamps.updatedAt]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -312,8 +312,8 @@ export function EditJobModal({
             <div className="mb-2 flex justify-center items-center">
               <span className="text-xs text-text-secondary transition-all duration-text">
                 {t('modals.shared.last-updated', {
-                  date: updatedAtDate.toLocaleDateString(),
-                  time: updatedAtDate.toLocaleTimeString(),
+                  date: lastUpdated.toLocaleDateString(),
+                  time: lastUpdated.toLocaleTimeString(),
                 })}
               </span>
             </div>

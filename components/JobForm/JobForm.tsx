@@ -201,7 +201,7 @@ export function JobForm() {
                      focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary
                      placeholder-text-secondary/50
                      transition-all duration-text"
-                value={job.location}
+                value={job.location || ''}
                 onChange={(e) => setJob({ ...job, location: e.target.value })}
               />
             </div>
@@ -214,7 +214,7 @@ export function JobForm() {
                 type="url"
                 placeholder={t('modals.job.shared.URL-placeholder')}
                 className="w-full px-4 py-2 rounded-lg bg-background-primary text-text-primary border border-background-secondary focus:outline-none focus:ring-2 focus:ring-accent-primary focus:ring-opacity-50 focus:bg-background-secondary placeholder-text-secondary/50 transition-all duration-text"
-                value={job?.URL}
+                value={job.URL || ''}
                 onChange={(e) => setJob({ ...job, URL: e.target.value })}
               />
             </div>

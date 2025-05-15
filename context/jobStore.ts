@@ -197,6 +197,8 @@ export const useJobStore = create<JobStore>((set, get) => ({
       // Use the API client instead of direct Firebase access
       const updatedJob = await jobsApi.updateJob(job);
 
+      updatedJob.timestamps = TimestampsFromJSON(updatedJob.timestamps);
+
       set((state) => ({
         jobs: state.jobs.map((j) => (j.id === updatedJob.id ? updatedJob : j)),
       }));
