@@ -1,4 +1,7 @@
 {
+  "maintenance": {
+    "message": "我们目前正在维护中！"
+  },
   "common": {
     "save": "保存",
     "cancel": "取消",

@@ -1,4 +1,7 @@
 {
+  "maintenance": {
+    "message": "We are currently under maintenance!"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -79,6 +82,9 @@
     "statusDeleted": "Status \"{{name}}\" deleted successfully",
     "statusUpdated": "Status \"{{name}}\" updated successfully",
     "statusesReset": "All statuses have been reset to defaults",
+    "fieldCreated": "Field \"{{name}}\" created successfully",
+    "fieldDeleted": "Field \"{{name}}\" deleted successfully",
+    "fieldUpdated": "Field \"{{name}}\" updated successfully",
     "errors": {
       "fetchSettings": "Error fetching settings",
       "updateSettings": "Error updating settings",

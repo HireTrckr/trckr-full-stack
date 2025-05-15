@@ -1,4 +1,7 @@
 {
+  "maintenance": {
+    "message": "¡Actualmente estamos en mantenimiento!"
+  },
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar",
