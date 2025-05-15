@@ -83,12 +83,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
   addJob: async (job: JobNotSavedInDB) => {
     if (!auth.currentUser) return false;
-    if (!job.statusID || !job.company || !job.position) return false; // will add timestamps - then type is satisfied
+    if (!job.statusID || !job.company || !job.position) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
       const newJob = await jobsApi.addJob(job);
+
+      newJob.timestamps = TimestampsFromJSON(newJob.timestamps);
 
       set((state) => ({
         jobs: [...state.jobs, newJob],

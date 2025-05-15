@@ -24,7 +24,7 @@ export const JobList: React.FC = () => {
   const router = useRouter();
 
   // Add state for sorting and filtering
-  const [sortField, setSortField] = useState<SortField>('dateApplied');
+  const [sortField, setSortField] = useState<SortField>('updatedAt');
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     status: [],
@@ -161,14 +161,18 @@ export const JobList: React.FC = () => {
         case 'position':
           comparison = a.position.localeCompare(b.position);
           break;
-        case 'dateApplied':
+        case 'updatedAt':
           comparison =
-            a.timestamps.createdAt.toDate().getTime() -
-            b.timestamps.createdAt.toDate().getTime();
+            (a.timestamps.updatedAt.toDate() ?? new Date()).getTime() -
+            (b.timestamps.updatedAt.toDate() ?? new Date()).getTime();
           break;
         case 'status':
           comparison = a.statusID.localeCompare(b.statusID);
           break;
+        case 'createdAt':
+          comparison =
+            (a.timestamps.createdAt.toDate() ?? new Date()).getTime() -
+            (b.timestamps.createdAt.toDate() ?? new Date()).getTime();
         default:
           break;
       }

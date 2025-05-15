@@ -6,7 +6,12 @@ import { useStatusStore } from '../../context/statusStore';
 import { getTailwindColorObjectFromName } from '../../utils/getTailwindColorObject';
 
 // Define types for props
-export type SortField = 'company' | 'position' | 'dateApplied' | 'status';
+export type SortField =
+  | 'company'
+  | 'position'
+  | 'updatedAt'
+  | 'status'
+  | 'createdAt';
 export type SortDirection = 'asc' | 'desc';
 export type FilterOptions = {
   status: string[];
@@ -200,11 +205,11 @@ export function DataFilterSorter({
           {renderSortIndicator('position')}
         </button>
         <button
-          className={`flex items-center ${sortField === 'dateApplied' ? 'font-bold text-text-primary' : 'text-text-secondary'}`}
-          onClick={() => onSortChange('dateApplied')}
+          className={`flex items-center ${sortField === 'updatedAt' ? 'font-bold text-text-primary' : 'text-text-secondary'}`}
+          onClick={() => onSortChange('updatedAt')}
         >
           {t('filter.date')}
-          {renderSortIndicator('dateApplied')}
+          {renderSortIndicator('updatedAt')}
         </button>
         <button
           className={`flex items-center ${sortField === 'status' ? 'font-bold text-text-primary' : 'text-text-secondary'}`}
@@ -212,6 +217,13 @@ export function DataFilterSorter({
         >
           {t('filter.status')}
           {renderSortIndicator('status')}
+        </button>
+        <button
+          className={`flex items-center ${sortField === 'createdAt' ? 'font-bold text-text-primary' : 'text-text-secondary'}`}
+          onClick={() => onSortChange('createdAt')}
+        >
+          {t('filter.createdAt')}
+          {renderSortIndicator('createdAt')}
         </button>
       </div>
     </div>
