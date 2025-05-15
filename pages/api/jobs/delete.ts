@@ -3,7 +3,6 @@ import { adminDb } from '../../../lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { Job } from '../../../types/job';
 import { Tag, TagMap } from '../../../types/tag';
-import { serverTimestamp } from 'firebase/firestore';
 
 export default async function handler(
   req: NextApiRequest,

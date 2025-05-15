@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { JobStatus, StatusMap } from '../../../types/jobStatus';
-import { serverTimestamp } from 'firebase/firestore';
+import { Timestamp } from 'firebase-admin/firestore';
 
 export default async function handler(
   req: NextApiRequest,
@@ -65,9 +65,7 @@ export default async function handler(
       }
 
       // Update the timestamp
-      status.timestamps.updatedAt = firebase.firestore.Timestamp.fromDate(
-        new Date()
-      );
+      status.timestamps.updatedAt = Timestamp.fromDate(new Date());
 
       await statusesRef.update({
         [`statusMap.${status.id}`]: status,

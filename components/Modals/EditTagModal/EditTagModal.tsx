@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { useJobStore } from '../../../context/jobStore';
 import { Job } from '../../../types/job';
 import { getGridRowsClassName } from '../CreateTagModal/CreateTagModal';
-import { Timestamp } from 'firebase/firestore';
 
 export interface EditTagModalProps {
   tag: Tag;

@@ -12,7 +12,6 @@ import { CustomFieldValue } from '../../../types/customField';
 import { useTagStore } from '../../../context/tagStore';
 import { Tag } from '../../../types/tag';
 import { getRandomTailwindColor } from '../../../utils/generateRandomColor';
-import { Timestamp } from 'firebase/firestore';
 
 export interface EditJobModalProps {
   job: Job;

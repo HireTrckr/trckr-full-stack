@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { adminDb } from '../../../lib/firebase-admin';
 import { Job } from '../../../types/job';
 import { Timestamp } from 'firebase-admin/firestore';
-import { serverTimestamp } from 'firebase/firestore';
 
 export default async function handler(
   req: NextApiRequest,
