@@ -4,8 +4,13 @@ import { ModalHousing } from './ModalHousing/ModalHousing';
 import { Navbar } from '../NavbarComponents/Navbar/Navbar';
 import { ToastsComponent } from './ToastsComponent/ToastsComponent';
 import { CookieConsentBannerComponent } from './CookieConsentBannerComponent/CookieConsentBannerComponent';
+import { MaintenanceComponent } from '../MaintenanceComponent/MaintenanceComponent';
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  if (process.env.NEXT_PUBLIC_MAINTAINANCE === 'true') {
+    return <MaintenanceComponent className="h-screen w-screen" />;
+  }
+
   return (
     <div
       className="h-screen w-screen bg-background-secondary flex flex-col overflow-hidden"
