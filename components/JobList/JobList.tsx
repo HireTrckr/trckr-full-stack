@@ -163,8 +163,8 @@ export const JobList: React.FC = () => {
           break;
         case 'dateApplied':
           comparison =
-            new Date(a.timestamps.createdAt).getTime() -
-            new Date(b.timestamps.createdAt).getTime();
+            a.timestamps.createdAt.toDate().getTime() -
+            b.timestamps.createdAt.toDate().getTime();
           break;
         case 'status':
           comparison = a.statusID.localeCompare(b.statusID);
