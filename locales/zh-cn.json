@@ -69,7 +69,10 @@
       "statusUpdated": "已更新状态",
       "statusesReset": "已重置状态",
       "operationFailed": "操作失败",
-      "error": "错误"
+      "error": "错误",
+      "fieldCreated": "已创建字段",
+      "fieldDeleted": "已删除字段",
+      "fieldUpdated": "已更新字段"
     },
     "jobAdded": "已成功添加 {{company}} 的 {{position}} 职位",
     "jobDeleted": "已成功删除 {{company}} 的 {{position}} 职位",
@@ -83,6 +86,9 @@
     "statusDeleted": "已成功删除\"{{name}}\"状态",
     "statusUpdated": "已成功更新\"{{name}}\"状态",
     "statusesReset": "所有状态已重置为默认值",
+    "fieldCreated": "已成功创建\"{{name}}\"字段",
+    "fieldDeleted": "已成功删除\"{{name}}\"字段",
+    "fieldUpdated": "已成功更新\"{{name}}\"字段",
     "errors": {
       "fetchSettings": "获取设置时出错",
       "updateSettings": "更新设置时出错",

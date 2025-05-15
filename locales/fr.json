@@ -69,7 +69,10 @@
       "statusUpdated": "Statut mis à jour",
       "statusesReset": "Statuts réinitialisés",
       "operationFailed": "Opération échouée",
-      "error": "Erreur"
+      "error": "Erreur",
+      "fieldCreated": "Champ créé",
+      "fieldDeleted": "Champ supprimé",
+      "fieldUpdated": "Champ mis à jour"
     },
     "jobAdded": "Emploi {{position}} chez {{company}} ajouté avec succès",
     "jobDeleted": "Emploi {{position}} chez {{company}} supprimé avec succès",
@@ -83,6 +86,9 @@
     "statusDeleted": "Statut \"{{name}}\" supprimé avec succès",
     "statusUpdated": "Statut \"{{name}}\" mis à jour avec succès",
     "statusesReset": "Tous les statuts ont été réinitialisés aux valeurs par défaut",
+    "fieldCreated": "Champ \"{{name}}\" créé avec succès",
+    "fieldDeleted": "Champ \"{{name}}\" supprimé avec succès",
+    "fieldUpdated": "Champ \"{{name}}\" mis à jour avec succès",
     "errors": {
       "fetchSettings": "Erreur lors de la récupération des paramètres",
       "updateSettings": "Erreur lors de la mise à jour des paramètres",

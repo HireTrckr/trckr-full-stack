@@ -68,7 +68,9 @@
       "statusUpdated": "Status updated",
       "statusesReset": "Statuses reset",
       "operationFailed": "Operation failed",
-      "error": "Error"
+      "error": "Error",
+      "fieldCreated": "Field created",
+      "fieldDeleted": "Field deleted"
     },
     "jobAdded": "Job {{position}} at {{company}} added successfully",
     "jobDeleted": "Job {{position}} at {{company}} deleted successfully",

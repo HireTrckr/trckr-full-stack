@@ -69,7 +69,10 @@
       "statusUpdated": "已更新狀態",
       "statusesReset": "已重設狀態",
       "operationFailed": "操作失敗",
-      "error": "錯誤"
+      "error": "錯誤",
+      "fieldCreated": "已創建欄位",
+      "fieldDeleted": "已刪除欄位",
+      "fieldUpdated": "已更新欄位"
     },
     "jobAdded": "已成功添加 {{company}} 的 {{position}} 職位",
     "jobDeleted": "已成功刪除 {{company}} 的 {{position}} 職位",
@@ -83,6 +86,9 @@
     "statusDeleted": "已成功刪除「{{name}}」狀態",
     "statusUpdated": "已成功更新「{{name}}」狀態",
     "statusesReset": "所有狀態已重設為預設值",
+    "fieldCreated": "已成功創建「{{name}}」欄位",
+    "fieldDeleted": "已成功刪除「{{name}}」欄位",
+    "fieldUpdated": "已成功更新「{{name}}」欄位",
     "errors": {
       "fetchSettings": "獲取設定時出錯",
       "updateSettings": "更新設定時出錯",

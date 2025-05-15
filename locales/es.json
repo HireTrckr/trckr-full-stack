@@ -69,7 +69,10 @@
       "statusUpdated": "Estado actualizado",
       "statusesReset": "Estados restablecidos",
       "operationFailed": "Operación fallida",
-      "error": "Error"
+      "error": "Error",
+      "fieldCreated": "Campo creado",
+      "fieldDeleted": "Campo eliminado",
+      "fieldUpdated": "Campo actualizado"
     },
     "jobAdded": "Empleo {{position}} en {{company}} añadido con éxito",
     "jobDeleted": "Empleo {{position}} en {{company}} eliminado con éxito",
@@ -83,6 +86,9 @@
     "statusDeleted": "Estado \"{{name}}\" eliminado con éxito",
     "statusUpdated": "Estado \"{{name}}\" actualizado con éxito",
     "statusesReset": "Todos los estados han sido restablecidos a los valores predeterminados",
+    "fieldCreated": "Campo \"{{name}}\" creado con éxito",
+    "fieldDeleted": "Campo \"{{name}}\" eliminado con éxito",
+    "fieldUpdated": "Campo \"{{name}}\" actualizado con éxito",
     "errors": {
       "fetchSettings": "Error al obtener la configuración",
       "updateSettings": "Error al actualizar la configuración",
