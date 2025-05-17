@@ -24,6 +24,10 @@ export function CustomFieldEditorModal({
     field.options?.map((opt) => opt.label).join(', ') || ''
   );
 
+  const lastUpdated: Date = field.timestamps.updatedAt.toDate
+    ? field.timestamps.updatedAt.toDate()
+    : new Date();
+
   const [defaultValue, setDefaultValue] = useState<CustomField['defaultValue']>(
     field.defaultValue
   );
@@ -328,12 +332,12 @@ export function CustomFieldEditorModal({
         </div>
       )}
 
-      {field.timestamps?.updatedAt && (
+      {lastUpdated && (
         <div className="mb-2 flex justify-center items-center">
           <span className="text-xs text-text-secondary transition-all duration-text">
             {t('modals.shared.last-updated', {
-              date: field.timestamps.updatedAt.toDate().toLocaleDateString(),
-              time: field.timestamps.updatedAt.toDate().toLocaleTimeString(),
+              date: lastUpdated.toLocaleDateString(),
+              time: lastUpdated.toLocaleTimeString(),
             })}
           </span>
         </div>
