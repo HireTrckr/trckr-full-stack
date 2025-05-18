@@ -232,6 +232,7 @@ export function JobForm() {
 
             <div className="w-full">
               <CustomFieldsSection
+                key={tagEditorKey}
                 job={job}
                 onValid={() => setCustomFieldsAreValid(true)}
                 onInvalid={() => setCustomFieldsAreValid(false)}
