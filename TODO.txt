@@ -1,5 +1,1 @@
-- fix logic for `TagEditor` in `EditJobModal` and `JobForm`
 - creating a tag when creating a new job doesnt work
-- custom field component boolean optimisations
-- only allow number sin CustomFieldEditorNumber
-- finsih other CustomFieldEditors
