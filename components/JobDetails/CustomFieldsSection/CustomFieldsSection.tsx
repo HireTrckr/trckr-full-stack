@@ -38,7 +38,12 @@ export function CustomFieldsSection({
   return (
     <div className="my-4 w-full max-h-[2rem]">
       {Object.values(fields).map((field) => (
-        <CustomFieldEditor job={job} field={field} onChange={handleChange} />
+        <CustomFieldEditor
+          job={job}
+          field={field}
+          onChange={handleChange}
+          key={field.id}
+        />
       ))}
     </div>
   );
