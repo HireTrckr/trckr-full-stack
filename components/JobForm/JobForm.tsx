@@ -65,13 +65,7 @@ export function JobForm() {
           color: newTag.color || getRandomTailwindColor().tailwindColorName,
         } as Partial<Tag>);
 
-        if (!tagId) {
-          // remove new Tag from newTags
-          setNewTags(newTags.filter((tag) => tag !== newTag));
-          jobToAdd.tagIds = jobToAdd.tagIds.filter(
-            (_tagId) => _tagId !== tagId
-          );
-        } else {
+        if (tagId) {
           newTagIds.push(tagId);
         }
       }

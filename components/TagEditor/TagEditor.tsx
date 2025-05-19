@@ -32,36 +32,66 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
 
   // Set state helpers
   function addToSelectedExistingTagIds(tagId: Tag['id']) {
-    setSelectedExistingTagIds((prev) => new Set(prev).add(tagId));
+    setSelectedExistingTagIds((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(tagId);
+
+      // Call onTagsChange with the updated set
+      setTimeout(() => {
+        onTagsChange(Array.from(newSet), Array.from(selectedNewTagNames));
+      }, 0);
+
+      return newSet;
+    });
   }
   function removeFromSelectedExistingTagIds(tagId: Tag['id']) {
     setSelectedExistingTagIds((prev) => {
       const newSet = new Set(prev);
       newSet.delete(tagId);
+
+      // Call onTagsChange with the updated set
+      setTimeout(() => {
+        onTagsChange(Array.from(newSet), Array.from(selectedNewTagNames));
+      }, 0);
+
       return newSet;
     });
   }
+
   function addToSelectedNewTagNames(tagName: Tag['name']) {
-    setSelectedNewTagNames((prev) =>
-      new Set(prev).add({
+    setSelectedNewTagNames((prev) => {
+      const newSet = new Set(prev);
+      newSet.add({
         name: tagName,
         color: getRandomTailwindColor().tailwindColorName,
-      })
-    );
-  }
+      });
 
+      setTimeout(() => {
+        onTagsChange(Array.from(selectedExistingTagIds), Array.from(newSet));
+      }, 0);
+
+      return newSet;
+    });
+  }
   function removeFromSelectedNewTagNames(tagName: Tag['name']) {
     // find the tag in the set that has the same name and delete it from set
-    const tag = Array.from(selectedNewTagNames).find(
-      (tag: Partial<Tag>) => tag.name === tagName
-    );
-    if (tag) {
-      selectedNewTagNames.delete(tag);
-    }
-    onTagsChange(
-      Array.from(selectedExistingTagIds),
-      Array.from(selectedNewTagNames)
-    );
+    setSelectedNewTagNames((prev) => {
+      const newSet = new Set(prev);
+
+      const tag = Array.from(newSet).find(
+        (tag: Partial<Tag>) => tag.name === tagName
+      );
+
+      if (tag) {
+        newSet.delete(tag);
+      }
+
+      setTimeout(() => {
+        onTagsChange(Array.from(selectedExistingTagIds), Array.from(newSet));
+      }, 0);
+
+      return newSet;
+    });
   }
 
   function removeTag(tagId: Tag['id']) {
@@ -75,10 +105,6 @@ export function TagEditor({ tagIds, onTagsChange }: TagEditorProps) {
     addToSelectedExistingTagIds(suggestionId);
     setInputValue('');
     setSuggestions([]);
-    onTagsChange(
-      Array.from(selectedExistingTagIds),
-      Array.from(selectedNewTagNames)
-    );
   }
 
   function selectNewTag(tagName: Tag['name']) {
