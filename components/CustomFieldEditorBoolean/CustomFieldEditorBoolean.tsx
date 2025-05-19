@@ -25,7 +25,7 @@ export function CustomFieldEditorBoolean({
     <input
       type="checkbox"
       checked={true}
-      onChange={(e) => onChange(field, false)}
+      onChange={() => onChange(field, false)}
       className="h-4 w-4 rounded-lg accent-accent-primary cursor-pointer"
     />
   );

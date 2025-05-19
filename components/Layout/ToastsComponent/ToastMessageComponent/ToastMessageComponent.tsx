@@ -16,6 +16,7 @@ type ToastColorScheme = {
 };
 
 const toastColorSchemes: ToastColorScheme = {
+  [ToastCategory.SUCCESS]: 'green',
   [ToastCategory.ERROR]: 'red',
   [ToastCategory.WARNING]: 'yellow',
   [ToastCategory.INFO]: 'blue',
@@ -102,7 +103,9 @@ export function ToastMessageComponent({
 
         <div className="flex justify-between">
           <span className={`text-xs text-${toastColor}-400`}>
-            {new Date(toast._createdAt).toLocaleTimeString()}
+            {toast._createdAt
+              ? new Date(toast._createdAt).toLocaleTimeString()
+              : new Date().toLocaleTimeString()}
           </span>
           {toast.undo && typeof toast.undo === 'function' && (
             <button

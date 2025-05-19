@@ -13,15 +13,15 @@ export function CustomFieldEditorSelect({
   field,
   onChange,
 }: CustomFieldEditorSelectProps): JSX.Element {
-  if (field.options === null) return <></>;
-  if (field.options === undefined) return <></>;
-  if (field.options.length === 0) return <></>;
-
   const [optionsDropdownOpen, setOptionsDropdownOpen] =
     useState<boolean>(false);
 
   const optionDropdownButtonRef = useRef<HTMLButtonElement>(null);
   const optionDropdownRef = useRef<HTMLDivElement>(null);
+
+  if (field.options === null) return <></>;
+  if (field.options === undefined) return <></>;
+  if (field.options.length === 0) return <></>;
 
   return (
     <>
