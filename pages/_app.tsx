@@ -6,8 +6,11 @@ import '../styles/globals.css';
 import { Layout } from '../components/Layout/Layout';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../lib/i18n';
+import { useRouter } from 'next/router';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
   return (
     <ThemeProvider>
       <I18nextProvider i18n={i18n}>
@@ -63,6 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Layout>
       </I18nextProvider>
+      <SpeedInsights route={router.pathname} />;
     </ThemeProvider>
   );
 }

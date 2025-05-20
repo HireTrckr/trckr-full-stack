@@ -1,10 +1,7 @@
 // pages/_document.tsx
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { useRouter } from 'next/router';
 
 class MyDocument extends Document {
-  router = useRouter();
   render() {
     return (
       <Html>
@@ -77,7 +74,6 @@ class MyDocument extends Document {
         <body className="bg-background-secondary">
           <Main />
           <NextScript />
-          <SpeedInsights route={this.router.pathname} />
         </body>
       </Html>
     );
