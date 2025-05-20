@@ -77,7 +77,7 @@ class MyDocument extends Document {
         <body className="bg-background-secondary">
           <Main />
           <NextScript />
-          <SpeedInsights route={router.pathname} />
+          <SpeedInsights route={this.router.pathname} />
         </body>
       </Html>
     );
