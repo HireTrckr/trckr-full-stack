@@ -187,7 +187,9 @@
       "title": "狀態"
     },
     "fields": {
-      "title": "欄位"
+      "title": "欄位",
+      "no-fields-title": "找不到欄位！",
+      "no-fields-msg": "新增欄位開始使用。"
     }
   },
   "modals": {
@@ -242,6 +244,11 @@
         "title": "編輯職位",
         "job-id": "職位 ID",
         "external-link-warning": "這是外部網站！"
+      }
+    },
+    "field": {
+      "create": {
+        "title": "創建欄位"
       }
     }
   },

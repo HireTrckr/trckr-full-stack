@@ -165,7 +165,9 @@
       "title": "Estado"
     },
     "fields": {
-      "title": "Campos"
+      "title": "Campos",
+      "no-fields-title": "¡No se encontraron campos!",
+      "no-fields-msg": "Añade un nuevo campo para comenzar."
     }
   },
   "modals": {
@@ -220,6 +222,11 @@
         "title": "Editar Empleo",
         "job-id": "ID de Empleo",
         "external-link-warning": "¡Este es un sitio web externo!"
+      }
+    },
+    "field": {
+      "create": {
+        "title": "Crear Campo"
       }
     }
   },

@@ -187,7 +187,9 @@
       "title": "Statut"
     },
     "fields": {
-      "title": "Champs"
+      "title": "Champs",
+      "no-fields-title": "Aucun champ trouvé !",
+      "no-fields-msg": "Ajoutez un nouveau champ pour commencer."
     }
   },
   "modals": {
@@ -242,6 +244,11 @@
         "title": "Modifier l'Emploi",
         "job-id": "ID de l'Emploi",
         "external-link-warning": "Ceci est un site web externe !"
+      }
+    },
+    "field": {
+      "create": {
+        "title": "Créer un Champ"
       }
     }
   },

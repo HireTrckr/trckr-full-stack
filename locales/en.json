@@ -21,7 +21,6 @@
     "selectAll": "Select All",
     "deselectAll": "Deselect All"
   },
-
   "types": {
     "number": "Number",
     "string": "Text",
@@ -46,7 +45,6 @@
     "no-results": "No jobs match your filters",
     "reset-filters": "Reset filters"
   },
-
   "cookies": {
     "message": "This website uses cookies to ensure you are kept logged in.",
     "acknowledge": "Acknowledge"
@@ -163,7 +161,9 @@
       "title": "Status"
     },
     "fields": {
-      "title": "Fields"
+      "title": "Fields",
+      "no-fields-title": "No fields found!",
+      "no-fields-msg": "Add a new field to get started."
     }
   },
   "modals": {
@@ -218,6 +218,11 @@
         "title": "Edit Job",
         "job-id": "Job ID",
         "external-link-warning": "This is an extenal website!"
+      }
+    },
+    "field": {
+      "create": {
+        "title": "Create Field"
       }
     }
   },

@@ -90,10 +90,10 @@ export function CustomJobFieldPanelComponent(): JSX.Element {
       {Object.values(fields).length === 0 && (
         <NoDataComponent
           icon={FiList}
-          title="No custom properties found!"
-          message="Create a property to get started"
+          title={t('settings.fields.no-fields-title')}
+          message={t('settings.fields.no-fields-msg')}
           action={{
-            label: t('modals.customField.create.title', 'Create Property'),
+            label: t('modals.customField.create.title'),
             onClick: handleFieldCreate,
           }}
         />

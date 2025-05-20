@@ -165,7 +165,9 @@
       "title": "状态"
     },
     "fields": {
-      "title": "字段"
+      "title": "字段",
+      "no-fields-title": "找不到字段！",
+      "no-fields-msg": "添加新字段开始使用。"
     }
   },
   "modals": {
@@ -220,6 +222,11 @@
         "title": "编辑职位",
         "job-id": "职位 ID",
         "external-link-warning": "这是外部网站！"
+      }
+    },
+    "field": {
+      "create": {
+        "title": "创建字段"
       }
     }
   },
