@@ -12,6 +12,7 @@ import { useToastStore } from './toastStore';
 import { tagsApi } from '../lib/api';
 import { getIDFromName } from '../utils/idUtils';
 import { TimestampsFromJSON } from '../utils/dateUtils';
+import { reqOptions } from '../types/reqOptions';
 
 /**
  * @interface TagStore
@@ -29,14 +30,17 @@ type TagStore = {
    * Fetches all tags for the current user
    * @returns Promise<boolean> - Success status of the operation
    */
-  fetchTags: () => Promise<boolean>;
+  fetchTags: (options?: reqOptions) => Promise<boolean>;
 
   /**
    * Creates a new tag
    * @param tag - Partial tag object containing required fields
    * @returns Promise<string | false> - New tag ID if successful, false otherwise
    */
-  createTag: (tag: Partial<TagNotSavedInDB>) => Promise<string | false>;
+  createTag: (
+    tag: Partial<TagNotSavedInDB>,
+    options?: reqOptions
+  ) => Promise<string | false>;
 
   /**
    * @function deleteTag
@@ -45,7 +49,7 @@ type TagStore = {
    * @returns Promise<boolean> - Success status of the operation
    * @throws Error if tag deletion fails or user is not authenticated
    */
-  deleteTag: (tagId: string) => Promise<boolean>;
+  deleteTag: (tagId: string, options?: reqOptions) => Promise<boolean>;
 
   /**
    * @function addTagToJob
@@ -55,7 +59,11 @@ type TagStore = {
    * @returns Promise<boolean> - Success status of the operation
    * @throws Error if job has reached tag limit or tag already exists on job
    */
-  addTagToJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
+  addTagToJob: (
+    jobId: Job['id'],
+    tagId: Tag['id'],
+    options?: reqOptions
+  ) => Promise<boolean>;
 
   /**
    * @function removeTagFromJob
@@ -65,7 +73,11 @@ type TagStore = {
    * @returns Promise<boolean> - Success status of the operation
    * @throws Error if job or tag not found
    */
-  removeTagFromJob: (jobId: Job['id'], tagId: Tag['id']) => Promise<boolean>;
+  removeTagFromJob: (
+    jobId: Job['id'],
+    tagId: Tag['id'],
+    options?: reqOptions
+  ) => Promise<boolean>;
 
   /**
    * @function clearTags
@@ -89,7 +101,7 @@ type TagStore = {
    * @returns Promise<boolean> - Success status of the operation
    * @throws Error if tag doesn't exist or update fails
    */
-  updateTag: (tag: Tag) => Promise<boolean>;
+  updateTag: (tag: Tag, options?: reqOptions) => Promise<boolean>;
 };
 
 /**
@@ -130,7 +142,7 @@ export const useTagStore = create<TagStore>((set, get) => {
 
     _lastFetched: null,
 
-    fetchTags: async () => {
+    fetchTags: async (options?: reqOptions) => {
       if (!auth.currentUser) return false;
 
       set({ isLoading: true, error: null });
@@ -141,7 +153,9 @@ export const useTagStore = create<TagStore>((set, get) => {
 
         // loop through all of the keys and values of the tagMap produced in await tagsApi.fetchTags()
 
-        for (let [tagId, tag] of Object.entries(await tagsApi.fetchTags())) {
+        for (let [tagId, tag] of Object.entries(
+          await tagsApi.fetchTags(options)
+        )) {
           tagMap[tagId] = {
             ...tag,
             timestamps: TimestampsFromJSON({
@@ -182,7 +196,7 @@ export const useTagStore = create<TagStore>((set, get) => {
       return jobsWithTag.length;
     },
 
-    deleteTag: async (tagId: string) => {
+    deleteTag: async (tagId: string, options?: reqOptions) => {
       if (!auth.currentUser) return false;
 
       set({ isLoading: true, error: null });
@@ -195,7 +209,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         }
 
         // Use the API client instead of direct Firebase access
-        await tagsApi.deleteTag(tagId);
+        await tagsApi.deleteTag(tagId, options);
 
         // remove tag from local state
         const newTagMap = { ...get().tagMap };
@@ -211,9 +225,9 @@ export const useTagStore = create<TagStore>((set, get) => {
           ToastCategory.INFO,
           3000,
           () => {},
-          (toast) => {
+          () => {
             // undo function
-            get().createTag(tag);
+            get().createTag(tag, { source: 'notification' });
           }
         );
       } catch (error: unknown) {
@@ -275,7 +289,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           5000,
           () => {},
           () => {
-            get().deleteTag(newTag.id);
+            get().deleteTag(newTag.id, { source: 'notification' });
           }
         );
         return newTag.id;
@@ -297,7 +311,11 @@ export const useTagStore = create<TagStore>((set, get) => {
       }
     },
 
-    addTagToJob: async (jobId: Job['id'], tagId: Tag['id']) => {
+    addTagToJob: async (
+      jobId: Job['id'],
+      tagId: Tag['id'],
+      options?: reqOptions
+    ) => {
       if (!auth.currentUser) return false;
       if (!jobId || !tagId) return false;
 
@@ -327,10 +345,13 @@ export const useTagStore = create<TagStore>((set, get) => {
 
         if (!tag) {
           // Need to create new tag if it doesn't exist
-          const newTagId = await get().createTag({
-            name: 'untitled',
-            color: getRandomTailwindColor().tailwindColorName,
-          } as TagNotSavedInDB);
+          const newTagId = await get().createTag(
+            {
+              name: 'untitled',
+              color: getRandomTailwindColor().tailwindColorName,
+            } as TagNotSavedInDB,
+            options
+          );
 
           if (!newTagId) {
             throw new Error('Failed to create tag');
@@ -340,10 +361,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         }
 
         // Use the API client to add tag to job
-        const { updatedTag, updatedJob } = await tagsApi.addTagToJob(
-          jobId,
-          tagId
-        );
+        const { updatedTag } = await tagsApi.addTagToJob(jobId, tagId, options);
 
         // Update the tag in the local state
         set((state) => ({
@@ -367,7 +385,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           () => {},
           (toast) => {
             // undo function
-            get().removeTagFromJob(jobId, tagId);
+            get().removeTagFromJob(jobId, tagId, { source: 'notification' });
           }
         );
       } catch (error: unknown) {
@@ -390,7 +408,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ isLoading: false });
 
         // fetch new tags and jobs
-        await get().fetchTags();
+        await get().fetchTags(options);
         await useJobStore.getState().fetchJobs();
       }
 
@@ -454,7 +472,7 @@ export const useTagStore = create<TagStore>((set, get) => {
           () => {},
           (toast) => {
             // undo function
-            get().addTagToJob(jobId, tagId);
+            get().addTagToJob(jobId, tagId, { source: 'notification' });
           }
         );
       } catch (error: unknown) {
@@ -480,7 +498,7 @@ export const useTagStore = create<TagStore>((set, get) => {
         set({ isLoading: false });
 
         // fetch new tags and jobs
-        await get().fetchTags();
+        await get().fetchTags({ source: 'system' });
         await useJobStore.getState().fetchJobs();
       }
 
@@ -511,7 +529,7 @@ export const useTagStore = create<TagStore>((set, get) => {
       return !get().error;
     },
 
-    updateTag: async (updatedTag: Tag) => {
+    updateTag: async (updatedTag: Tag, options?: reqOptions) => {
       if (!auth.currentUser) return false;
       if (!updatedTag.id) return false;
       if (!get().tagMap[updatedTag.id]) return false;
@@ -519,7 +537,7 @@ export const useTagStore = create<TagStore>((set, get) => {
       set({ isLoading: true, error: null });
       try {
         // Use the API client instead of direct Firebase access
-        const tag = await tagsApi.updateTag(updatedTag);
+        const tag = await tagsApi.updateTag(updatedTag, options);
 
         set((state) => ({
           tagMap: {

@@ -8,17 +8,22 @@ import colors from 'tailwindcss/colors';
 import { useToastStore } from './toastStore';
 import { ToastCategory } from '../types/toast';
 import { TimestampsFromJSON } from '../utils/dateUtils';
+import { reqOptions } from '../types/reqOptions';
 
 type SettingsStore = {
   settings: Settings;
   isLoading: boolean;
   error: string | null;
-  fetchSettings: () => Promise<boolean>;
+  fetchSettings: (options?: reqOptions) => Promise<boolean>;
   updateSetting: <K extends keyof Settings>(
     key: K,
-    value: Settings[K]
+    value: Settings[K],
+    options?: reqOptions
   ) => Promise<boolean>;
-  updateSettings: (newSettings: Settings) => Promise<boolean>;
+  updateSettings: (
+    newSettings: Settings,
+    options?: reqOptions
+  ) => Promise<boolean>;
 };
 
 export const applyTailwindThemeColor = (
@@ -41,13 +46,13 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
   isLoading: true,
   error: null,
 
-  fetchSettings: async () => {
+  fetchSettings: async (options?: reqOptions) => {
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const settings = await settingsApi.fetchSettings();
+      const settings = await settingsApi.fetchSettings(options);
       settings.timestamps = TimestampsFromJSON(settings.timestamps);
 
       applyTailwindThemeColor(settings.theme.primaryColor);
@@ -76,7 +81,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     return !get().error;
   },
 
-  updateSettings: async (newSettings: Settings) => {
+  updateSettings: async (newSettings: Settings, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     if (!get().settings) return false;
 
@@ -85,7 +90,10 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const updatedSettings = await settingsApi.updateSettings(newSettings);
+      const updatedSettings = await settingsApi.updateSettings(
+        newSettings,
+        options
+      );
 
       set({ settings: updatedSettings });
       applyTailwindThemeColor(updatedSettings.theme.primaryColor);
@@ -101,7 +109,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         () => {},
         (toast) => {
           // undo function
-          get().updateSettings(currentSettings);
+          get().updateSettings(currentSettings, { source: 'notification' });
         }
       );
     } catch (error: unknown) {
@@ -126,7 +134,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     return !get().error;
   },
 
-  updateSetting: async (key, value) => {
+  updateSetting: async (key, value, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     if (!get().settings) return false;
     if (!(key && value)) return false;
@@ -137,7 +145,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const newSettings = await settingsApi.updateSetting(key, value);
+      const newSettings = await settingsApi.updateSetting(key, value, options);
 
       set({ settings: newSettings });
       applyTailwindThemeColor(newSettings.theme.primaryColor);
@@ -153,7 +161,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
         () => {},
         (toast) => {
           // undo function
-          get().updateSettings(currentSettings);
+          get().updateSettings(currentSettings, { source: 'notification' });
         }
       );
     } catch (error: unknown) {

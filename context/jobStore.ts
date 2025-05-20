@@ -11,21 +11,28 @@ import { JobStatus } from '../types/jobStatus';
 import { CustomField } from '../types/customField';
 import { jobsApi } from '../lib/api';
 import { TimestampsFromJSON } from '../utils/dateUtils';
+import { reqOptions } from '../types/reqOptions';
 
 type JobStore = {
   jobs: Job[];
   isLoading: boolean;
   error: string | null;
 
-  fetchJobs: () => Promise<boolean>;
-  addJob: (job: JobNotSavedInDB) => Promise<Job['id'] | false>;
-  deleteJob: (job: Job) => Promise<boolean>;
-  updateJob: (job: Job) => Promise<boolean>;
-  getJobsWithTags: (tagId: Tag['id'][]) => Job[];
-  getJobsWithStatus: (statusId: JobStatus['id']) => Job[];
+  fetchJobs: (options?: reqOptions) => Promise<boolean>;
+  addJob: (
+    job: JobNotSavedInDB,
+    options?: reqOptions
+  ) => Promise<Job['id'] | false>;
+  deleteJob: (job: Job, options?: reqOptions) => Promise<boolean>;
+  updateJob: (job: Job, options?: reqOptions) => Promise<boolean>;
+  getJobsWithTags: (tagId: Tag['id'][], options?: reqOptions) => Job[];
+  getJobsWithStatus: (statusId: JobStatus['id'], options?: reqOptions) => Job[];
   clearJobs: () => boolean; // doesn't delete from server, only clears locally saved jobs
 
-  cleanupFieldValuesFromJobs: (fieldID: CustomField['id']) => Promise<boolean>;
+  cleanupFieldValuesFromJobs: (
+    fieldID: CustomField['id'],
+    options?: reqOptions
+  ) => Promise<boolean>;
 };
 
 const { createTranslatedToast } = useToastStore.getState();
@@ -37,13 +44,13 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
   error: null,
 
-  fetchJobs: async () => {
+  fetchJobs: async (options?: reqOptions) => {
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const jobs = (await jobsApi.fetchJobs()).map((job) => {
+      const jobs = (await jobsApi.fetchJobs(options)).map((job) => {
         // convert timestamps
         return {
           ...job,
@@ -81,14 +88,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
     });
   },
 
-  addJob: async (job: JobNotSavedInDB) => {
+  addJob: async (job: JobNotSavedInDB, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     if (!job.statusID || !job.company || !job.position) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const newJob = await jobsApi.addJob(job);
+      const newJob = await jobsApi.addJob(job, options);
 
       newJob.timestamps = TimestampsFromJSON(newJob.timestamps);
 
@@ -106,9 +113,9 @@ export const useJobStore = create<JobStore>((set, get) => ({
         ToastCategory.INFO,
         3000,
         () => {},
-        (toast) => {
+        () => {
           // undo function
-          get().deleteJob(newJob);
+          get().deleteJob(newJob, { source: 'notification' });
         }
       );
       return newJob.id;
@@ -136,7 +143,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
     return false;
   },
 
-  deleteJob: async (job: Job) => {
+  deleteJob: async (job: Job, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     if (!job.id) return false;
 
@@ -144,7 +151,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
 
     try {
       // Use the API client instead of direct Firebase access
-      await jobsApi.deleteJob(job);
+      await jobsApi.deleteJob(job, options);
 
       set((state) => ({
         jobs: state.jobs.filter((j) => j.id !== job.id),
@@ -162,7 +169,7 @@ export const useJobStore = create<JobStore>((set, get) => ({
         () => {},
         (toast) => {
           // undo function
-          get().updateJob(job);
+          get().updateJob(job, { source: 'notification' });
         }
       );
     } catch (error: unknown) {
@@ -190,14 +197,14 @@ export const useJobStore = create<JobStore>((set, get) => ({
     return !get().error;
   },
 
-  updateJob: async (job: Job) => {
+  updateJob: async (job: Job, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     if (!job.id) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      const updatedJob = await jobsApi.updateJob(job);
+      const updatedJob = await jobsApi.updateJob(job, options);
 
       updatedJob.timestamps = TimestampsFromJSON(updatedJob.timestamps);
 
@@ -254,13 +261,16 @@ export const useJobStore = create<JobStore>((set, get) => ({
     return !get().error;
   },
 
-  cleanupFieldValuesFromJobs: async (fieldID: CustomField['id']) => {
+  cleanupFieldValuesFromJobs: async (
+    fieldID: CustomField['id'],
+    options?: reqOptions
+  ) => {
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
     try {
       // Use the API client instead of direct Firebase access
-      await jobsApi.cleanupFieldValues(fieldID);
+      await jobsApi.cleanupFieldValues(fieldID, options);
     } catch (error: unknown) {
       console.error(`[jobStore.ts] Error cleaning up field values`, error);
       const errorMessage =

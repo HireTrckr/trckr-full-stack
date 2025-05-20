@@ -11,6 +11,7 @@ import { useJobStore } from './jobStore';
 import { fieldsApi } from '../lib/api';
 import { getIDFromName } from '../utils/idUtils';
 import { TimestampsFromJSON } from '../utils/dateUtils';
+import { reqOptions } from '../types/reqOptions';
 
 interface CustomFieldStore {
   fieldMap: Record<string, CustomField>;
@@ -18,7 +19,7 @@ interface CustomFieldStore {
   error: string | null;
 
   // Actions
-  loadFields: () => Promise<boolean>;
+  loadFields: (options?: reqOptions) => Promise<boolean>;
   createField: (field: CustomFieldNotSavedInDB) => Promise<string | null>;
   updateField: (field: CustomField) => Promise<boolean>;
   deleteField: (fieldId: string) => Promise<boolean>;
@@ -33,7 +34,7 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
   isLoading: false,
   error: null,
 
-  loadFields: async () => {
+  loadFields: async (options?: reqOptions) => {
     if (!auth.currentUser) return false;
 
     set({ isLoading: true, error: null });
@@ -42,7 +43,7 @@ export const useCustomFieldStore = create<CustomFieldStore>((set, get) => ({
       const fieldMap: Record<string, CustomField> = {};
 
       for (let [fieldId, field] of Object.entries(
-        await fieldsApi.fetchFields()
+        await fieldsApi.fetchFields(options)
       )) {
         fieldMap[fieldId] = {
           ...field,

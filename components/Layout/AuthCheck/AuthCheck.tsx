@@ -40,11 +40,11 @@ export function AuthCheck({ children, fallback }: AuthCheckProps) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        fetchTags();
-        fetchJobs();
-        fetchSettings();
-        fetchStatus();
-        fetchFields();
+        fetchJobs({ source: 'system' });
+        fetchTags({ source: 'system' });
+        fetchSettings({ source: 'system' });
+        fetchStatus({ source: 'system' });
+        fetchFields({ source: 'system' });
       }
     });
 

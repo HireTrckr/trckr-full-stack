@@ -14,6 +14,7 @@ import { statusesApi } from '../lib/api';
 import { getIDFromName } from '../utils/idUtils';
 import { Timestamp } from 'firebase/firestore';
 import { TimestampsFromJSON } from '../utils/dateUtils';
+import { reqOptions } from '../types/reqOptions';
 
 type StatusStore = {
   /** Current map of all statuses (both default and custom) */
@@ -28,7 +29,7 @@ type StatusStore = {
    * then merges them together. Custom statuses override default ones with the same ID.
    * @returns Promise<boolean> - True if fetch was successful, false otherwise
    */
-  fetchStatuses: () => Promise<boolean>;
+  fetchStatuses: (options?: reqOptions) => Promise<boolean>;
 
   /**
    * Creates a new custom status for the user.
@@ -37,7 +38,8 @@ type StatusStore = {
    * @returns Promise<string | false> - The new status ID if successful, false if failed
    */
   createStatus: (
-    status: Partial<JobStatusNotSavedInDB>
+    status: Partial<JobStatusNotSavedInDB>,
+    options?: reqOptions
   ) => Promise<string | false>;
 
   /**
@@ -45,7 +47,10 @@ type StatusStore = {
    * @param statusId - The ID of the status to delete
    * @returns Promise<boolean> - True if deletion was successful, false if failed or status is non-deletable
    */
-  deleteStatus: (statusId: JobStatus['id']) => Promise<boolean>;
+  deleteStatus: (
+    statusId: JobStatus['id'],
+    options?: reqOptions
+  ) => Promise<boolean>;
 
   /**
    * Updates an existing custom status. Default statuses cannot be modified.
@@ -53,7 +58,7 @@ type StatusStore = {
    * @param status - Complete status object with updates
    * @returns Promise<boolean> - True if update was successful, false if failed or status is non-modifiable
    */
-  updateStatus: (status: JobStatus) => Promise<boolean>;
+  updateStatus: (status: JobStatus, options?: reqOptions) => Promise<boolean>;
 
   /**
    * Resets all statuses to default by:
@@ -62,7 +67,7 @@ type StatusStore = {
    * 3. Resetting local state to only default statuses
    * @returns Promise<boolean> - True if reset was successful, false if failed
    */
-  resetStatuses: () => Promise<boolean>;
+  resetStatuses: (options?: reqOptions) => Promise<boolean>;
 
   /**
    * Clears all statuses from local state.
@@ -76,14 +81,13 @@ type StatusStore = {
 };
 
 const { createTranslatedToast } = useToastStore.getState();
-const { getJobsWithStatus, updateJob } = useJobStore.getState();
 
 export const useStatusStore = create<StatusStore>((set, get) => ({
   statusMap: {},
   isLoading: false,
   error: null,
 
-  fetchStatuses: async () => {
+  fetchStatuses: async (options?: reqOptions) => {
     if (!auth.currentUser) return false;
     set({ isLoading: true, error: null });
 
@@ -92,7 +96,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       const statusMap: StatusMap = {};
 
       for (let [statusId, status] of Object.entries(
-        await statusesApi.fetchStatuses()
+        await statusesApi.fetchStatuses(options)
       )) {
         statusMap[statusId] = {
           ...status,
@@ -125,7 +129,10 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     }
   },
 
-  createStatus: async (status: Partial<JobStatusNotSavedInDB>) => {
+  createStatus: async (
+    status: Partial<JobStatusNotSavedInDB>,
+    options?: reqOptions
+  ) => {
     if (!auth.currentUser) return false;
     if (!status || !status.statusName) return false;
 
@@ -138,10 +145,13 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
       }
 
       // Use the API client instead of direct Firebase access
-      const newStatus = await statusesApi.createStatus({
-        statusName: status.statusName || 'New Status',
-        color: status.color || getRandomTailwindColor().tailwindColorName,
-      });
+      const newStatus = await statusesApi.createStatus(
+        {
+          statusName: status.statusName || 'New Status',
+          color: status.color || getRandomTailwindColor().tailwindColorName,
+        },
+        options
+      );
 
       set((state) => ({
         statusMap: { ...state.statusMap, [newStatus.id]: newStatus },
@@ -158,7 +168,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         5000,
         undefined,
         () => {
-          get().deleteStatus(newStatus.id);
+          get().deleteStatus(newStatus.id, { source: 'notifications' });
         }
       );
 
@@ -183,7 +193,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     }
   },
 
-  deleteStatus: async (statusId: JobStatus['id']) => {
+  deleteStatus: async (statusId: JobStatus['id'], options?: reqOptions) => {
     if (!auth.currentUser) return false;
     const status = get().statusMap[statusId];
 
@@ -205,7 +215,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
 
     try {
       // Use the API client instead of direct Firebase access
-      await statusesApi.deleteStatus(statusId);
+      await statusesApi.deleteStatus(statusId, options);
 
       set((state) => {
         const newStatusMap = { ...state.statusMap };
@@ -225,11 +235,11 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         5000,
         undefined,
         () => {
-          get().createStatus(status);
+          get().createStatus(status, { source: 'notification' });
         }
       );
 
-      get().fetchStatuses();
+      get().fetchStatuses(options);
 
       return true;
     } catch (error: unknown) {
@@ -252,7 +262,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     }
   },
 
-  updateStatus: async (status: JobStatus) => {
+  updateStatus: async (status: JobStatus, options?: reqOptions) => {
     if (!auth.currentUser) return false;
     const existingStatus = get().statusMap[status.id];
 
@@ -274,7 +284,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
 
     try {
       // Use the API client instead of direct Firebase access
-      const updatedStatus = await statusesApi.updateStatus(status);
+      const updatedStatus = await statusesApi.updateStatus(status, options);
 
       set((state) => ({
         statusMap: { ...state.statusMap, [updatedStatus.id]: updatedStatus },
@@ -291,7 +301,7 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
         5000,
         undefined,
         () => {
-          get().updateStatus(existingStatus);
+          get().updateStatus(existingStatus, { source: 'notifications' });
         }
       );
 
@@ -316,31 +326,17 @@ export const useStatusStore = create<StatusStore>((set, get) => ({
     }
   },
 
-  resetStatuses: async () => {
+  resetStatuses: async (options?: reqOptions) => {
     if (!auth.currentUser) return false;
     set({ isLoading: true, error: null });
 
     try {
       // Use the API client instead of direct Firebase access
-      const response = await fetch('/api/statuses/reset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'user-id': auth.currentUser.uid,
-        },
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to reset statuses');
-      }
-
-      const data = await response.json();
-      const defaultStatuses = data.statusMap;
+      const statusMap = await statusesApi.resetStatuses(options);
 
       // Update local state with just default statuses
       set({
-        statusMap: defaultStatuses,
+        statusMap,
         isLoading: false,
       });
 
